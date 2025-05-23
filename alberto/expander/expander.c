@@ -1,14 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 12:37:10 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/20 12:37:35 by rabiner          ###   ########.fr       */
+/*   Created: 2025/05/23 13:10:50 by albertooutu       #+#    #+#             */
+/*   Updated: 2025/05/23 13:12:40 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "../../headers/minishell.h"
 
+/*
+*	Expander:
+*	Replaces environment variables like $VAR and $? inside tokens of type WORD.
+*/
