@@ -1,4 +1,4 @@
-Test push
+
 Token usage in Minishell parsing process:
 
 1. Lexer:
