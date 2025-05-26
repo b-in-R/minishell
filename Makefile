@@ -3,22 +3,22 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
+#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/05/19 17:12:32 by rabiner          ###   ########.fr        #
+#    Updated: 2025/05/26 11:40:14 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philo
+NAME = minishell
 
-CC = cc
+CC = gcc
 RM = rm -f
-CFLAGS = -g #-Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -Iinclude
+LIBS = -lreadline
 
 SRCS_DIR = srcs
-
-SRCS =	.c
+SRCS =	srcs/main.c\
 
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
