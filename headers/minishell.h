@@ -134,6 +134,13 @@ typedef struct	s_cmd {
 *		Grâce à ça, on pourra appeler une fonction execute(t_cmd *cmds) et faire tourner tout le shell.
 */
 
+// permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer de duplicata. visible partout mais declaré	dans signals.c
+extern volatile sig_atomic_t g_signal;
+
 /*-------------Prototypes-------------*/
+/*---------------Signals--------------*/
+void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
+void	setup_signals(void);
 
 #endif
