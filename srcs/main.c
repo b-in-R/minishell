@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/26 11:43:17 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/26 12:17:31 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	main(void)
 {
 	char	*line;
 
+	setup_signals(); /*gere le signaux Ctrl+C et Ctrl+\*/
 	while (1)
 	{
 	// Affiche le prompt minishell$ attends l'entrée de l'utilisateur, lit l'entrée et  le stocke dans line
@@ -24,7 +25,7 @@ int	main(void)
 	line = readline("minishell$ ");
 	if (!line)
 	{
-		printf("exit\n"); // Affiche exit comme bash
+		printf("exit\n"); // Affiche exit comme bash (Ctrl-D)
 		break;
 	}
 	if (line[0] != '\0')

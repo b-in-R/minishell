@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/23 14:53:51 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/26 12:47:21 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,13 @@ typedef struct	s_cmd {
 *		Grâce à ça, on pourra appeler une fonction execute(t_cmd *cmds) et faire tourner tout le shell.
 */
 
+// permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer de duplicata. visible partout mais declaré	dans signals.c
+extern volatile sig_atomic_t g_signal;
+
 /*-------------Prototypes-------------*/
+/*---------------Signals--------------*/
+void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
+void	setup_signals(void);
 
 #endif
