@@ -1,14 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/20 12:37:10 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/20 12:37:35 by rabiner          ###   ########.fr       */
+/*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
+/*   Updated: 2025/05/23 14:51:24 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
 
+// Point d'entrée du programme, gestion de la boucle principale du shell.
+int	main(void)
+{
+	// TODO: setup_signals();
+	// TODO: boucle readline -> parse_input -> exec
+	// ETC.
+	return (0);
+}
