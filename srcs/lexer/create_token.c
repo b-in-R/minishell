@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenization.c                                     :+:      :+:    :+:   */
+/*   create_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/23 13:10:25 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/23 14:50:51 by albertooutu      ###   ########.fr       */
+/*   Created: 2025/05/27 15:56:16 by albertooutu       #+#    #+#             */
+/*   Updated: 2025/05/27 16:12:22 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
-/*	Lexer:
-*	Converts the raw input line (char *line) into a linked list of t_token elements.
-*/
+#include "../../includes/minishell.h"
 
-t_token	*lexer(char *line)
+void	add_token()
+{}
+
+t_token	*create_token(t_token_type type, char *value)
 {
-	// à faire: découpage en tokens selon quotes, pipes, redirections...
-	return (NULL);
 }
