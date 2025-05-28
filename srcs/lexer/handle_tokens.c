@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/28 13:35:55 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/28 14:12:10 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 */
 void	handle_pipe(t_token **tokens, size_t *i)
 {
-	add_token(tokens, create_token(PIPE, ft_strdup('|')));
+	add_token(tokens, create_token(PIPE, ft_strdup("|")));
 	(*i)++;
 }
 
@@ -29,22 +29,22 @@ void	handle_redirection(t_token **tokens, char *line, size_t *i)
 {
 	if (line[*i] == '>' && line [*i + 1] == '>')
 	{
-		add_token(tokens, create_token(REDIR_APPEND, ft_strdup('>>')));
+		add_token(tokens, create_token(REDIR_APPEND, ft_strdup(">>")));
 		*i += 2;
 	}
 	else if (line[*i] == '<' && line[*i] == '<')
 	{
-		add_token(tokens, create_token(HEREDOC, ft_strdup('<<')));
+		add_token(tokens, create_token(HEREDOC, ft_strdup("<<")));
 		*i += 2;
 	}
 	else if (line[*i] == '>')
 	{
-		add_token(tokens, create_token(REDIR_OUT, ft_strdup('>')));
+		add_token(tokens, create_token(REDIR_OUT, ft_strdup(">")));
 		(*i)++;
 	}
 	else if (line[*i] == '<')
 	{
-		add_token(tokens, create_token(REDIR_IN, ft_strdup('<')));
+		add_token(tokens, create_token(REDIR_IN, ft_strdup("<")));
 		(*i)++;
 	}
 }

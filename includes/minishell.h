@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/27 19:01:14 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/28 14:17:18 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,9 +148,12 @@ void	setup_signals(void);
 t_token	*lexer(char *line);
 t_token	*create_token(t_token_type type, char *value);
 void	add_token(t_token **list, t_token *new_token);
-void	handle_pipe();
-void	handle_redirection();
-void	handle_quotes();
-void	handle_word();
+void	handle_pipe(t_token **tokens, size_t *i);
+void	handle_redirection(t_token **tokens, char *line, size_t *i);
+void	handle_word(t_token **tokens, char *line, size_t *i);
+void	handle_quotes(t_token **tokens, char *line, size_t *i);
+
+/*--------------Utils---------------*/
+void	free_tokens(t_token *tokens);
 
 #endif
