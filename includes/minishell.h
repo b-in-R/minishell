@@ -6,13 +6,14 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/27 16:32:33 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/27 19:01:14 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../Libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -146,7 +147,7 @@ void	setup_signals(void);
 /*---------------Lexer----------------*/
 t_token	*lexer(char *line);
 t_token	*create_token(t_token_type type, char *value);
-void	add_token();
+void	add_token(t_token **list, t_token *new_token);
 void	handle_pipe();
 void	handle_redirection();
 void	handle_quotes();

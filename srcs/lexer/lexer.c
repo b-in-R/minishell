@@ -6,28 +6,53 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:25 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/27 16:03:38 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/28 13:38:23 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-/*	Lexer:
+
+/* Lexer:
 *	Converts the raw input line (char *line) into a linked list of t_token elements.
+* Prends une ligne de commande brute (ex: echo "hello" > out.txt)
+* La scanne caractere par caractere et la découpe en tokens, ignore les spaces
+* Associe à chaque token son type (WORD, PIPE, REDIR_OUT, etc.)
+* Crée une liste chaînée de t_token
+* Retourner cette liste chaînée pour qu’elle soit utilisée ensuite par le parse
 */
 
-/*
-*	1. Scanner la ligne caractère par caractère
-*	2. Selon le caractère actuel :
-*		- ignorer les espaces (ls -la)
-*		- capturer un pipe (|)
-*		- détecter les redirections (>, <, >>, <<)
-*		- lire un mot simple
-*		- capturer ce qui est entre quotes simples ' ou doubles "
-*	3. À chaque "morceau identifié", créer un nouveau token avec le bon type et la valeur copiée.
-*	4. Ajouter chaque token à une liste chaînée.
+/* Résumé du flux de traitement:
+*readline() --> line : "echo 'hello > test' | grep ok >> output"
+*lexer()
+* ├─ "echo"     → WORD
+* ├─ "'hello > test'" → WORD (quotes simples → tout pris littéral)
+* ├─ "|"        → PIPE
+* ├─ "grep"     → WORD
+* ├─ "ok"       → WORD
+* ├─ ">>"       → REDIR_APPEND
+* └─ "output"   → WORD
 */
-
 t_token	*lexer(char *line)
 {
-	return (NULL);
+	t_token	*tokens;
+	size_t		i;
+
+	tokens = NULL;
+	i = 0;
+	if (!line || *line == '\0')
+		return (NULL);
+	while (line[i])
+	{
+		if (line[i] == ' ')
+			i++;
+		else if (line[i] == '|')
+			handle_pipe(&tokens, &i);
+		else if (line[i] == '<' || line[i] == '>')
+			handle_redirection(&tokens, line, &i);
+		else if (line[i] == '\'' || line[i] == '"' )
+			handle_quotes(&tokens, line, &i);
+		else
+			handle_word(&tokens, line, &i);
+	}
+	return (tokens);
 }
