@@ -6,8 +6,8 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:14:03 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/23 13:14:05 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/27 15:00:43 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"

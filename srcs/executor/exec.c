@@ -6,9 +6,9 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/23 12:23:58 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/27 15:01:23 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 

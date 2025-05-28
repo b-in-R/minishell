@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/26 10:33:01 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/05/28 14:17:18 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../Libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -135,12 +136,24 @@ typedef struct	s_cmd {
 */
 
 // permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer de duplicata. visible partout mais declaré	dans signals.c
-extern volatile sig_atomic_t g_signal;
+extern volatile sig_atomic_t	g_signal;
 
 /*-------------Prototypes-------------*/
 /*---------------Signals--------------*/
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
 void	setup_signals(void);
+
+/*---------------Lexer----------------*/
+t_token	*lexer(char *line);
+t_token	*create_token(t_token_type type, char *value);
+void	add_token(t_token **list, t_token *new_token);
+void	handle_pipe(t_token **tokens, size_t *i);
+void	handle_redirection(t_token **tokens, char *line, size_t *i);
+void	handle_word(t_token **tokens, char *line, size_t *i);
+void	handle_quotes(t_token **tokens, char *line, size_t *i);
+
+/*--------------Utils---------------*/
+void	free_tokens(t_token *tokens);
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/23 14:50:58 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/27 15:01:04 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 /*
 *	Parser:
 *	Reads the list of t_token to build structured t_cmd elements

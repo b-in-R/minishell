@@ -53,8 +53,6 @@ Créer lexer() :
     * Mots simples (ls, cat, etc.)
 * Pas besoin de gérer \ ou ;
 Structure recommandée :
-c
-CopierModifier
 typedef enum e_token_type {
   WORD, PIPE, REDIR_IN, REDIR_OUT, REDIR_APPEND, HEREDOC
 } t_token_type;

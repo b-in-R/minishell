@@ -6,11 +6,11 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:50 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/23 14:50:44 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/05/27 15:01:18 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 *	Expander:
