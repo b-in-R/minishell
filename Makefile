@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
+#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/05/26 11:40:14 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/05/28 08:37:40 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,10 +18,15 @@ CFLAGS = -Wall -Wextra -Werror -Iinclude
 LIBS = -lreadline
 
 SRCS_DIR = srcs
-SRCS =	srcs/main.c\
+SRCS =	main.c \
 
+EXEC_DIR = executor
+EXEC = exec.c \
 
-SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
+LEXER_DIR = lexer
+LEXER = tokenization.c \
+
+SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) $(addprefix $(EXEC_DIR)/, $(EXEC))
 
 OBJS_DIR = $(SRCS_DIR)/objs
 OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
