@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/28 14:17:18 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/02 16:46:09 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,41 +21,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-/*	Fonctions autorisees
-
-	access
-	add_history
-	chdir
-	close
-	dup, dup2
-	execve
-	exit
-	fork
-	free
-	getcwd, getenv
-	isatty, ttyname, ttyslot
-	ioctl
-	kill
-	malloc
-	open
-	opendir, closedir
-	pipe
-	printf
-	read
-	readline
-	rl_clear_history
-	rl_on_new_line
-	rl_redisplay
-	rl_replace_line
-	sigaction, sigaddset, sigemptyset, signal
-	stat, lstat, fstat
-	strerror, perror
-	tcsetattr, tcgetattr
-	tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
-	unlink
-	wait, waitpid, wait3, wait4
-	write
-*/
 /*-------------Structures--------------*/
 // Token types recognized in the input line
 typedef enum	e_token_type
@@ -152,6 +117,11 @@ void	handle_pipe(t_token **tokens, size_t *i);
 void	handle_redirection(t_token **tokens, char *line, size_t *i);
 void	handle_word(t_token **tokens, char *line, size_t *i);
 void	handle_quotes(t_token **tokens, char *line, size_t *i);
+
+/*--------------Parser---------------*/
+t_cmd	*parser(t_token *tokens);
+t_cmd	*create_cmd(void);
+void	*add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
 
 /*--------------Utils---------------*/
 void	free_tokens(t_token *tokens);
