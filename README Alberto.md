@@ -16,6 +16,30 @@ Token usage in Minishell parsing process:
 
 -> Tokens are an essential intermediate step between the raw user input and the structured commands to be executed.
 
+REDIRECTIONS:
+
+- < : infile (redirection d’entrée)
+Commande : cat < input.txt
+Effet : Le contenu du fichier input.txt remplace l’entrée standard (stdin).
+Dans la structure t_cmd :  infile = "input.txt"
+
+- "> : outfile (écrasement)"
+Commande : cat < input.txt
+Effet : Le texte "hello" est écrit dans file.txt, en écrasant le contenu précédent.
+
+Dans ta structure : outfile = "file.txt";  append = 0;
+
+- ">> : outfile (ajout)"
+Commande : echo hello >> file.txt
+Effet : "hello" est ajouté à la fin de file.txt, sans effacer son contenu.
+Dans ta structure : outfile = "file.txt";  append = 1;
+
+- << : heredoc (redirection d’entrée temporaire)
+Commande : cat << END bonjour au revoir END
+Effet : Tout ce que tu tapes entre cat << END et la ligne END est capturé.
+Ce contenu est ensuite donné à la commande comme si c'était l'entrée standard (stdin).
+Dans ta structure : heredoc = 1;  delimiter = "END";
+
 
 CHECKLIST DÉTAILLÉE — Parsing & Signaux
 
