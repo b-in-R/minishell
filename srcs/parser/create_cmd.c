@@ -1,0 +1,62 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_cmd.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/02 15:06:32 by albertooutu       #+#    #+#             */
+/*   Updated: 2025/06/02 16:46:29 by albertooutu      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../../includes/minishell.h"
+
+/* create_cmd:
+*	Initialise proprement chaque element de la structure t_cmd.
+*	On ne sait pas a l'avance ce que la commande va contenir (args, infile...)
+*	C'est pour ça que nous on initialise tous les elements a NULL ou 0 au debut dans create_cmd.
+*	Comme ça, le parser va parcourir les tokens et mettre a jour les champs en fonction de ce quil voit.
+*	Alloue la memoire dans cmd de taille t_cmd et returne cmd
+*/
+t_cmd	*create_cmd(void)
+{
+	t_cmd	*cmd;
+
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->args = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->append = 0;
+	cmd->heredoc = 0;
+	cmd->delimiter = NULL;
+	cmd->next = NULL;
+	return (cmd);
+}
+
+/*
+* Rajoute une commande () a la fin de la liste chainée t_cmd *cmds (dans parser)
+* La 1er fois comme la liste sera vide en rentre dans le if et on assigne le new_cmd (qui aura comme valeur la structure current dans le parser) a *cmd_list
+* La 2eme fois on saute la verification car la liste contiendra la 1ere commande
+* et tmp pointera vers la 1ere commande, ensuite comme tmp->next est NULL on rentre pas dans la boucle
+* et donc tmp->next pointera maintenant sur la 2eme commande, donc on aura cmd1 -> cmd2 -> NULL;
+* et comme ça jusqua la fin des commandes.
+*/
+void	*add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
+{
+	t_cmd	*tmp;
+
+	if (!cmd_list || ! new_cmd)
+		return ;
+	if (*cmd_list == NULL)
+	{
+		*cmd_list = new_cmd;
+		return ;
+	}
+	tmp = *cmd_list;
+	while (tmp->next)
+		tmp = tmp->next,
+	tmp->next = new_cmd;
+}
