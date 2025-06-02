@@ -6,7 +6,7 @@
 #    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/05/27 16:35:44 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/06/02 15:11:14 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,15 @@ LIBS = -lreadline
 
 SRCS = \
 	srcs/main.c \
-	srcs/utils/utils.c \
+	srcs/utils/free.c \
+	srcs/utils/exit.c \
+	srcs/utils/error.c \
 	srcs/signals/signals.c \
-	srcs/lexer/tokenization.c \
-	srcs/parser/parsing.c \
+	srcs/lexer/lexer.c \
+	srcs/lexer/create_token.c \
+	srcs/lexer/handle_tokens.c \
+	srcs/parser/parser.c \
+	srcs/parser/create_cmd.c \
 	srcs/expander/expander.c \
 	srcs/executor/exec.c
 
