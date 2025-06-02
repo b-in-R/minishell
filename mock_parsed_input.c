@@ -6,11 +6,11 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 14:29:19 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/23 14:43:54 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/02 15:10:07 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../includes/minishell.h"
 
 /* A tester par rabiner avec les t_cmd simulés ci desous pendant que je develop le parsing:
 	- Exécution basique d'une commande (ls, echo, pwd, etc.)
