@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/05/26 10:33:01 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/03 19:02:17 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+
+# include "../libft/libft.h"
 
 /*	Fonctions autorisees
 
@@ -55,6 +59,11 @@
 	wait, waitpid, wait3, wait4
 	write
 */
+
+/*----------Variable globale-----------*/
+// /utils/env.c
+extern char	**g_env;// dans main, builtin_1, builtin_utils, utils
+
 /*-------------Structures--------------*/
 // Token types recognized in the input line
 typedef enum	e_token_type
@@ -134,13 +143,53 @@ typedef struct	s_cmd {
 *		Grâce à ça, on pourra appeler une fonction execute(t_cmd *cmds) et faire tourner tout le shell.
 */
 
-// permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer de duplicata. visible partout mais declaré	dans signals.c
+// permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer
+// de duplicata. visible partout mais declaré  dans signals.c
 extern volatile sig_atomic_t g_signal;
 
-/*-------------Prototypes-------------*/
+/*------------------Prototypes------------------*/
+
+/*---------------Commun---------------*/
+// /utils/utils.c
+void	error_exit(char *str);
+void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
+void	free_env(void);
+void	init_env(char **envp);
+
 /*---------------Signals--------------*/
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
 void	setup_signals(void);
+
+/*-------------Execution--------------*/
+// /execution/execute.c
+void	execute(t_cmd *cmds);
+void	execute_command(t_cmd *cmd);
+
+// /execution/redirection.c
+void	setup_redirections(t_cmd *cmd, int int_fd, int pipe_fd[2]);
+
+// /execution/check_builtin.c
+int	is_builtin(t_cmd *cmd);
+int	execute_builtin(t_cmd *cmd);
+
+// /execution/builtin_1.c
+int	ft_echo(char **args);
+int	ft_cd(char **args);
+int	ft_pwd(char **args);
+int	ft_env(char **args);
+
+// /execution/builtin_2.c
+int	ft_export(char **args);
+int	ft_unset(char **args);
+
+// /execution/builtin_utils.c
+char	*get_env(char *str);
+int		set_env(char *arg);// norminette
+void	unset_env(char *arg);
+/*------------------------------------*/
+
+
+
 
 #endif
