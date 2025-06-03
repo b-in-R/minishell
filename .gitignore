@@ -2,5 +2,5 @@
 *.a
 *.out
 *.dSYM/
-Libft
+libft
 test_main.c
