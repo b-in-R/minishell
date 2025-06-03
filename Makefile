@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/03 19:04:52 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/03 21:25:50 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = minishell
 
 CC = gcc
 RM = rm -f
+RMDIR = rm -rf
 CFLAGS = -Wall -Wextra -Werror -Iinclude
 LIBS = -lreadline
 
@@ -23,7 +24,8 @@ LIBS = -lreadline
 #
 
 SRCS_DIR = srcs
-SRCS =	main.c \
+SRCS = test_main.c \
+#SRCS =	main.c \
 
 LIBFT_DIR =  libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -36,24 +38,34 @@ EXEC = execute.c \
 		builtin_2.c \
 		builtin_utils.c \
 
+EXPAND_DIR = expander
+EXPAND = expander.c \
+
 LEXER_DIR = lexer
 LEXER = tokenization.c \
+
+PARSER_DIR = parser
+PARSER = parsing.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \
 
 UTILS_DIR = utils
-UTILS = error_exit.c
-
-
+UTILS = utils.c \
+		env.c \
+		
+		
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \
-		$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER)) \
-		$(addprefix $(SRCS_DIR)/$(SIGNAL_DIR)/, $(SIGNAL)) \
 		$(addprefix $(SRCS_DIR)/$(UTILS_DIR)/, $(UTILS)) \
 		
-		
+#		$(addprefix $(SRCS_DIR)/$(EXPAND_DIR)/, $(EXPAND)) \
+		$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER)) \
+		$(addprefix $(SRCS_DIR)/$(PARSER_DIR)/, $(PARSER)) \
+		$(addprefix $(SRCS_DIR)/$(SIGNAL_DIR)/, $(SIGNAL)) \
+
+
 
 OBJS_DIR = $(SRCS_DIR)/objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
@@ -68,6 +80,9 @@ $(OBJS_DIR):
 $(NAME): $(OBJS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME)
 
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
@@ -80,6 +95,7 @@ clean:
 
 fclean: clean
 	$(RM) $(NAME)
+	$(RMDIR) $(OBJS_DIR)
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all

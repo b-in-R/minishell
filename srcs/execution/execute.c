@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/03 18:47:50 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/03 21:27:03 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	execute_command(t_cmd *cmd)
 {
 	char	*path;
 	
-	path = find_command_path(cmd->args[0]);
+	path = find_command_path(cmd->args[0]);// a faire
 	if (!path)
 		error_exit("execute_command: command not fould\n");// texte a voir selon bash?
 	execve(path, cmd->args, NULL);

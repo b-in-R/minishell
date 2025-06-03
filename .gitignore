@@ -3,3 +3,4 @@
 *.out
 *.dSYM/
 Libft
+test_main.c

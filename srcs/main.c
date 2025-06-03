@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/03 18:51:22 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/03 20:38:10 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,19 @@ int	main(int ac, char **av, char **envp)
 	init_env(envp);
 	// TEMPORAIRE : appel du lexer + affichage des tokens
 	line = "echo \"Hello World\" > file1.txt | wc -l >> result.txt";
-	tokens = lexer(line);
+	//tokens = lexer(line);
 	if (!tokens)
 	{
 		printf("Erreur : ligne vide ou invalide.\n");
 		return (1);
 	}
+	
+/*
 	print_tokens(tokens);
 	free_tokens(tokens);
-/* VERSION FINALE
+*/
+
+/* //VERSION FINALE
 	while (1)
 	{
 	line = readline("minishell> ");
