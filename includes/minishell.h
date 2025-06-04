@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/02 16:46:09 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/04 18:43:24 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,12 @@ void	handle_quotes(t_token **tokens, char *line, size_t *i);
 /*--------------Parser---------------*/
 t_cmd	*parser(t_token *tokens);
 t_cmd	*create_cmd(void);
-void	*add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
+void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
+int		add_arg(char ***args, const char *value);
+void	handle_redirections(t_cmd *current, t_token **tokens);
 
 /*--------------Utils---------------*/
 void	free_tokens(t_token *tokens);
+void	free_cmds(t_cmd *cmds);
 
 #endif

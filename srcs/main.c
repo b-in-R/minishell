@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/28 14:27:36 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/04 18:43:08 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,53 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
+//TEMPORAIRE : fonction pour montrer les cmds
+void print_cmds(t_cmd *cmds)
+{
+	int	i = 1;
+	while (cmds)
+	{
+		printf("-- CMD %d --\n", i++);
+		if (cmds->args)
+		{
+			printf("Args: ");
+			for (int j = 0; cmds->args[j]; j++)
+				printf("[%s] ", cmds->args[j]);
+			printf("\n");
+		}
+		if (cmds->infile)
+			printf("Infile: %s\n", cmds->infile);
+		if (cmds->outfile)
+			printf("Outfile: %s (%s)\n", cmds->outfile, cmds->append ? "append" : "truncate");
+		if (cmds->heredoc)
+			printf("Heredoc delimiter: %s\n", cmds->delimiter);
+		cmds = cmds->next;
+	}
+}
+
 int	main(void)
 {
 	char	*line;
 	t_token	*tokens;
+	t_cmd	*cmds;
 
-	// TEMPORAIRE : appel du lexer + affichage des tokens
-	line = "echo \"Hello World\" > file1.txt | wc -l >> result.txt";
+	// TEMPORAIRE: pour tester
+	line = "cat < input.txt | wc -l >> result.txt";
+	printf("==> Ligne testée : %s\n\n", line);
 	tokens = lexer(line);
 	if (!tokens)
 	{
 		printf("Erreur : ligne vide ou invalide.\n");
 		return (1);
 	}
+	cmds = parser(tokens);
+	printf("=== TOKENS ===\n");
 	print_tokens(tokens);
+	printf("\n=== PARSED COMMANDS ===\n");
+	print_cmds(cmds);
 	free_tokens(tokens);
-/* VERSION FINALE
+	free_cmds(cmds);
+/* VERSION FINALE (FAUT COMPLETER AU FUR A MESURE)
 	while (1)
 	{
 	line = readline("minishell> ");
@@ -70,10 +101,11 @@ int	main(void)
 	if (line[0] != '\0')
 		add_history(line);
 	tokens = lexer(line);
-	//parser
+	cmds = parser(tokens);
 	//executer
-	//free_tokens(tokens)
-	//free(line); // readline fait malloc donc il faut free
+	free_tokens(tokens);
+	free_cmds(cmds);
+	free(line); // readline fait malloc donc il faut free
 	}
 	rl_clear_history();
 */

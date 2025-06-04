@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/02 17:02:42 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/04 16:06:10 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,45 @@ t_cmd	*parser(t_token *tokens)
 			add_cmd(&cmds, current);
 		}
 		if (tokens->type == WORD)
-			add_cmd(&current->args, tokens->value);
-		else if (tokens->type == REDIR_IN)
-		else if (tokens->type == REDIR_OUT)
-		else if (tokens->type == REDIR_APPEND)
-		else if (tokens->type == HEREDOC)
+			add_arg(&current->args, tokens->value);
+		else if (tokens->type == REDIR_IN || tokens->type == REDIR_OUT
+			|| tokens->type == REDIR_APPEND || tokens->type == HEREDOC)
+		{
+			handle_redirections(current, &tokens);
+		}
 		else if (tokens->type == PIPE)
 			current = NULL;
 		tokens = tokens->next;
 	}
-	return (NULL);
+	return (cmds);
+}
+
+/*
+*	Pour racourcir la fonction parser, mets a jour les valeurs des champs correspondants
+*/
+void	handle_redirections(t_cmd *current, t_token **tokens)
+{
+	if ((*tokens)->type == REDIR_IN)
+	{
+		*tokens = (*tokens)->next;
+		current->infile = ft_strdup((*tokens)->value);
+	}
+	else if ((*tokens)->type == REDIR_OUT)
+	{
+		*tokens = (*tokens)->next;
+		current->outfile = ft_strdup((*tokens)->value);
+		current->append = 0;
+	}
+	else if ((*tokens)->type == REDIR_APPEND)
+	{
+		*tokens = (*tokens)->next;
+		current->outfile = ft_strdup((*tokens)->value);
+		current->append = 1;
+	}
+	else if ((*tokens)->type == HEREDOC)
+	{
+		*tokens = (*tokens)->next;
+		current->heredoc = 1;
+		current->delimiter = ft_strdup((*tokens)->value);
+	}
 }

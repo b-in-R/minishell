@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/28 14:12:10 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/04 18:40:50 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	handle_redirection(t_token **tokens, char *line, size_t *i)
 		add_token(tokens, create_token(REDIR_APPEND, ft_strdup(">>")));
 		*i += 2;
 	}
-	else if (line[*i] == '<' && line[*i] == '<')
+	else if (line[*i] == '<' && line[*i + 1] == '<')
 	{
 		add_token(tokens, create_token(HEREDOC, ft_strdup("<<")));
 		*i += 2;

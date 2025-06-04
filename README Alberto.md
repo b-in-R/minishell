@@ -1,3 +1,13 @@
+Pour tester:
+gcc -Wall -Wextra -Werror -g \
+    main.c \
+    lexer/*.c \
+    parser/*.c \
+    utils/*.c \
+    ../Libft/*.c \
+    -Iincludes \
+    -o minishell \
+    -lreadline
 
 Token usage in Minishell parsing process:
 
