@@ -6,21 +6,12 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/04 18:43:08 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/05 11:24:29 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-// Point d'entrée du programme, gestion de la boucle principale du shell.
-/*
-* setup_signals(); gere le signaux Ctrl+C et Ctrl+\
-* readline();  Affiche le prompt minishell$ attends l'entrée de l'utilisateur, lit l'entrée et  le stocke dans line
-*			Comme ca aprés on peut faire le parsing, exec, etc.
-* add_history(); // permets d'ajouter line (la commande entrée par le user dans l'histoirque) quand le user a tapé eu moins un caractere
-* lexer(); appel le lexer pour identifier chaque token et creer la liste de tokens
-* rl_clear_history(); // Vide l'historique de readline avant de quitter
-*/
 //TEMPORAIRE: affichage types
 char	*token_type_str(t_token_type type)
 {
@@ -67,11 +58,21 @@ void print_cmds(t_cmd *cmds)
 	}
 }
 
+// Point d'entrée du programme, gestion de la boucle principale du shell.
+/*
+* setup_signals(); gere le signaux Ctrl+C et Ctrl+\
+* readline();  Affiche le prompt minishell$ attends l'entrée de l'utilisateur, lit l'entrée et  le stocke dans line
+*			Comme ca aprés on peut faire le parsing, exec, etc.
+* add_history(); // permets d'ajouter line (la commande entrée par le user dans l'histoirque) quand le user a tapé eu moins un caractere
+* lexer(); appel le lexer pour identifier chaque token et creer la liste de tokens
+* rl_clear_history(); // Vide l'historique de readline avant de quitter
+*/
 int	main(void)
 {
 	char	*line;
 	t_token	*tokens;
 	t_cmd	*cmds;
+	int		last_status; // Code de retour de la dernière commande exécutée. (pour traiter $? dans l'expansion)
 
 	// TEMPORAIRE: pour tester
 	line = "cat < input.txt | wc -l >> result.txt";
@@ -82,6 +83,7 @@ int	main(void)
 		printf("Erreur : ligne vide ou invalide.\n");
 		return (1);
 	}
+	expand_tokens(tokens, last_status);
 	cmds = parser(tokens);
 	printf("=== TOKENS ===\n");
 	print_tokens(tokens);
@@ -101,8 +103,9 @@ int	main(void)
 	if (line[0] != '\0')
 		add_history(line);
 	tokens = lexer(line);
+	expand_tokens(tokens, last_status); //modifie-mets a jour directement le champ (token->value)
 	cmds = parser(tokens);
-	//executer
+	last_status = // execute(cmds); // A implémenter
 	free_tokens(tokens);
 	free_cmds(cmds);
 	free(line); // readline fait malloc donc il faut free
