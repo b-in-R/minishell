@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/03 19:02:17 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/05 17:04:59 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,23 +170,27 @@ void	execute_command(t_cmd *cmd);
 void	setup_redirections(t_cmd *cmd, int int_fd, int pipe_fd[2]);
 
 // /execution/check_builtin.c
-int	is_builtin(t_cmd *cmd);
-int	execute_builtin(t_cmd *cmd);
+int		is_builtin(t_cmd *cmd);
+int		execute_builtin(t_cmd *cmd);
 
 // /execution/builtin_1.c
-int	ft_echo(char **args);
-int	ft_cd(char **args);
-int	ft_pwd(char **args);
-int	ft_env(char **args);
+int		ft_echo(char **args);
+int		ft_cd(char **args);
+int		ft_pwd(char **args);
+int		ft_env(char **args);
 
 // /execution/builtin_2.c
-int	ft_export(char **args);
-int	ft_unset(char **args);
+int		ft_export(char **args);
+int		ft_unset(char **args);
 
 // /execution/builtin_utils.c
 char	*get_env(char *str);
 int		set_env(char *arg);// norminette
 void	unset_env(char *arg);
+
+// /execution/path.c
+char	*find_command_path(char *arg);
+
 /*------------------------------------*/
 
 
