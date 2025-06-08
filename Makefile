@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/03 21:25:50 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/08 13:33:01 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ EXEC = execute.c \
 		builtin_1.c \
 		builtin_2.c \
 		builtin_utils.c \
+		path.c \
 
 EXPAND_DIR = expander
 EXPAND = expander.c \
@@ -72,10 +73,13 @@ OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
 
 INCLUDES = -I. -I$(LIBFT_DIR)
 
-all: $(OBJS_DIR) $(LIBFT_A) $(NAME)
+all: $(OBJS_DIR) $(NAME)
 
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
+
+$(LIBFT_A):
+	$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME)
@@ -85,9 +89,6 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-
-$(LIBFT_A):
-	$(MAKE) -C $(LIBFT_DIR)
 
 clean:
 	$(RM) $(OBJS)

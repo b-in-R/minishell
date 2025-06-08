@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/05 17:04:59 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/08 13:04:19 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ int		set_env(char *arg);// norminette
 void	unset_env(char *arg);
 
 // /execution/path.c
-char	*find_command_path(char *arg);
+char	*find_command_path(const char *cmd);
 
 /*------------------------------------*/
 

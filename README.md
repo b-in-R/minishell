@@ -37,3 +37,8 @@ minishell/
 - [ ] Pipes
 - [ ] Signaux
 - [ ] Gestion des erreurs
+
+
+## Commandes utiles
+
+- passer de zsh a bash (sans les config de profil ou rc):	bash --noprofile --norc 

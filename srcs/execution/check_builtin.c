@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:09:00 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/03 18:58:29 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/08 13:00:55 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	execute_builtin(t_cmd *cmd)
 		return (ft_env(cmd->args));
 	if (!ft_strcmp(cmd->args[0], "exit"))
 		exit(0);// voir si free etc avant
+	return (1);
 }
 
 int	is_builtin(t_cmd *cmd)

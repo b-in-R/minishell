@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/03 18:44:00 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/08 13:22:52 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_echo(char **args)
 	int	i;
 	int	newline;
 
+	i = 1;
+	newline = 1;
 	if (args[i] && !ft_strcmp(args[i],  "-n"))
 	{
 		newline = 0;
@@ -52,7 +54,7 @@ int	ft_pwd(char **args)
 	char	cwd[1024];// voir pour malloc
 	
 	(void)args;
-	if (getcwd(cwd, sizeof(cwd)));
+	if (getcwd(cwd, sizeof(cwd)))
 	{
 		printf("%s\n", cwd);
 		return (0);

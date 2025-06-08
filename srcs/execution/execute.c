@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/03 21:27:03 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/08 14:07:04 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	execute(t_cmd *cmds)
 			if (is_builtin(cmd))
 				execute_builtin(cmd);
 			else
-				execute_command(cmd);				
+				execute_command(cmd);
 		}
 		else
 		{
