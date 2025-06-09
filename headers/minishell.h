@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/08 13:04:19 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/09 13:18:01 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ typedef struct	s_cmd {
 	int		append;          // 1 if '>>' (append mode), 0 if '>'
 	int		heredoc;         // 1 if '<<' is used (heredoc), 0 otherwise
 	char	*delimiter;     // The heredoc delimiter string (after '<<')
+	char	**g_env;			//	ajouter pour recupere l'env
 	struct	s_cmd*next;  // Pointer to the next command in a pipeline (after '|')
 }	t_cmd;
 

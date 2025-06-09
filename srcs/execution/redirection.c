@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:42 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/03 18:53:30 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/09 15:30:59 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	setup_redirections(t_cmd *cmd, int in_fd, int pipe_fd[2])
 	// redirection de sortie (fichier ou pipe suivant)
 	if (cmd->outfile)
 	{
-		flags = O_CREAT | O_WRONLY | (cmd->append ? O_APPEND : O_TRUNC);
+		flags = O_CREAT | O_WRONLY | (cmd->append ? O_APPEND : O_TRUNC);// booleen interdit
 		fd_out = open(cmd->outfile, flags, 0644);
 		if (fd_out < 0)
 			error_exit("setup_redirections: fd_out < 0");
