@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/05 11:38:03 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/13 15:37:48 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,11 +124,16 @@ t_cmd	*create_cmd(void);
 void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
 int		add_arg(char ***args, const char *value);
 void	handle_redirections(t_cmd *current, t_token **tokens);
+int		check_syntax_errors(t_token *tokens);
 
 /*--------------Expander--------------*/
 void	expand_tokens(t_token *tokens, int last_status);
 char	*expand_word(const char *word, int last_status);
 char	*get_env_value(const char *word);
+void	update_quote_flags(char c, int *in_single, int *in_double);
+void	handle_dollar(const char *word, int *i, char **result, int last_status);
+void	append_char(char **str, char c);
+char	*str_append_free(char *s1, const char *s2);
 
 /*--------------Utils---------------*/
 void	free_tokens(t_token *tokens);

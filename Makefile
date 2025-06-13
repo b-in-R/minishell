@@ -6,7 +6,7 @@
 #    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/04 18:46:19 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/06/13 15:36:38 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,9 @@ SRCS = \
 	srcs/lexer/handle_tokens.c \
 	srcs/parser/parser.c \
 	srcs/parser/create_cmd.c \
-	srcs/expander/expander.c \
+	srcs/parser/syntax_checker.c \
+	srcs/expander/expand_tokens.c \
+	srcs/expander/get_env.c \
 	srcs/executor/exec.c
 
 OBJS = $(SRCS:.c=.o)

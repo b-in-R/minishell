@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/05 11:24:29 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/12 16:35:21 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ int	main(void)
 	int		last_status; // Code de retour de la dernière commande exécutée. (pour traiter $? dans l'expansion)
 
 	// TEMPORAIRE: pour tester
-	line = "cat < input.txt | wc -l >> result.txt";
+	last_status = 0; // Initialisation du dernier statut à 0 (succès)
+	line = "echo $USER $HOME $? | wc -l >> result.txt";
 	printf("==> Ligne testée : %s\n\n", line);
 	tokens = lexer(line);
 	if (!tokens)
@@ -105,7 +106,7 @@ int	main(void)
 	tokens = lexer(line);
 	expand_tokens(tokens, last_status); //modifie-mets a jour directement le champ (token->value)
 	cmds = parser(tokens);
-	last_status = // execute(cmds); // A implémenter
+	last_status = // execute(cmds); // A implémenter , execute la commande et mets a jour last_status
 	free_tokens(tokens);
 	free_cmds(cmds);
 	free(line); // readline fait malloc donc il faut free
