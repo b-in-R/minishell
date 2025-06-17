@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:13:08 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 20:30:31 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,9 @@ void	error_exit(char *str);
 void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
 void	free_env(void);
 void	init_env(char **envp);
+
+// /srcs/main.c
+void	print_cmds(t_cmd *cmds);
 
 /*-------------Execution--------------*/
 // /execution/execute.c

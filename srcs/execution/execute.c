@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:25:32 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 20:29:04 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	execute(t_cmd *cmds)
 
 	cmd = cmds;
 
+	print_cmds(cmds);
 	/*
 		setup_redirections:
 			si pas de fork, mais redirections quand meme:

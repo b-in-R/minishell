@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/17 17:21:47 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/17 22:02:30 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,16 @@ NAME = minishell
 CC = gcc
 RM = rm -f
 RMDIR = rm -rf
-CFLAGS = -Wall -Wextra -Werror -Iinclude
+CFLAGS = -Wall -Wextra -Werror -Iinclude -fdiagnostics-color=always
+MAKEFLAGS += --no-print-directory
 LIBS = -lreadline
+
+# Colors
+GREEN	:= \033[0;32m
+RED		:= \033[0;31m
+BLUE	:= \033[0;34m
+YELLOW	:= \033[0;33m
+RST		:= \033[0m
 
 #
 #	DOSSIER_DIR = dossier
@@ -60,7 +68,6 @@ UTILS = utils.c \
 		env.c \
 		free.c \
 		
-		
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \
@@ -82,25 +89,33 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
 $(LIBFT_A):
-	$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME)
+	@{ \
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME); \
+	}	2> .build_err && \
+		(printf "$(GREEN)[compilation ok]$(RST)\n"; rm -f .build_err) || \
+		(cat .build_err; rm -f .build_err; false)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
+		|| (cat .build_err && rm -f .build_err && false)
+		
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
+		|| (cat .build_err && rm -f .build_err && false)
 
 clean:
-	$(RM) $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@$(RM) $(OBJS)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME)
-	$(RMDIR) $(OBJS_DIR)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(RM) $(NAME)
+	@$(RMDIR) $(OBJS_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

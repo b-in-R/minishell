@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/17 17:41:06 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 22:03:05 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,13 @@ int	main(int ac, char **av, char **envp)
 // precedent main
 int	main(void)
 {
+	/*
+	char	*sdf = {"1", "2", NULL}; 
+	int		dfg = 42;
+
+	printf("%i", sdf + dfg);
+	*/	
+	
 	char	*line;
 	t_token	*tokens;
 	t_cmd	*cmds;
