@@ -3,23 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/13 15:37:48 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/17 16:25:54 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../Libft/libft.h"
+# include "../libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+
+# include "../libft/libft.h"
 
 /*-------------Structures--------------*/
 // Token types recognized in the input line
@@ -56,6 +60,7 @@ typedef struct	s_cmd {
 	int		append;          // 1 if '>>' (append mode), 0 if '>'
 	int		heredoc;         // 1 if '<<' is used (heredoc), 0 otherwise
 	char	*delimiter;     // The heredoc delimiter string (after '<<')
+	char	**g_env;			//	ajouter pour recupere l'env
 	struct	s_cmd*next;  // Pointer to the next command in a pipeline (after '|')
 }	t_cmd;
 
@@ -103,11 +108,53 @@ typedef struct	s_cmd {
 // permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer de duplicata. visible partout mais declaré	dans signals.c
 extern volatile sig_atomic_t	g_signal;
 
-/*-------------Prototypes-------------*/
+/*------------------Prototypes------------------*/
+
+/*---------------Commun---------------*/
+// /utils/utils.c
+void	error_exit(char *str);
+void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
+void	free_env(void);
+void	init_env(char **envp);
+
 /*---------------Signals--------------*/
 void	sigint_handler(int sig);
 void	sigquit_handler(int sig);
 void	setup_signals(void);
+
+/*-------------Execution--------------*/
+// /execution/execute.c
+void	execute(t_cmd *cmds);
+void	execute_command(t_cmd *cmd);
+
+// /execution/redirection.c
+void	setup_redirections(t_cmd *cmd, int int_fd, int pipe_fd[2]);
+
+// /execution/check_builtin.c
+int		is_builtin(t_cmd *cmd);
+int		execute_builtin(t_cmd *cmd);
+
+// /execution/builtin_1.c
+int		ft_echo(char **args);
+int		ft_cd(char **args);
+int		ft_pwd(char **args);
+int		ft_env(char **args);
+
+// /execution/builtin_2.c
+int		ft_export(char **args);
+int		ft_unset(char **args);
+
+// /execution/builtin_utils.c
+char	*get_env(char *str);
+int		set_env(char *arg);// norminette
+void	unset_env(char *arg);
+
+// /execution/path.c
+char	*find_command_path(const char *cmd);
+
+/*------------------------------------*/
+
+
 
 /*---------------Lexer----------------*/
 t_token	*lexer(char *line);
