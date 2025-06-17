@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/09 13:18:01 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/16 11:13:08 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,16 @@
 /*----------Variable globale-----------*/
 // /utils/env.c
 extern char	**g_env;// dans main, builtin_1, builtin_utils, utils
+
+/*------Codes ANSI pour formatage------*/
+# define YELL	"\033[1;33m"
+# define GREE	"\033[1;32m"
+# define CYAN	"\033[1;36m"
+# define BLUE	"\033[1;34m"
+# define MAGE	"\033[1;35m"
+# define WHEI	"\033[1;37m"
+# define RED	"\033[1;31m"
+# define RST	"\033[0m"
 
 /*-------------Structures--------------*/
 // Token types recognized in the input line

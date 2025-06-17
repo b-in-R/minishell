@@ -17,32 +17,29 @@ parsing - Alberto
 ===============================================================================
 execute.c:
 
-
-void	execute_command(t_cmd *cmd)
-{
-	char	*path = find_command_path(cmd->args[0])
-	execve(path, cmd->args, cmd->g_env);
-	error_exit();
-}
-
-
-void	execute(t_cmd *cmds)
+void	execute(t_cmds)
 {
 	t_cmd	*cmd = cmds;
 	int		fd[2];
 	int		in_fd = 0;
 	pid_t	pid;
 
-	if (...) 
-		error_exit();
-	if (pid == 0)
-		setup_redirections(cmd, in_fd, fd);
-		if (is_builtin(cmd))
-			execute_builtin(cmd);
-		else
-			execute_command(cmd);
-	else
-		cleanup_parent(cmd, &in_fd, fd);
+	while (cmd)
+	{
+		if (plus de commande && pipe_error) -> error_exit("pipe");
+
+		pid = fork();
+		{
+			if -1 -> error_exit("fork");
+
+			if (pid == 0)
+			{
+				setup_redirections(...)
+			}
+		}
+
+
+	}
 }
 
 ===============================================================================

@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/09 15:23:30 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/16 10:23:52 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,24 +55,47 @@ void	execute(t_cmd *cmds)
 	pid_t	pid;
 
 	cmd = cmds;
+
+	/*
+		setup_redirections:
+			si pas de fork, mais redirections quand meme:
+			voir pour sauvegarge et restauration de stdin et stdout.
+			Si on ne restaure pas la sortie standard apres l'exec, 
+			toutes les prochaines commandes ecriront dans le fichier 
+			en question plutot que le terminal
+			dans un fork pas necessaire vu que le process meurt a la 
+			fin de l'exec
+	*/
+	
+	// si qu'1 cmd & is_builtin ok: pas de fork pour l'exec -- ? 
+	if (!cmd->next && is_builtin(cmd))
+	{
+		fd[0] = -1;
+		fd[1] = -1;
+		setup_redirections(cmd, in_fd, fd);
+		execute_builtin(cmd);
+		return ;
+	}
+	
 	while (cmd)
 	{
-		if (cmd->next && pipe(fd) == -1)
+		if (cmd->next && pipe(fd) == -1)// si il y a encore une cmd & pipe/erreur
 			error_exit("pipe");
 		
-		pid = fork();
+		pid = fork();	/*-------------- FORK --------------*/
 		if (pid == -1)
 			error_exit("fork");
 			
-		if (pid == 0)
+		if (pid == 0)// si OK
 		{
+			// 
 			setup_redirections(cmd, in_fd, fd);
 			if (is_builtin(cmd))
 				execute_builtin(cmd);
 			else
 				execute_command(cmd);
 		}
-		else
+		else // autre erreur fork
 		{
 			cleanup_parent(cmd, &in_fd, fd);
 			if (cmd->next)

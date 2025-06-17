@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/08 13:04:00 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 15:29:15 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ char	*find_command_path(const char *cmd)
 {
 	char	**paths;
 	char	*path;
+	char	*path_var;
 	int		i;
 
-	// si la commande contient un '/' => chemin absolu ou relatif
+	// si la commande contient un '/' => chemin direct
 	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, X_OK) == 0)
@@ -40,7 +41,7 @@ char	*find_command_path(const char *cmd)
 	}
 
 	// sinon, on cherche dans $PATH
-	char *path_var = get_env("PATH");
+	path_var = get_env("PATH");
 	if (!path_var)
 		return (NULL);
 

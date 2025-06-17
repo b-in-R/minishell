@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/08 13:22:52 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/16 10:25:27 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_echo(char **args)
 
 	i = 1;
 	newline = 1;
-	if (args[i] && !ft_strcmp(args[i],  "-n"))
+	if (args[i] && !ft_strcmp(args[i], "-n"))
 	{
 		newline = 0;
 		i++;

@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/03 18:42:48 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/16 10:35:02 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	init_env(char **envp)
 
 void	error_exit(char *str)
 {
-	printf("ERROR: %s\n", str);
+	printf(RED"ERROR_EXIT: %s\n"RST, str);
 	free_env();
 	exit(EXIT_FAILURE);
 }
