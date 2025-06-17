@@ -6,7 +6,7 @@
 #    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/05/26 11:40:14 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/06/13 15:36:38 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,37 +14,50 @@ NAME = minishell
 
 CC = gcc
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror -Iinclude
+CFLAGS = -Wall -Wextra -Werror -Iincludes -ILibft
+
+LIBFT_DIR = Libft
+LIBFT_A = $(LIBFT_DIR)/libft.a
 LIBS = -lreadline
 
-SRCS_DIR = srcs
-SRCS =	srcs/main.c\
+SRCS = \
+	srcs/main.c \
+	srcs/utils/free.c \
+	srcs/utils/exit.c \
+	srcs/utils/error.c \
+	srcs/signals/signals.c \
+	srcs/lexer/lexer.c \
+	srcs/lexer/create_token.c \
+	srcs/lexer/handle_tokens.c \
+	srcs/parser/parser.c \
+	srcs/parser/create_cmd.c \
+	srcs/parser/syntax_checker.c \
+	srcs/expander/expand_tokens.c \
+	srcs/expander/get_env.c \
+	srcs/executor/exec.c
 
+OBJS = $(SRCS:.c=.o)
 
-SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
-
-OBJS_DIR = $(SRCS_DIR)/objs
-OBJS = $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
-
-INCLUDES = -I.
-
-all: $(OBJS_DIR) $(NAME)
-
-$(OBJS_DIR):
-	@mkdir -p $(OBJS_DIR)
+all: $(LIBFT_A) $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT_A) -o $(NAME) $(LIBS)
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(LIBFT_A):
+	@$(MAKE) -C $(LIBFT_DIR)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
 	$(RM) $(NAME)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
 .PHONY: all clean fclean re
+
