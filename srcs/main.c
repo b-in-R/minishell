@@ -149,7 +149,7 @@ int	main(void)
 	line = readline(GREE"minishell> "RST);
 	if (!line)
 	{
-		printf("exit\n");
+		printf(BLUE"exit\n"RST);
 		break;
 	}
 	if (line[0] != '\0')
