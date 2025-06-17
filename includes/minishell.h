@@ -6,13 +6,14 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/16 11:13:08 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 16:25:54 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../libft/libft.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -23,56 +24,6 @@
 # include <sys/wait.h>
 
 # include "../libft/libft.h"
-
-/*	Fonctions autorisees
-
-	access
-	add_history
-	chdir
-	close
-	dup, dup2
-	execve
-	exit
-	fork
-	free
-	getcwd, getenv
-	isatty, ttyname, ttyslot
-	ioctl
-	kill
-	malloc
-	open
-	opendir, closedir
-	pipe
-	printf
-	read
-	readline
-	rl_clear_history
-	rl_on_new_line
-	rl_redisplay
-	rl_replace_line
-	sigaction, sigaddset, sigemptyset, signal
-	stat, lstat, fstat
-	strerror, perror
-	tcsetattr, tcgetattr
-	tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
-	unlink
-	wait, waitpid, wait3, wait4
-	write
-*/
-
-/*----------Variable globale-----------*/
-// /utils/env.c
-extern char	**g_env;// dans main, builtin_1, builtin_utils, utils
-
-/*------Codes ANSI pour formatage------*/
-# define YELL	"\033[1;33m"
-# define GREE	"\033[1;32m"
-# define CYAN	"\033[1;36m"
-# define BLUE	"\033[1;34m"
-# define MAGE	"\033[1;35m"
-# define WHEI	"\033[1;37m"
-# define RED	"\033[1;31m"
-# define RST	"\033[0m"
 
 /*-------------Structures--------------*/
 // Token types recognized in the input line
@@ -154,9 +105,8 @@ typedef struct	s_cmd {
 *		Grâce à ça, on pourra appeler une fonction execute(t_cmd *cmds) et faire tourner tout le shell.
 */
 
-// permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer
-// de duplicata. visible partout mais declaré  dans signals.c
-extern volatile sig_atomic_t g_signal;
+// permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer de duplicata. visible partout mais declaré	dans signals.c
+extern volatile sig_atomic_t	g_signal;
 
 /*------------------Prototypes------------------*/
 
@@ -206,5 +156,34 @@ char	*find_command_path(const char *cmd);
 
 
 
+/*---------------Lexer----------------*/
+t_token	*lexer(char *line);
+t_token	*create_token(t_token_type type, char *value);
+void	add_token(t_token **list, t_token *new_token);
+void	handle_pipe(t_token **tokens, size_t *i);
+void	handle_redirection(t_token **tokens, char *line, size_t *i);
+void	handle_word(t_token **tokens, char *line, size_t *i);
+void	handle_quotes(t_token **tokens, char *line, size_t *i);
+
+/*--------------Parser---------------*/
+t_cmd	*parser(t_token *tokens);
+t_cmd	*create_cmd(void);
+void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
+int		add_arg(char ***args, const char *value);
+void	handle_redirections(t_cmd *current, t_token **tokens);
+int		check_syntax_errors(t_token *tokens);
+
+/*--------------Expander--------------*/
+void	expand_tokens(t_token *tokens, int last_status);
+char	*expand_word(const char *word, int last_status);
+char	*get_env_value(const char *word);
+void	update_quote_flags(char c, int *in_single, int *in_double);
+void	handle_dollar(const char *word, int *i, char **result, int last_status);
+void	append_char(char **str, char c);
+char	*str_append_free(char *s1, const char *s2);
+
+/*--------------Utils---------------*/
+void	free_tokens(t_token *tokens);
+void	free_cmds(t_cmd *cmds);
 
 #endif

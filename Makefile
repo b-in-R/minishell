@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/08 13:33:01 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/17 16:37:32 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,8 @@ LIBS = -lreadline
 #
 
 SRCS_DIR = srcs
-SRCS = test_main.c \
-#SRCS =	main.c \
+SRCS = main.c \
+#SRCS =	test_main.c \
 
 LIBFT_DIR =  libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -66,6 +66,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(PARSER_DIR)/, $(PARSER)) \
 		$(addprefix $(SRCS_DIR)/$(SIGNAL_DIR)/, $(SIGNAL)) \
 
+OBJS = $(SRCS:.c=.o)
 
 
 OBJS_DIR = $(SRCS_DIR)/objs
@@ -87,11 +88,15 @@ $(NAME): $(OBJS) $(LIBFT_A)
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(LIBFT_A):
+	@$(MAKE) -C $(LIBFT_DIR)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
@@ -102,3 +107,4 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+
