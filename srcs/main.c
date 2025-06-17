@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/17 16:28:36 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 17:23:01 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,28 +68,7 @@ void print_cmds(t_cmd *cmds)
 * rl_clear_history(); // Vide l'historique de readline avant de quitter
 */
 
-//TEMPORAIRE: affichage types
-char	*token_type_str(t_token_type type)
-{
-	if (type == WORD) return "WORD";
-	if (type == PIPE) return "PIPE";
-	if (type == REDIR_IN) return "REDIR_IN";
-	if (type == REDIR_OUT) return "REDIR_OUT";
-	if (type == REDIR_APPEND) return "REDIR_APPEND";
-	if (type == HEREDOC) return "HEREDOC";
-	return "UNKNOWN";
-}
-
-//TEMPORAIRE : fonction de debug pour afficher les tokens
-void	print_tokens(t_token *tokens)
-{
-	while (tokens)
-	{
-		printf("Type: %s | Value: \"%s\"\n", token_type_str(tokens->type), tokens->value);
-		tokens = tokens->next;
-	}
-}
-
+/*
 int	main(int ac, char **av, char **envp)
 {
 	char	*line;
@@ -106,13 +85,13 @@ int	main(int ac, char **av, char **envp)
 		printf("Erreur : ligne vide ou invalide.\n");
 		return (1);
 	}
-	
+*/
 /*
 	print_tokens(tokens);
 	free_tokens(tokens);
 */
-
-/* //VERSION FINALE
+/*
+ //VERSION FINALE
 	while (1)
 	{
 	line = readline("minishell> ");
@@ -130,12 +109,12 @@ int	main(int ac, char **av, char **envp)
 	//free(line); // readline fait malloc donc il faut free
 	}
 	rl_clear_history();
-*/
+
 	free_env();
 	return (0);
-}
+}*/
 
-/* precedent main
+// precedent main
 int	main(void)
 {
 	char	*line;
@@ -145,7 +124,9 @@ int	main(void)
 
 	// TEMPORAIRE: pour tester
 	last_status = 0; // Initialisation du dernier statut à 0 (succès)
-	line = "echo $USER $HOME $? | wc -l >> result.txt";
+//	line = "echo $USER $HOME $? | wc -l >> result.txt";
+/*
+		A SUPPR	
 	printf("==> Ligne testée : %s\n\n", line);
 	tokens = lexer(line);
 	if (!tokens)
@@ -161,7 +142,8 @@ int	main(void)
 	print_cmds(cmds);
 	free_tokens(tokens);
 	free_cmds(cmds);
-/* VERSION FINALE (FAUT COMPLETER AU FUR A MESURE)
+*/
+// VERSION FINALE (FAUT COMPLETER AU FUR A MESURE)
 	while (1)
 	{
 	line = readline("minishell> ");
@@ -175,7 +157,7 @@ int	main(void)
 	tokens = lexer(line);
 	expand_tokens(tokens, last_status); //modifie-mets a jour directement le champ (token->value)
 	cmds = parser(tokens);
-	last_status = // execute(cmds); // A implémenter , execute la commande et mets a jour last_status
+	last_status = execute(cmds); // A implémenter , execute la commande et mets a jour last_status
 	free_tokens(tokens);
 	free_cmds(cmds);
 	free(line); // readline fait malloc donc il faut free
@@ -183,4 +165,4 @@ int	main(void)
 	rl_clear_history();
 	return (0);
 }
-*/
+

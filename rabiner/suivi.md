@@ -3,9 +3,15 @@
 
 EN COURS:
 
+
+	uniquement commandes builtin ok..
+
 	explications et commentaires:
 
 		-	execute.c - execute();
+
+	execute.c :		renvoi le code int last_status des commandes ( echo $? )
+						0  1  126  127  ..
 
 
 ===============================================================================
@@ -17,7 +23,6 @@ QUESTIONS - INFOS PARTAGEES:
 		le shell principal?
 
 	-	variable globale (besoin de char **envp, a mettre dans t_cmd->g_env ?)
-
 
 
 ===============================================================================
@@ -48,6 +53,15 @@ INFOS A TROUVER:
 
 	-	heredoc
 
+	- 	num de code de sortie des commandes (int last_satuts) echo $?	:
+			1	Erreur générale    Une commande a échoué sans précision
+			2	Mauvais usage de la commande (invalid option)    grep --badoption
+			126 Commande trouvée mais non exécutable    chmod -x script.sh && ./script.sh
+			127 Commande introuvable    toto (commande inconnue)
+			128 Erreur de signal    Utilisé comme base pour les erreurs liées à des signaux
+			130 Interruption par Ctrl+C (SIGINT)    Tu fais sleep 10, tu tapes Ctrl+C
+			139	Erreur de segmentation (Segmentation fault) Un programme
+				plante à cause de la mémoire
 
 ===============================================================================
 

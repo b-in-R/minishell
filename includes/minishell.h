@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 16:25:54 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 17:13:08 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 # include <readline/history.h>
 # include <fcntl.h>
 # include <sys/wait.h>
-
-# include "../libft/libft.h"
 
 /*-------------Structures--------------*/
 // Token types recognized in the input line
@@ -105,6 +103,20 @@ typedef struct	s_cmd {
 *		Grâce à ça, on pourra appeler une fonction execute(t_cmd *cmds) et faire tourner tout le shell.
 */
 
+/*----------Variable globale-----------*/
+// /utils/env.c
+extern char	**g_env;// dans main, builtin_1, builtin_utils, utils
+
+/*------Codes ANSI pour formatage------*/
+# define YELL	"\033[1;33m"
+# define GREE	"\033[1;32m"
+# define CYAN	"\033[1;36m"
+# define BLUE	"\033[1;34m"
+# define MAGE	"\033[1;35m"
+# define WHEI	"\033[1;37m"
+# define RED	"\033[1;31m"
+# define RST	"\033[0m"
+
 // permet à tous les fichiers (.c) d'accéder à la même variable globale partagée, sans créer de duplicata. visible partout mais declaré	dans signals.c
 extern volatile sig_atomic_t	g_signal;
 
@@ -117,14 +129,9 @@ void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
 void	free_env(void);
 void	init_env(char **envp);
 
-/*---------------Signals--------------*/
-void	sigint_handler(int sig);
-void	sigquit_handler(int sig);
-void	setup_signals(void);
-
 /*-------------Execution--------------*/
 // /execution/execute.c
-void	execute(t_cmd *cmds);
+int		execute(t_cmd *cmds);
 void	execute_command(t_cmd *cmd);
 
 // /execution/redirection.c
@@ -151,7 +158,6 @@ void	unset_env(char *arg);
 
 // /execution/path.c
 char	*find_command_path(const char *cmd);
-
 /*------------------------------------*/
 
 

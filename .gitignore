@@ -2,7 +2,6 @@
 *.a
 *.out
 *.dSYM/
-libft
 test_main.c
 minishell
 test*

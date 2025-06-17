@@ -6,11 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:42 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/10 15:11:39 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 17:00:38 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 
 // configure stdin stdout avant execution d'une commande selon pipe ou cmd unique
 void	setup_redirections(t_cmd *cmd, int in_fd, int pipe_fd[2])
