@@ -1,15 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: rabiner <marvin@42lausanne.ch>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 18:51:32 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 16:55:35 by rabiner          ###   ########.fr       */
+/*   Created: 2024/10/01 16:29:23 by rabiner           #+#    #+#             */
+/*   Updated: 2024/10/02 16:15:14 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-char **g_env = NULL;
+size_t	ft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+/*
+int	main(int ac, char **av)
+{
+	if (ac != 2)
+		return 0;
+	printf("%s: %zu carac\n", av[1], ft_strlen(av[1]));
+	return 0;
+}
+*/

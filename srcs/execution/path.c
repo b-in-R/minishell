@@ -6,11 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 15:29:15 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 17:00:32 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*join_path(const char *dir, const char *cmd)
 {

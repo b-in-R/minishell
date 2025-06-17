@@ -6,11 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:09:00 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/16 10:25:04 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 16:53:51 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 
 // renvoie sur la bonne fonction builtin
 int	execute_builtin(t_cmd *cmd)

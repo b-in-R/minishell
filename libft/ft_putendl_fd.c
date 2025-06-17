@@ -1,15 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: rabiner <marvin@42lausanne.ch>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 18:51:32 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 16:55:35 by rabiner          ###   ########.fr       */
+/*   Created: 2024/10/28 15:26:13 by rabiner           #+#    #+#             */
+/*   Updated: 2024/10/28 15:26:15 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "libft.h"
 
-char **g_env = NULL;
+void	ft_putendl_fd(char *s, int fd)
+{
+	ft_putstr_fd(s, fd);
+	ft_putchar_fd('\n', fd);
+}
+/*
+int	main(void)
+{
+	char	s[] = "test avec backslashN";
+	ft_putendl_fd(s, 1);
+	return 0;
+}
+*/

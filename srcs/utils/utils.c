@@ -6,11 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/16 10:35:02 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 16:55:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 
 void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd)
 {
