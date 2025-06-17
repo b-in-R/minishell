@@ -6,11 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/16 10:23:52 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 17:25:32 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 	input expected:
@@ -47,7 +47,7 @@ void	execute_command(t_cmd *cmd)
 	error_exit("execute_command: execve failure\n");
 }
 
-void	execute(t_cmd *cmds)
+int	execute(t_cmd *cmds)
 {
 	t_cmd	*cmd;
 	int		fd[2];
@@ -74,7 +74,7 @@ void	execute(t_cmd *cmds)
 		fd[1] = -1;
 		setup_redirections(cmd, in_fd, fd);
 		execute_builtin(cmd);
-		return ;
+		return (1);
 	}
 	
 	while (cmd)
@@ -112,4 +112,5 @@ void	execute(t_cmd *cmds)
 			cmd = cmd->next;
 		}
 	}
+	return (1);
 }

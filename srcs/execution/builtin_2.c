@@ -6,11 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:50:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/03 18:57:22 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 17:00:23 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/minishell.h"
+#include "../../includes/minishell.h"
 
 int	ft_export(char **args)
 {

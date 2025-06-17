@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/17 16:37:32 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/17 17:21:47 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,13 +40,17 @@ EXEC = execute.c \
 		path.c \
 
 EXPAND_DIR = expander
-EXPAND = expander.c \
+EXPAND = expand_tokens.c \
+		get_env.c
 
 LEXER_DIR = lexer
-LEXER = tokenization.c \
+LEXER = create_token.c \
+		handle_tokens.c \
+		lexer.c \
 
 PARSER_DIR = parser
-PARSER = parsing.c \
+PARSER = create_cmd.c \
+		parser.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \
@@ -54,19 +58,17 @@ SIGNAL = signal.c \
 UTILS_DIR = utils
 UTILS = utils.c \
 		env.c \
+		free.c \
 		
 		
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \
 		$(addprefix $(SRCS_DIR)/$(UTILS_DIR)/, $(UTILS)) \
-		
-#		$(addprefix $(SRCS_DIR)/$(EXPAND_DIR)/, $(EXPAND)) \
+		$(addprefix $(SRCS_DIR)/$(EXPAND_DIR)/, $(EXPAND)) \
 		$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER)) \
 		$(addprefix $(SRCS_DIR)/$(PARSER_DIR)/, $(PARSER)) \
 		$(addprefix $(SRCS_DIR)/$(SIGNAL_DIR)/, $(SIGNAL)) \
-
-OBJS = $(SRCS:.c=.o)
 
 
 OBJS_DIR = $(SRCS_DIR)/objs
@@ -88,15 +90,11 @@ $(NAME): $(OBJS) $(LIBFT_A)
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-$(LIBFT_A):
-	@$(MAKE) -C $(LIBFT_DIR)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
-	@$(MAKE) -C $(LIBFT_DIR) clean
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
