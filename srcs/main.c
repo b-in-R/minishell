@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/17 17:23:01 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/17 17:41:06 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	main(void)
 // VERSION FINALE (FAUT COMPLETER AU FUR A MESURE)
 	while (1)
 	{
-	line = readline("minishell> ");
+	line = readline(GREE"minishell> "RST);
 	if (!line)
 	{
 		printf("exit\n");
