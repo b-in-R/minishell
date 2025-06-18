@@ -6,7 +6,7 @@
 #    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/18 15:39:42 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/06/18 15:57:14 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ LEXER = create_token.c \
 PARSER_DIR = parser
 PARSER = create_cmd.c \
 		parser.c \
+		syntax_checker.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \

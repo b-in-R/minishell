@@ -6,11 +6,12 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/18 15:44:49 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/18 15:55:44 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <readline/history.h>
 
 //TEMPORAIRE: affichage types
 char	*token_type_str(t_token_type type)
