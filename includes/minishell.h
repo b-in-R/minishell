@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:13:08 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:43:01 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,8 +163,8 @@ char	*find_command_path(const char *cmd);
 
 
 /*---------------Lexer----------------*/
+t_token *create_token(t_token_type type, char *value);
 t_token	*lexer(char *line);
-t_token	*create_token(t_token_type type, char *value);
 void	add_token(t_token **list, t_token *new_token);
 void	handle_pipe(t_token **tokens, size_t *i);
 void	handle_redirection(t_token **tokens, char *line, size_t *i);

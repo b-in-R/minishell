@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/17 17:41:06 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:44:49 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*token_type_str(t_token_type type)
 	if (type == REDIR_OUT) return "REDIR_OUT";
 	if (type == REDIR_APPEND) return "REDIR_APPEND";
 	if (type == HEREDOC) return "HEREDOC";
-	return "UNKNOWN";
+	return ("UNKNOWN");
 }
 
 //TEMPORAIRE : fonction de debug pour afficher les tokens
@@ -122,11 +122,10 @@ int	main(void)
 	t_cmd	*cmds;
 	int		last_status; // Code de retour de la dernière commande exécutée. (pour traiter $? dans l'expansion)
 
-	// TEMPORAIRE: pour tester
 	last_status = 0; // Initialisation du dernier statut à 0 (succès)
 //	line = "echo $USER $HOME $? | wc -l >> result.txt";
 /*
-		A SUPPR	
+		A SUPPR
 	printf("==> Ligne testée : %s\n\n", line);
 	tokens = lexer(line);
 	if (!tokens)

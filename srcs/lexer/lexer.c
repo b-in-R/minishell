@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:25 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/28 13:38:23 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/13 16:02:22 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 */
 t_token	*lexer(char *line)
 {
-	t_token	*tokens;
+	t_token		*tokens;
 	size_t		i;
 
 	tokens = NULL;

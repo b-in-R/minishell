@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/04 18:40:50 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/13 16:02:38 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	handle_word(t_token **tokens, char *line, size_t *i)
 	{
 		(*i)++;
 	}
-	word = ft_substr(line , start, *i - start);
+	word = ft_substr(line, start, *i - start);
 	add_token(tokens, create_token(WORD, word));
 }
 

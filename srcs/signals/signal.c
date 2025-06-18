@@ -6,13 +6,13 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:09:18 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/05/27 15:11:13 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/13 16:06:39 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-volatile sig_atomic_t g_signal = 0; // Variable globale pour stocker le status de sortie
+volatile sig_atomic_t	g_signal = 0; // Variable globale pour stocker le status de sortie
 
 /*
 *	Quand tu tapes Ctrl-C dans un shell Bash interactif :
