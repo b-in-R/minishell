@@ -6,7 +6,7 @@
 #    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/18 15:57:14 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/06/24 12:35:03 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ NAME = minishell
 CC = gcc
 RM = rm -f
 RMDIR = rm -rf
-CFLAGS = -Wall -Wextra -Werror -Iinclude
-LIBS = -lreadline
+CFLAGS = -Wall -Wextra -Werror -g -arch arm64 -Iinclude -Ilibft -I/opt/homebrew/opt/readline/include
+LIBS = -L/opt/homebrew/opt/readline/lib -lreadline
 
 #
 #	DOSSIER_DIR = dossier

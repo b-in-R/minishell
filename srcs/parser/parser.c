@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/24 11:36:11 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/24 15:29:43 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ t_cmd	*parser(t_token *tokens)
 			current = NULL;
 			tokens = tokens->next;
 		}
-		tokens = tokens->next;
+		else
+			tokens = tokens->next;
 	}
 	return (cmds);
 }

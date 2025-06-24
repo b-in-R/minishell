@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:51:19 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/18 16:03:23 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/24 11:36:12 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@
 *	- Vérifie les pipes consécutifs (ex: `||`)
 *	- Vérifie les redirections consécutives (ex: `>> >` ou `<< <`)
 *
-*	A voir sil faut implementer d'autres vérifications plus complexes comme erreurs de frappe ou ' au debut ou a la fin ou sans fermer
+*	A implementer encore:
+*		- Vérifier les quotes non fermées (ex: `'`, `"` sans fermeture)
+*		- Si on veux envoyer message derreur avec le \ (échappement) ou ; (séparateur de commandes), implemter , sinon ces seront traités par le lexer comme mots
 */
 int	check_syntax_errors(t_token *tokens)
 {

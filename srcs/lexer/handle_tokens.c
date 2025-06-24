@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/13 16:02:38 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/24 11:36:07 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,19 @@ void	handle_quotes(t_token **tokens, char *line, size_t *i)
 	char	type_quote;
 	char	*word;
 	size_t	start;
+	t_token	*new_token;
 
 	type_quote = line[*i]; //guillemet ouvrant (le premier)
 	start = ++(*i); // caractere suivant au guillemet ouvrant
 	while (line[*i] && line[*i] != type_quote)
 		(*i)++; // i incrementé jusqu'au dernier guillemet
 	word = ft_substr(line, start, *i - start); // extrait le mot/mots placé entre les guillemets
-	add_token(tokens, create_token(WORD, word));
+	new_token = create_token(WORD, word);
+	if (type_quote == '\'')
+		new_token->quoted_type = SINGLE_QUOTE; // si c'est un guillemet simple
+	else
+		new_token->quoted_type = DOUBLE_QUOTE; // si c'est un guillemet double
+	add_token(tokens, new_token);
 	if (line[*i] == type_quote)
 		(*i)++; // se place dans le caractere suivant au dernier guillemet
 }

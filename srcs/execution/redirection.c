@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:42 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:00:38 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/19 15:48:30 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ void	setup_redirections(t_cmd *cmd, int in_fd, int pipe_fd[2])
 	int	fd_in;
 	int	flags;
 	int	fd_out;
-	
+
+	// Verifier cmd->in_fd (heredoc) prioritaire ** avant de tester cmd->infile
+	if (cmd->in_fd != -1)
+	{
+		dup2(cmd->in_fd, STDIN_FILENO);
+		close(cmd->in_fd);
+	}
 	// redirection d'entree (par defaut in_fd = 0)
 	if (cmd->infile)
 	{
@@ -33,7 +39,6 @@ void	setup_redirections(t_cmd *cmd, int in_fd, int pipe_fd[2])
 		dup2(in_fd, STDIN_FILENO);
 		close(in_fd);
 	}
-	
 	// redirecition de sortie, si la cmd a "> fichier" ou "">> fichier"
 	if (cmd->outfile)
 	{

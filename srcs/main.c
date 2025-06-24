@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/24 13:12:10 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/24 15:31:33 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int	main(void)
 	if (!line)
 	{
 		printf(BLUE"exit\n"RST);
-		break;
+		rl_clear_history();
+		return (0); // Si readline retourne NULL, c'est qu'on a tapé Ctrl-D (EOF), on quitte le shell
 	}
 	if (line[0] != '\0')
 		add_history(line);
@@ -56,7 +57,5 @@ int	main(void)
 	free_tokens(tokens);
 	free(line); // readline fait malloc donc il faut free
 	}
-	printf(BLUE"exit\n"RST);
-	rl_clear_history();
 	return (0);
 }
