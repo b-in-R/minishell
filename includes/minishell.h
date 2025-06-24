@@ -177,6 +177,7 @@ t_cmd	*create_cmd(void);
 void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
 int		add_arg(char ***args, const char *value);
 void	handle_redirections(t_cmd *current, t_token **tokens);
+int	handle_heredocs(t_cmd *cmds);
 int		check_syntax_errors(t_token *tokens);
 
 /*--------------Expander--------------*/
