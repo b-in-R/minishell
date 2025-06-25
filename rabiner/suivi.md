@@ -6,9 +6,7 @@ EN COURS:
 
 	uniquement commandes builtin ok..
 
-	explications et commentaires:
-
-		-	execute.c - execute();
+	envp ok -> var=val ne marche pas (symbole '=' ?)
 
 	execute.c :		renvoi le code int last_status des commandes ( echo $? )
 						0  1  126  127  ..
@@ -16,14 +14,11 @@ EN COURS:
 
 ===============================================================================
 
-
 QUESTIONS - INFOS PARTAGEES:
 
-	- 	est ce que si depuis minishell on fait cd etc, ca se repercute aussi sur
-		le shell principal?
+	- var=val KO (symbole '='?)
 
-	-	variable globale (besoin de char **envp, a mettre dans t_cmd->g_env ?)
-
+	- codes d'erreur a verifier pour renvoi (last_status)
 
 ===============================================================================
 

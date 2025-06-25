@@ -6,27 +6,27 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:09:00 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 16:53:51 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/25 18:32:16 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // renvoie sur la bonne fonction builtin
-int	execute_builtin(t_cmd *cmd)
+int	execute_builtin(t_cmd *cmd, char **my_env)
 {
 	if (!ft_strcmp(cmd->args[0], "echo"))
 		return (ft_echo(cmd->args));
 	if (!ft_strcmp(cmd->args[0], "cd"))
-		return (ft_cd(cmd->args));
+		return (ft_cd(my_env, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "pwd"))
-		return (ft_pwd(cmd->args));
+		return (ft_pwd(my_env, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "export"))
-		return (ft_export(cmd->args));
+		return (ft_export(my_env, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "unset"))
-		return (ft_unset(cmd->args));
+		return (ft_unset(my_env, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "env"))
-		return (ft_env(cmd->args));
+		return (ft_env(my_env, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "exit"))
 		exit(0);// voir si free etc avant
 	return (1);

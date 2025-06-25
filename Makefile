@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/17 22:02:30 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/25 18:33:24 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,8 +44,11 @@ EXEC = execute.c \
 		check_builtin.c \
 		builtin_1.c \
 		builtin_2.c \
-		builtin_utils.c \
 		path.c \
+
+ENV_DIR = env
+ENV = env.c \
+		env_utils.c \
 
 EXPAND_DIR = expander
 EXPAND = expand_tokens.c \
@@ -65,12 +68,12 @@ SIGNAL = signal.c \
 
 UTILS_DIR = utils
 UTILS = utils.c \
-		env.c \
 		free.c \
 		
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \
+		$(addprefix $(SRCS_DIR)/$(ENV_DIR)/, $(ENV)) \
 		$(addprefix $(SRCS_DIR)/$(UTILS_DIR)/, $(UTILS)) \
 		$(addprefix $(SRCS_DIR)/$(EXPAND_DIR)/, $(EXPAND)) \
 		$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER)) \

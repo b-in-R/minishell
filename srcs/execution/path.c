@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/22 19:53:17 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/25 18:35:30 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*join_path(const char *dir, const char *cmd)
 	return (path);
 }
 
-char	*find_command_path(const char *cmd)
+char	*find_command_path(char **my_env, const char *cmd)
 {
 	char	**paths;
 	char	*path;
@@ -44,8 +44,8 @@ char	*find_command_path(const char *cmd)
 	
 	// test
 	//printf(YELL"find_cmd-path 1\n"RST);
-	//path_var = get_env("PATH");
-	path_var = getenv("PATH");
+	path_var = get_env(my_env, "PATH");
+	//path_var = getenv("PATH");
 	//printf(YELL"path_var:\t%s\n", path_var);
 
 	
@@ -78,7 +78,6 @@ char	*find_command_path(const char *cmd)
 		{
 			ft_split_free(paths);
 			// test
-			printf(CYAN"path access ok:\t%s\n"RST, path);
 			
 			return (path);
 		}

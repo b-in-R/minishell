@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/22 19:43:18 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/25 18:38:10 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	print_detailled_cmds(t_cmd *cmds)
 	printf("append:\t\t%i\n", cmds->append);
 	printf("heredoc:\t%i\n", cmds->heredoc);
 	printf("delimiter:\t%s\n", cmds->delimiter);
-//	printf("g_env:\t%s", cmds->g_env[1]);
 }
 
 
@@ -138,7 +137,7 @@ int	main(int ac, char **av, char **envp)
 }*/
 
 // precedent main
-int	main(int ac, char **av)
+int	main(int ac, char **av, char **envp)
 {
 	/*
 	char	*sdf = {"1", "2", NULL}; 
@@ -155,6 +154,9 @@ int	main(int ac, char **av)
 	t_token	*tokens;
 	t_cmd	*cmds;
 	int		last_status; // Code de retour de la dernière commande exécutée. (pour traiter $? dans l'expansion)
+	char	**my_env;
+
+	my_env = init_env(envp);
 
 	// TEMPORAIRE: pour tester
 	last_status = 0; // Initialisation du dernier statut à 0 (succès)
@@ -191,7 +193,7 @@ int	main(int ac, char **av)
 	tokens = lexer(line);
 	expand_tokens(tokens, last_status); //modifie-mets a jour directement le champ (token->value)
 	cmds = parser(tokens);
-	last_status = execute(cmds, av); // A implémenter , execute la commande et mets a jour last_status
+	last_status = execute(cmds, av, my_env); // A implémenter , execute la commande et mets a jour last_status
 	free_tokens(tokens);
 	free_cmds(cmds);
 	free(line); // readline fait malloc donc il faut free

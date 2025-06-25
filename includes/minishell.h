@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/22 19:57:51 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/25 18:31:01 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct	s_cmd {
 	int		append;          // 1 if '>>' (append mode), 0 if '>'
 	int		heredoc;         // 1 if '<<' is used (heredoc), 0 otherwise
 	char	*delimiter;     // The heredoc delimiter string (after '<<')
-	char	**g_env;			//	ajouter pour recupere l'env
 	struct	s_cmd*next;  // Pointer to the next command in a pipeline (after '|')
 }	t_cmd;
 
@@ -103,10 +102,6 @@ typedef struct	s_cmd {
 *		Grâce à ça, on pourra appeler une fonction execute(t_cmd *cmds) et faire tourner tout le shell.
 */
 
-/*----------Variable globale-----------*/
-// /utils/env.c
-extern char	**g_env;// dans main, builtin_1, builtin_utils, utils
-
 /*------Codes ANSI pour formatage------*/
 # define YELL	"\033[1;33m"
 # define GREE	"\033[1;32m"
@@ -124,45 +119,46 @@ extern volatile sig_atomic_t	g_signal;
 
 /*---------------Commun---------------*/
 // /utils/utils.c
-void	error_exit(char *str);
+void	error_exit(char **my_env, char *str);
 void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
-void	free_env(void);
-void	init_env(char **envp);
 
 // /srcs/main.c
 void	print_cmds(t_cmd *cmds);
 void	print_detailled_cmds(t_cmd *cmds);
 
-
 /*-------------Execution--------------*/
 // /execution/execute.c
-int		execute(t_cmd *cmds, char **av);
-void	execute_command(t_cmd *cmd);
+int		execute(t_cmd *cmds, char **av, char **my_env);
+void	execute_command(t_cmd *cmd, char **my_env);
 
 // /execution/redirection.c
-void	setup_redirections(t_cmd *cmd, int int_fd, int pipe_fd[2]);
+void	setup_redirections(char **my_env, t_cmd *cmd, int int_fd, int pipe_fd[2]);
 
 // /execution/check_builtin.c
 int		is_builtin(t_cmd *cmd);
-int		execute_builtin(t_cmd *cmd);
+int		execute_builtin(t_cmd *cmd, char **my_env);
 
 // /execution/builtin_1.c
 int		ft_echo(char **args);
-int		ft_cd(char **args);
-int		ft_pwd(char **args);
-int		ft_env(char **args);
+int		ft_cd(char **my_env, char **args);
+int		ft_pwd(char **my_env, char **args);
+int		ft_env(char **my_env, char **args);
 
 // /execution/builtin_2.c
-int		ft_export(char **args);
-int		ft_unset(char **args);
-
-// /execution/builtin_utils.c
-char	*get_env(char *str);
-int		set_env(char *arg);// norminette
-void	unset_env(char *arg);
+int		ft_export(char **my_env, char **args);
+int		ft_unset(char **my_env, char **args);
 
 // /execution/path.c
-char	*find_command_path(const char *cmd);
+char	*find_command_path(char **my_env, const char *cmd);
+
+// /env/env.c
+char	**init_env(char **envp);
+void	free_env(char **my_env);
+
+// env/env_utils.c
+char	*get_env(char **env, char *str);
+int		set_env(char **env, char *arg);
+void	unset_env(char **env, char *arg);
 /*------------------------------------*/
 
 

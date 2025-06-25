@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:42:45 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/22 19:27:16 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/25 18:35:09 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*get_env(char *str)
+// retrouver la valeur d'une variable d'environnement (aussi avant execve)
+char	*get_env(char **my_env, char *str)
 {
 	int		i;
 	size_t	len;
@@ -21,21 +22,17 @@ char	*get_env(char *str)
 		return (NULL);
 	len = ft_strlen(str);
 	i = 0;
-	while (g_env && g_env[i])
+	while (my_env && my_env[i])
 	{
-		printf(YELL"get_env 2\n"RST);
-		if (!ft_strncmp(g_env[i], str, len) && g_env[i][len] == '=')
-		{
-			printf(YELL"get_env 1\n"RST);
-			return (g_env[i] + len  + 1);
-		}
+		if (!ft_strncmp(my_env[i], str, len) && my_env[i][len] == '=')
+			return (my_env[i] + len  + 1);
 		i++;
 	}
-	printf(YELL"get_env 0\n"RST);
 	return (NULL);
 }
 
-int	set_env(char *arg)
+// defini ou modifie une variable d'environnement
+int	set_env(char **my_env, char *arg)
 {
 	char	*key;
 	char	**new_env;
@@ -55,12 +52,12 @@ int	set_env(char *arg)
 	
 	// verif si la variable existe deja
 	i = 0;
-	while (g_env && g_env[i])
+	while (my_env && my_env[i])
 	{
-		if (!ft_strncmp(g_env[i], key, len) && g_env[i][len] == '=')
+		if (!ft_strncmp(my_env[i], key, len) && my_env[i][len] == '=')
 		{
-			free(g_env[i]);
-			g_env[i] = ft_strdup(arg);
+			free(my_env[i]);
+			my_env[i] = ft_strdup(arg);
 			free(key);
 			return (0);
 		}
@@ -74,39 +71,40 @@ int	set_env(char *arg)
 	j = 0;
 	while (j < i)
 	{
-		new_env[j] = g_env[j];
+		new_env[j] = my_env[j];
 		j++;
 	}
 	new_env[i] = ft_strdup(arg);
 	new_env[i + 1] = NULL;
-	free(g_env);
-	g_env = new_env;
+	free(my_env);
+	my_env = new_env;
 	free(key);
 	return (0);
 }
 
-void	unset_env(char *arg)// explications
+// supprime une variable d'environnement
+void	unset_env(char **my_env, char *arg)
 {
 	int		i;
 	int		j;
 	size_t	len;
 	
-	if (!arg || !g_env)
+	if (!arg || !my_env)
 		return ;
 	len = ft_strlen(arg);
 	i = 0;
-	while (g_env[i])
+	while (my_env[i])
 	{
-		if (!ft_strncmp(g_env[i], arg, len) && g_env[i][len] == '=')
+		if (!ft_strncmp(my_env[i], arg, len) && my_env[i][len] == '=')
 		{
-			free(g_env[i]);
+			free(my_env[i]);
 			j = i;
-			while (g_env[j + 1])
+			while (my_env[j + 1])
 			{
-				g_env[j] = g_env[j + 1];
+				my_env[j] = my_env[j + 1];
 				j++;
 			}
-			g_env[j] = NULL;
+			my_env[j] = NULL;
 			return ;
 		}
 		i++;
