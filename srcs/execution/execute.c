@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 20:29:04 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/22 19:58:59 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,17 @@ void	execute_command(t_cmd *cmd)
 {
 	char	*path;
 	
+	// test
+	print_detailled_cmds(cmd);
+
 	path = find_command_path(cmd->args[0]);
 	if (!path)
 		error_exit("execute_command: command not fould\n");// texte a voir selon bash?
-	execve(path, cmd->args, cmd->g_env);
+	execve(path, cmd->args, g_env);
 	error_exit("execute_command: execve failure\n");
 }
 
-int	execute(t_cmd *cmds)
+int	execute(t_cmd *cmds, char **av)
 {
 	t_cmd	*cmd;
 	int		fd[2];
@@ -56,7 +59,11 @@ int	execute(t_cmd *cmds)
 
 	cmd = cmds;
 
-	print_cmds(cmds);
+	if (av[1] && av[1][0] == 'd')
+		print_cmds(cmds);
+
+	// test
+	printf(RED"execute 1\n"RST);
 	/*
 		setup_redirections:
 			si pas de fork, mais redirections quand meme:

@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:42:45 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 16:53:41 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/22 19:27:16 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,15 @@ char	*get_env(char *str)
 	i = 0;
 	while (g_env && g_env[i])
 	{
+		printf(YELL"get_env 2\n"RST);
 		if (!ft_strncmp(g_env[i], str, len) && g_env[i][len] == '=')
+		{
+			printf(YELL"get_env 1\n"RST);
 			return (g_env[i] + len  + 1);
+		}
 		i++;
 	}
+	printf(YELL"get_env 0\n"RST);
 	return (NULL);
 }
 

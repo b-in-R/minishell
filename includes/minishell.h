@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 20:30:31 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/22 19:57:51 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,12 @@ void	init_env(char **envp);
 
 // /srcs/main.c
 void	print_cmds(t_cmd *cmds);
+void	print_detailled_cmds(t_cmd *cmds);
+
 
 /*-------------Execution--------------*/
 // /execution/execute.c
-int		execute(t_cmd *cmds);
+int		execute(t_cmd *cmds, char **av);
 void	execute_command(t_cmd *cmd);
 
 // /execution/redirection.c

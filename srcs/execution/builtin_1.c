@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:00:08 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/22 20:08:04 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,17 @@ int	ft_env(char **args)
 
 	(void)args;
 	i = 0;
+	// test
+	printf(YELL"ft_env -> start\n"RST);
+	//printf(YELL"g_env[%i]:\t%s\n"RST, i, g_env[i]);
+
 	while (g_env && g_env[i])
 	{
+		//test
+		if (i == 0)
+			printf(YELL"ft_env -> while ok\n"RST);
+		printf(YELL"g_env[%i]:\t%s\n"RST, i, g_env[i]);
+			
 		printf("%s\n", g_env[i]);
 		i++;
 	}

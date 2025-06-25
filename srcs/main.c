@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/17 22:03:05 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/22 19:43:18 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,26 @@ void	print_tokens(t_token *tokens)
 	}
 }
 
+
+void	print_detailled_cmds(t_cmd *cmds)
+{
+	int	i = 0;
+	
+	printf("\n\n### Detailled ###\n");
+	while (cmds->args[i])
+	{
+		printf("args[%i]:\t%s\n", i, cmds->args[i]);
+		i++;
+	}
+	printf("infile:\t\t%s\n", cmds->infile);
+	printf("outfile:\t%s\n", cmds->outfile);
+	printf("append:\t\t%i\n", cmds->append);
+	printf("heredoc:\t%i\n", cmds->heredoc);
+	printf("delimiter:\t%s\n", cmds->delimiter);
+//	printf("g_env:\t%s", cmds->g_env[1]);
+}
+
+
 //TEMPORAIRE : fonction pour montrer les cmds
 void print_cmds(t_cmd *cmds)
 {
@@ -45,7 +65,10 @@ void print_cmds(t_cmd *cmds)
 		{
 			printf("Args: ");
 			for (int j = 0; cmds->args[j]; j++)
-				printf("[%s] ", cmds->args[j]);
+			{
+				//printf("\n[%s] ", cmds->args[j]);
+				print_detailled_cmds(cmds);
+			}
 			printf("\n");
 		}
 		if (cmds->infile)
@@ -115,7 +138,7 @@ int	main(int ac, char **av, char **envp)
 }*/
 
 // precedent main
-int	main(void)
+int	main(int ac, char **av)
 {
 	/*
 	char	*sdf = {"1", "2", NULL}; 
@@ -123,6 +146,10 @@ int	main(void)
 
 	printf("%i", sdf + dfg);
 	*/	
+	if (ac  == 1)
+	{
+		(void)av;
+	}
 	
 	char	*line;
 	t_token	*tokens;
@@ -164,7 +191,7 @@ int	main(void)
 	tokens = lexer(line);
 	expand_tokens(tokens, last_status); //modifie-mets a jour directement le champ (token->value)
 	cmds = parser(tokens);
-	last_status = execute(cmds); // A implémenter , execute la commande et mets a jour last_status
+	last_status = execute(cmds, av); // A implémenter , execute la commande et mets a jour last_status
 	free_tokens(tokens);
 	free_cmds(cmds);
 	free(line); // readline fait malloc donc il faut free
