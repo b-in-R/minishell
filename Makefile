@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/25 18:33:24 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/26 16:37:54 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,11 @@ ENV_DIR = env
 ENV = env.c \
 		env_utils.c \
 
+BUILT_DIR = builtin
+BUILT = builtin_1.c \
+		builtin_2.c \
+		check_builtin.c \
+
 EXPAND_DIR = expander
 EXPAND = expand_tokens.c \
 		get_env.c
@@ -74,6 +79,7 @@ UTILS = utils.c \
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \
 		$(addprefix $(SRCS_DIR)/$(ENV_DIR)/, $(ENV)) \
+		$(addprefix $(SRCS_DIR)/$(BUILT_DIR)/, $(BUILT)) \
 		$(addprefix $(SRCS_DIR)/$(UTILS_DIR)/, $(UTILS)) \
 		$(addprefix $(SRCS_DIR)/$(EXPAND_DIR)/, $(EXPAND)) \
 		$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER)) \

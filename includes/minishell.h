@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/25 18:31:01 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/26 16:38:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,17 +134,17 @@ void	execute_command(t_cmd *cmd, char **my_env);
 // /execution/redirection.c
 void	setup_redirections(char **my_env, t_cmd *cmd, int int_fd, int pipe_fd[2]);
 
-// /execution/check_builtin.c
+// /builtin/check_builtin.c
 int		is_builtin(t_cmd *cmd);
 int		execute_builtin(t_cmd *cmd, char **my_env);
 
-// /execution/builtin_1.c
+// /builtin/builtin_1.c
 int		ft_echo(char **args);
 int		ft_cd(char **my_env, char **args);
 int		ft_pwd(char **my_env, char **args);
 int		ft_env(char **my_env, char **args);
 
-// /execution/builtin_2.c
+// /builtin/builtin_2.c
 int		ft_export(char **my_env, char **args);
 int		ft_unset(char **my_env, char **args);
 
