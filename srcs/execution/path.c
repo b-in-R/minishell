@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/25 18:35:30 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/26 16:48:24 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,46 +39,19 @@ char	*find_command_path(char **my_env, const char *cmd)
 			return (ft_strdup(cmd));
 		return (NULL);
 	}
-
-	// sinon, on cherche dans $PATH
-	
-	// test
-	//printf(YELL"find_cmd-path 1\n"RST);
 	path_var = get_env(my_env, "PATH");
-	//path_var = getenv("PATH");
-	//printf(YELL"path_var:\t%s\n", path_var);
-
-	
 	if (!path_var)
 		return (NULL);
-
 	paths = ft_split(path_var, ':');
 	if (!paths)
 		return (NULL);
-
-		/*
-	// test: voir les path
-	int	j = 0;
-	while (paths[j])
-	{
-		printf(YELL"paths[%i]:\t%s\n"RST, j, paths[j]);
-		j++;
-	}
-	j = 0;
-	*/
-
 	i = 0;
 	while (paths[i])
 	{
 		path = join_path(paths[i], cmd);
-		// test
-		//printf(YELL"path[%i]:\t%s\n"RST, i, path);
-		
 		if (path && access(path, X_OK) == 0)
 		{
 			ft_split_free(paths);
-			// test
-			
 			return (path);
 		}
 		free(path);

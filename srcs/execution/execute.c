@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/25 18:36:06 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/26 18:23:14 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	execute_command(t_cmd *cmd, char **my_env)
 	
 	// test
 	//print_detailled_cmds(cmd);
-
+	
 	path = find_command_path(my_env, cmd->args[0]);
 	if (!path)
 		error_exit(my_env, "execute_command: command not fould\n");// texte a voir selon bash?
@@ -50,7 +50,7 @@ void	execute_command(t_cmd *cmd, char **my_env)
 	error_exit(my_env, "execute_command: execve failure\n");
 }
 
-int	execute(t_cmd *cmds, char **av, char **my_env)
+int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
 {
 	t_cmd	*cmd;
 	int		fd[2];
@@ -59,8 +59,9 @@ int	execute(t_cmd *cmds, char **av, char **my_env)
 
 	cmd = cmds;
 
-	if (av[1] && av[1][0] == 'd')
-		print_cmds(cmds);
+	(void)av;
+	//if (av[1] && av[1][0] == 'd')
+	//	print_cmds(cmds);
 
 	/*
 		setup_redirections:
@@ -76,6 +77,9 @@ int	execute(t_cmd *cmds, char **av, char **my_env)
 	// si qu'1 cmd & is_builtin ok: pas de fork pour l'exec -- ? 
 	if (!cmd->next && is_builtin(cmd))
 	{
+		//test
+		printf(YELL"just builtin - no fork\n"RST);
+		
 		fd[0] = -1;
 		fd[1] = -1;
 		setup_redirections(my_env, cmd, in_fd, fd);

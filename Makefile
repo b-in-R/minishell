@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/26 16:37:54 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/26 18:46:12 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,8 @@ RST		:= \033[0m
 #
 
 SRCS_DIR = srcs
-SRCS = main.c \
-#SRCS =	test_main.c \
+#SRCS = main.c 
+SRCS =	test_main.c 
 
 LIBFT_DIR =  libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -41,9 +41,6 @@ LIBFT_A = $(LIBFT_DIR)/libft.a
 EXEC_DIR = execution
 EXEC = execute.c \
 		redirection.c \
-		check_builtin.c \
-		builtin_1.c \
-		builtin_2.c \
 		path.c \
 
 ENV_DIR = env

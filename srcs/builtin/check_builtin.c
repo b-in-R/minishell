@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:09:00 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/25 18:32:16 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/26 16:54:47 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	execute_builtin(t_cmd *cmd, char **my_env)
 	if (!ft_strcmp(cmd->args[0], "unset"))
 		return (ft_unset(my_env, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "env"))
-		return (ft_env(my_env, cmd->args));
+		return (ft_env(my_env));
 	if (!ft_strcmp(cmd->args[0], "exit"))
 		exit(0);// voir si free etc avant
 	return (1);

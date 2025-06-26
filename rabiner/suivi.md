@@ -11,6 +11,8 @@ EN COURS:
 	execute.c :		renvoi le code int last_status des commandes ( echo $? )
 						0  1  126  127  ..
 
+	test_main.c:	si ls apres unset $PATH: sortie de minishell,
+					voir si pareil avec main normal
 
 ===============================================================================
 
@@ -23,8 +25,6 @@ QUESTIONS - INFOS PARTAGEES:
 ===============================================================================
 
 GENERAL:
-
-	-	structure.md:	reecrire plus simplement
 
 	-	toutes les commandes builtin sont executees dans un fork
 		--> quand il n'y a pas de pipe (1 seule cmd builtin), executer direct
@@ -41,6 +41,8 @@ GENERAL:
 	-	redirections avec heredoc (t_cmd->heredoc   t_cmd->delimiter)
 		--> fonction handle_heredoc
 
+	-	test_main.c:	si ls apres unset $PATH: sortie de minishell,
+						voir si pareil avec main normal
 
 ===============================================================================
 
