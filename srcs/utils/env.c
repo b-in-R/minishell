@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:51:32 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 16:55:35 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:45:31 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

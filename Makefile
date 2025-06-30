@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
+#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/17 17:21:47 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/24 12:35:03 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = minishell
 CC = gcc
 RM = rm -f
 RMDIR = rm -rf
-CFLAGS = -Wall -Wextra -Werror -Iinclude
+CFLAGS = -Wall -Wextra -Werror 
 LIBS = -lreadline
 
 #
@@ -51,6 +51,7 @@ LEXER = create_token.c \
 PARSER_DIR = parser
 PARSER = create_cmd.c \
 		parser.c \
+		syntax_checker.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \
@@ -59,8 +60,7 @@ UTILS_DIR = utils
 UTILS = utils.c \
 		env.c \
 		free.c \
-		
-		
+
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \

@@ -35,12 +35,12 @@ Effet : Le contenu du fichier input.txt remplace l’entrée standard (stdin).
 Dans la structure t_cmd :  infile = "input.txt"
 
 - "> : outfile (écrasement)"
-Commande : cat < input.txt
+Commande : echo hello > file.txt
 Effet : Le texte "hello" est écrit dans file.txt, en écrasant le contenu précédent.
 
 Dans ta structure : outfile = "file.txt";  append = 0;
 
-- ">> : outfile (ajout)"
+- ">> : outfile (append)"
 Commande : echo hello >> file.txt
 Effet : "hello" est ajouté à la fin de file.txt, sans effacer son contenu.
 Dans ta structure : outfile = "file.txt";  append = 1;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:13:08 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/24 15:31:58 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,23 @@ typedef enum	e_token_type
 	HEREDOC       // Here-document symbol '<<' for multiline input
 }	t_token_type;
 
+/*
+*	Quote types used to handle quotes in the input line
+*/
+typedef enum e_quote_type
+{
+	NO_QUOTE,
+	SINGLE_QUOTE,
+	DOUBLE_QUOTE
+}	t_quote_type;
+
 /* Represents a single token parsed from the input line
 *	t_token are used to analyze and understand what the user wants to do, step by step.
 */
 typedef struct	s_token {
 	char			*value; // The actual content of the token (e.g. "ls", ">", "file.txt")
 	t_token_type	type;   // The type of this token (WORD, PIPE, etc.)
+	t_quote_type	quoted_type; // Type of quotes if the token is quoted (SINGLE, DOUBLE, NONE)
 	struct s_token	*next;  // Pointer to the next token in the list
 }	t_token;
 
@@ -57,6 +68,8 @@ typedef struct	s_cmd {
 	char	*outfile;       // Output redirection file (for '>' or '>>')
 	int		append;          // 1 if '>>' (append mode), 0 if '>'
 	int		heredoc;         // 1 if '<<' is used (heredoc), 0 otherwise
+	int		expand_heredoc; // 1 si on fait l’expansion, 0 sinon
+	int		in_fd;			// File descriptor for input redirection (if any)
 	char	*delimiter;     // The heredoc delimiter string (after '<<')
 	char	**g_env;			//	ajouter pour recupere l'env
 	struct	s_cmd*next;  // Pointer to the next command in a pipeline (after '|')
@@ -163,8 +176,8 @@ char	*find_command_path(const char *cmd);
 
 
 /*---------------Lexer----------------*/
+t_token *create_token(t_token_type type, char *value);
 t_token	*lexer(char *line);
-t_token	*create_token(t_token_type type, char *value);
 void	add_token(t_token **list, t_token *new_token);
 void	handle_pipe(t_token **tokens, size_t *i);
 void	handle_redirection(t_token **tokens, char *line, size_t *i);
@@ -176,20 +189,28 @@ t_cmd	*parser(t_token *tokens);
 t_cmd	*create_cmd(void);
 void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
 int		add_arg(char ***args, const char *value);
-void	handle_redirections(t_cmd *current, t_token **tokens);
+void	handle_redirections(t_cmd *current, t_token *tokens);
+int 	handle_heredocs(t_cmd *cmds);
 int		check_syntax_errors(t_token *tokens);
+char	*remove_outer_quotes(const char *str);
 
 /*--------------Expander--------------*/
-void	expand_tokens(t_token *tokens, int last_status);
+int		expand_tokens(t_token *tokens, int last_status);
 char	*expand_word(const char *word, int last_status);
-char	*get_env_value(const char *word);
+char	*get_env_value(const char *key);
 void	update_quote_flags(char c, int *in_single, int *in_double);
-void	handle_dollar(const char *word, int *i, char **result, int last_status);
-void	append_char(char **str, char c);
-char	*str_append_free(char *s1, const char *s2);
+int		handle_dollar(const char *word, int *i, char **result, int last_status);
+int		append_char(char **str, char c);
+int		str_append_free(char **s1, const char *s2);
+int		is_var_char(char c);
 
 /*--------------Utils---------------*/
 void	free_tokens(t_token *tokens);
 void	free_cmds(t_cmd *cmds);
+
+/*--------------Signals--------------*/
+void	setup_signals(void);
+void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
 
 #endif
