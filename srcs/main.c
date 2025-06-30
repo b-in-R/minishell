@@ -6,12 +6,12 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/30 14:32:44 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/30 14:38:57 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
+/*
 int	main(void)
 {
 //TEMPORAIRE: affichage types
@@ -81,7 +81,7 @@ void print_cmds(t_cmd *cmds)
 		cmds = cmds->next;
 	}
 }
-
+*/
 // Point d'entrée du programme, gestion de la boucle principale du shell.
 /*
 * setup_signals(); gere le signaux Ctrl+C et Ctrl+\
@@ -164,39 +164,39 @@ int	main(int ac, char **av, char **envp)
 	setup_signals(); // Gère les signaux (Ctrl-C, Ctrl-\), avant la boucle parce que readline() va attendre l'entrée de l'utilisateur et on veut que les signaux soient gérés correctement.
 	while (1)
 	{
-	line = readline(GREE"minishell> "RST);
-	if (!line)
-	{
-		printf(BLUE"exit\n"RST);
-		rl_clear_history();
-		return (0); // Si readline retourne NULL, c'est qu'on a tapé Ctrl-D (EOF), on quitte le shell
-	}
-	if (line[0] != '\0')
-		add_history(line);
-	tokens = lexer(line);
-	if (!check_syntax_errors(tokens))
-	{
-		if (expand_tokens(tokens, last_status))
+		line = readline(GREE"minishell> "RST);
+		if (!line)
 		{
-			cmds = parser(tokens);
-			if (cmds != NULL)
+			printf(BLUE"exit\n"RST);
+			rl_clear_history();
+			return (0); // Si readline retourne NULL, c'est qu'on a tapé Ctrl-D (EOF), on quitte le shell
+		}
+		if (line[0] != '\0')
+			add_history(line);
+		tokens = lexer(line);
+		if (!check_syntax_errors(tokens))
+		{
+			if (expand_tokens(tokens, last_status))
 			{
-				if (handle_heredocs(cmds))
-					last_status = execute(cmds);
+				cmds = parser(tokens);
+				if (cmds != NULL)
+				{
+					if (handle_heredocs(cmds))
+						last_status = execute(cmds, NULL, my_env);
+					else
+						last_status = 1;
+					free_cmds(cmds);
+				}
 				else
-					last_status = 1;
-				free_cmds(cmds);
+					last_status = 2;
 			}
 			else
-				last_status = 2;
+				last_status = 2; // échec de l'expansion
 		}
 		else
-			last_status = 2; // échec de l'expansion
-	}
-	else
-		last_status = 2; // Si il y a une erreur de syntaxe, on met last_status à 2
-	free_tokens(tokens);
-	free(line); // readline fait malloc donc il faut free
+			last_status = 2; // Si il y a une erreur de syntaxe, on met last_status à 2
+		free_tokens(tokens);
+		free(line); // readline fait malloc donc il faut free
 	}
 	return (0);
 }
