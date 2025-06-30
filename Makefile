@@ -15,8 +15,8 @@ NAME = minishell
 CC = gcc
 RM = rm -f
 RMDIR = rm -rf
-CFLAGS = -Wall -Wextra -Werror -g -arch arm64 -Iinclude -Ilibft -I/opt/homebrew/opt/readline/include
-LIBS = -L/opt/homebrew/opt/readline/lib -lreadline
+CFLAGS = -Wall -Wextra -Werror 
+LIBS = -lreadline
 
 #
 #	DOSSIER_DIR = dossier
