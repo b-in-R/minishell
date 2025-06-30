@@ -61,7 +61,6 @@ UTILS = utils.c \
 		env.c \
 		free.c \
 
-
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \
