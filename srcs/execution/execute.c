@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:25:32 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/26 18:23:14 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,21 @@
 						cmd2->next = NULL;
 */
 
-void	execute_command(t_cmd *cmd)
+void	execute_command(t_cmd *cmd, char **my_env)
 {
 	char	*path;
 	
-	path = find_command_path(cmd->args[0]);
+	// test
+	//print_detailled_cmds(cmd);
+	
+	path = find_command_path(my_env, cmd->args[0]);
 	if (!path)
-		error_exit("execute_command: command not fould\n");// texte a voir selon bash?
-	execve(path, cmd->args, cmd->g_env);
-	error_exit("execute_command: execve failure\n");
+		error_exit(my_env, "execute_command: command not fould\n");// texte a voir selon bash?
+	execve(path, cmd->args, my_env);
+	error_exit(my_env, "execute_command: execve failure\n");
 }
 
-int	execute(t_cmd *cmds)
+int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
 {
 	t_cmd	*cmd;
 	int		fd[2];
@@ -55,6 +58,10 @@ int	execute(t_cmd *cmds)
 	pid_t	pid;
 
 	cmd = cmds;
+
+	(void)av;
+	//if (av[1] && av[1][0] == 'd')
+	//	print_cmds(cmds);
 
 	/*
 		setup_redirections:
@@ -70,30 +77,33 @@ int	execute(t_cmd *cmds)
 	// si qu'1 cmd & is_builtin ok: pas de fork pour l'exec -- ? 
 	if (!cmd->next && is_builtin(cmd))
 	{
+		//test
+		printf(YELL"just builtin - no fork\n"RST);
+		
 		fd[0] = -1;
 		fd[1] = -1;
-		setup_redirections(cmd, in_fd, fd);
-		execute_builtin(cmd);
+		setup_redirections(my_env, cmd, in_fd, fd);
+		execute_builtin(cmd, my_env);
 		return (1);
 	}
 	
 	while (cmd)
 	{
 		if (cmd->next && pipe(fd) == -1)// si il y a encore une cmd & pipe/erreur
-			error_exit("pipe");
+			error_exit(my_env, "pipe");
 		
 		pid = fork();	/*-------------- FORK --------------*/
 		if (pid == -1)
-			error_exit("fork");
+			error_exit(my_env, "fork");
 			
 		if (pid == 0)// si OK
 		{
 			// 
-			setup_redirections(cmd, in_fd, fd);
+			setup_redirections(my_env, cmd, in_fd, fd);
 			if (is_builtin(cmd))
-				execute_builtin(cmd);
+				execute_builtin(cmd, my_env);
 			else
-				execute_command(cmd);
+				execute_command(cmd, my_env);
 		}
 		else // autre erreur fork
 		{

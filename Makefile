@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
+#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/24 12:35:03 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/06/30 14:25:31 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,16 @@ NAME = minishell
 CC = gcc
 RM = rm -f
 RMDIR = rm -rf
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror  -fdiagnostics-color=always
+MAKEFLAGS += --no-print-directory
 LIBS = -lreadline
+
+# Colors
+GREEN	:= \033[0;32m
+RED		:= \033[0;31m
+BLUE	:= \033[0;34m
+YELLOW	:= \033[0;33m
+RST		:= \033[0m
 
 #
 #	DOSSIER_DIR = dossier
@@ -24,8 +32,8 @@ LIBS = -lreadline
 #
 
 SRCS_DIR = srcs
-SRCS = main.c \
-#SRCS =	test_main.c \
+#SRCS = main.c 
+SRCS =	test_main.c 
 
 LIBFT_DIR =  libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -33,11 +41,16 @@ LIBFT_A = $(LIBFT_DIR)/libft.a
 EXEC_DIR = execution
 EXEC = execute.c \
 		redirection.c \
-		check_builtin.c \
-		builtin_1.c \
-		builtin_2.c \
-		builtin_utils.c \
 		path.c \
+
+ENV_DIR = env
+ENV = env.c \
+		env_utils.c \
+
+BUILT_DIR = builtin
+BUILT = builtin_1.c \
+		builtin_2.c \
+		check_builtin.c \
 
 EXPAND_DIR = expander
 EXPAND = expand_tokens.c \
@@ -58,12 +71,13 @@ SIGNAL = signal.c \
 
 UTILS_DIR = utils
 UTILS = utils.c \
-		env.c \
 		free.c \
 
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \
+		$(addprefix $(SRCS_DIR)/$(ENV_DIR)/, $(ENV)) \
+		$(addprefix $(SRCS_DIR)/$(BUILT_DIR)/, $(BUILT)) \
 		$(addprefix $(SRCS_DIR)/$(UTILS_DIR)/, $(UTILS)) \
 		$(addprefix $(SRCS_DIR)/$(EXPAND_DIR)/, $(EXPAND)) \
 		$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER)) \
@@ -82,25 +96,33 @@ $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
 $(LIBFT_A):
-	$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR)
 
 $(NAME): $(OBJS) $(LIBFT_A)
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME)
+	@{ \
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME); \
+	}	2> .build_err && \
+		(printf "$(GREEN)[compilation ok]$(RST)\n"; rm -f .build_err) || \
+		(cat .build_err; rm -f .build_err; false)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
+		|| (cat .build_err && rm -f .build_err && false)
+		
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
+		|| (cat .build_err && rm -f .build_err && false)
 
 clean:
-	$(RM) $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR) clean
+	@$(RM) $(OBJS)
+	@$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean: clean
-	$(RM) $(NAME)
-	$(RMDIR) $(OBJS_DIR)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(RM) $(NAME)
+	@$(RMDIR) $(OBJS_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 

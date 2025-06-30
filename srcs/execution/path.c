@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:00:32 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/26 16:48:24 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*join_path(const char *dir, const char *cmd)
 	return (path);
 }
 
-char	*find_command_path(const char *cmd)
+char	*find_command_path(char **my_env, const char *cmd)
 {
 	char	**paths;
 	char	*path;
@@ -39,16 +39,12 @@ char	*find_command_path(const char *cmd)
 			return (ft_strdup(cmd));
 		return (NULL);
 	}
-
-	// sinon, on cherche dans $PATH
-	path_var = get_env("PATH");
+	path_var = get_env(my_env, "PATH");
 	if (!path_var)
 		return (NULL);
-
 	paths = ft_split(path_var, ':');
 	if (!paths)
 		return (NULL);
-
 	i = 0;
 	while (paths[i])
 	{

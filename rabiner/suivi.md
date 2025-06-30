@@ -6,30 +6,25 @@ EN COURS:
 
 	uniquement commandes builtin ok..
 
-	explications et commentaires:
-
-		-	execute.c - execute();
+	envp ok -> var=val ne marche pas (symbole '=' ?)
 
 	execute.c :		renvoi le code int last_status des commandes ( echo $? )
 						0  1  126  127  ..
 
+	test_main.c:	si ls apres unset $PATH: sortie de minishell,
+					voir si pareil avec main normal
 
 ===============================================================================
 
-
 QUESTIONS - INFOS PARTAGEES:
 
-	- 	est ce que si depuis minishell on fait cd etc, ca se repercute aussi sur
-		le shell principal?
+	- var=val KO (symbole '='?)
 
-	-	variable globale (besoin de char **envp, a mettre dans t_cmd->g_env ?)
-
+	- codes d'erreur a verifier pour renvoi (last_status)
 
 ===============================================================================
 
 GENERAL:
-
-	-	structure.md:	reecrire plus simplement
 
 	-	toutes les commandes builtin sont executees dans un fork
 		--> quand il n'y a pas de pipe (1 seule cmd builtin), executer direct
@@ -46,6 +41,8 @@ GENERAL:
 	-	redirections avec heredoc (t_cmd->heredoc   t_cmd->delimiter)
 		--> fonction handle_heredoc
 
+	-	test_main.c:	si ls apres unset $PATH: sortie de minishell,
+						voir si pareil avec main normal
 
 ===============================================================================
 
