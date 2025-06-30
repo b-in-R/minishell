@@ -6,13 +6,13 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:50:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/17 17:00:23 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/25 18:04:38 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_export(char **args)
+int	ft_export(char **my_env, char **args)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ int	ft_export(char **args)
 			i++;
 			continue ;
 		}
-		if (set_env(args[i]) == -1)
+		if (set_env(my_env, args[i]) == -1)
 		{
 			perror("ft_export");
 			return (1);
@@ -35,14 +35,14 @@ int	ft_export(char **args)
 	return (0);
 }
 
-int	ft_unset(char **args)
+int	ft_unset(char **my_env, char **args)
 {
 	int	i;
 
 	i = 1;
 	while (args[i])
 	{
-		unset_env(args[i]);
+		unset_env(my_env, args[i]);
 		i++;
 	}
 	return (0);

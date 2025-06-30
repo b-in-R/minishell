@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/01 14:56:11 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/08 13:53:49 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/17 22:02:20 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,15 @@ NAME = libft.a
 CC = cc
 RM = rm -f
 RMDIR = rm -rf
-CFLAGS = -Wall -Wextra -Werror -I.
+CFLAGS = -Wall -Wextra -Werror -I. -Iinclude
+
+# Colors
+GREEN	:= \033[0;32m
+RED		:= \033[0;31m
+BLUE	:= \033[0;34m
+YELLOW	:= \033[0;33m
+RST		:= \033[0m
+
 
 SRCS = ft_bzero.c \
 	ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c \
@@ -44,18 +52,23 @@ OBJS := $(addprefix $(OBJS_DIR)/, $(OBJS))
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+	@ar rcs $(NAME) $(OBJS) \
+		2> .build_err && (printf "$(GREEN)[libft ok]$(RST)\n"; \
+		rm -f .build_err) || (cat .build_err && rm -f .build_err)
 
 $(OBJS_DIR)/%.o: %.c
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@  2> .build_err \
+		|| (cat .build_err && rm -f .build_err && false)
 
 clean:
-	$(RM) $(OBJS)
+	@$(RM) $(OBJS)
+	@printf "$(BLUE)[petit nettoyage]$(RST)\n"
 	
 fclean: clean
-	$(RM) $(NAME)
-	$(RMDIR) $(OBJS_DIR)
+	@$(RM) $(NAME)
+	@$(RMDIR) $(OBJS_DIR)
+	@printf "$(BLUE)[Tout tout gros nettoyage]$(RST)\n"
 	
 re: fclean all
 
