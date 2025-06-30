@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/26 18:46:12 by rabiner          ###   ########.fr        #
+#    Updated: 2025/06/30 14:25:31 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = minishell
 CC = gcc
 RM = rm -f
 RMDIR = rm -rf
-CFLAGS = -Wall -Wextra -Werror -Iinclude -fdiagnostics-color=always
+CFLAGS = -Wall -Wextra -Werror  -fdiagnostics-color=always
 MAKEFLAGS += --no-print-directory
 LIBS = -lreadline
 
@@ -64,6 +64,7 @@ LEXER = create_token.c \
 PARSER_DIR = parser
 PARSER = create_cmd.c \
 		parser.c \
+		syntax_checker.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \
@@ -71,7 +72,7 @@ SIGNAL = signal.c \
 UTILS_DIR = utils
 UTILS = utils.c \
 		free.c \
-		
+
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(EXEC_DIR)/, $(EXEC)) \

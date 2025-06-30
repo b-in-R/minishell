@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:56:16 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/02 16:17:34 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/24 11:36:06 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_token	*create_token(t_token_type type, char *value)
 		return (NULL);
 	token->value = value;
 	token->type = type;
+	token->quoted_type = NO_QUOTE; // Initialisé à NO_QUOTE par défaut
 	token->next = NULL;
 	return (token);
 }

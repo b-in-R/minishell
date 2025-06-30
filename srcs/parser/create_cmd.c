@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:06:32 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/04 17:14:32 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/06/24 11:36:10 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_cmd	*create_cmd(void)
 	cmd->outfile = NULL;
 	cmd->append = 0;
 	cmd->heredoc = 0;
+	cmd->in_fd = -1;
 	cmd->delimiter = NULL;
 	cmd->next = NULL;
 	return (cmd);
