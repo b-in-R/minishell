@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/26 18:23:14 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/14 16:26:07 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 	input expected:
 
 		terminal entry:		ls -l | grep hello > out.txt
-			
+
 		struct:		t_cmd *cmd1;
 						cmd1->args = {"ls", "-l", NULL};
 						cmd1->infile = NULL;
@@ -35,22 +35,24 @@
 						cmd2->delimiter = NULL;
 						cmd2->next = NULL;
 */
-
 void	execute_command(t_cmd *cmd, char **my_env)
 {
 	char	*path;
-	
-	// test
-	//print_detailled_cmds(cmd);
-	
+
 	path = find_command_path(my_env, cmd->args[0]);
 	if (!path)
-		error_exit(my_env, "execute_command: command not fould\n");// texte a voir selon bash?
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putstr_fd(cmd->args[0], 2);
+		ft_putstr_fd("\n", 2);
+		exit(127);
+	}
 	execve(path, cmd->args, my_env);
-	error_exit(my_env, "execute_command: execve failure\n");
+	ft_putstr_fd("minishell: execve failed\n", 2);
+	exit(126);
 }
 
-int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
+int	execute(t_cmd *cmds, char **av, t_expander *exp)
 {
 	t_cmd	*cmd;
 	int		fd[2];
@@ -58,7 +60,6 @@ int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
 	pid_t	pid;
 
 	cmd = cmds;
-
 	(void)av;
 	//if (av[1] && av[1][0] == 'd')
 	//	print_cmds(cmds);
@@ -67,43 +68,40 @@ int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
 		setup_redirections:
 			si pas de fork, mais redirections quand meme:
 			voir pour sauvegarge et restauration de stdin et stdout.
-			Si on ne restaure pas la sortie standard apres l'exec, 
-			toutes les prochaines commandes ecriront dans le fichier 
+			Si on ne restaure pas la sortie standard apres l'exec,
+			toutes les prochaines commandes ecriront dans le fichier
 			en question plutot que le terminal
-			dans un fork pas necessaire vu que le process meurt a la 
+			dans un fork pas necessaire vu que le process meurt a la
 			fin de l'exec
 	*/
-	
-	// si qu'1 cmd & is_builtin ok: pas de fork pour l'exec -- ? 
+
+	// si qu'1 cmd & is_builtin ok: pas de fork pour l'exec -- ?
 	if (!cmd->next && is_builtin(cmd))
 	{
-		//test
-		printf(YELL"just builtin - no fork\n"RST);
-		
 		fd[0] = -1;
 		fd[1] = -1;
-		setup_redirections(my_env, cmd, in_fd, fd);
-		execute_builtin(cmd, my_env);
+		setup_redirections(exp->my_env, cmd, in_fd, fd);
+		execute_builtin(cmd, exp);
 		return (1);
 	}
-	
+
 	while (cmd)
 	{
 		if (cmd->next && pipe(fd) == -1)// si il y a encore une cmd & pipe/erreur
-			error_exit(my_env, "pipe");
-		
+			error_exit(exp->my_env, "pipe");
+
 		pid = fork();	/*-------------- FORK --------------*/
 		if (pid == -1)
-			error_exit(my_env, "fork");
-			
+			error_exit(exp->my_env, "fork");
+
 		if (pid == 0)// si OK
 		{
-			// 
-			setup_redirections(my_env, cmd, in_fd, fd);
+			//
+			setup_redirections(exp->my_env, cmd, in_fd, fd);
 			if (is_builtin(cmd))
-				execute_builtin(cmd, my_env);
+				execute_builtin(cmd, exp);
 			else
-				execute_command(cmd, my_env);
+				execute_command(cmd, exp->my_env);
 		}
 		else // autre erreur fork
 		{
@@ -111,7 +109,7 @@ int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
 			if (cmd->next)
 			{
 				close(fd[1]);
-				in_fd =  fd[0];
+				in_fd = fd[0];
 			}
 			else
 			{

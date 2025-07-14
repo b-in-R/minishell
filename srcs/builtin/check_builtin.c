@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   check_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:09:00 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/26 16:54:47 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/14 15:52:40 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // renvoie sur la bonne fonction builtin
-int	execute_builtin(t_cmd *cmd, char **my_env)
+int	execute_builtin(t_cmd *cmd, t_expander *exp)
 {
 	if (!ft_strcmp(cmd->args[0], "echo"))
 		return (ft_echo(cmd->args));
 	if (!ft_strcmp(cmd->args[0], "cd"))
-		return (ft_cd(my_env, cmd->args));
+		return (ft_cd(exp->my_env, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "pwd"))
-		return (ft_pwd(my_env, cmd->args));
-	if (!ft_strcmp(cmd->args[0], "export"))
-		return (ft_export(my_env, cmd->args));
+		return (ft_pwd(exp->my_env, cmd->args));
+	if (ft_strcmp(cmd->args[0], "export") == 0)
+		return (ft_export(exp, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "unset"))
-		return (ft_unset(my_env, cmd->args));
+		return (ft_unset(exp->my_env, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "env"))
-		return (ft_env(my_env));
+		return (ft_env(exp->my_env));
 	if (!ft_strcmp(cmd->args[0], "exit"))
-		exit(0);// voir si free etc avant
+		exit(0);
 	return (1);
 }
 
@@ -36,7 +36,7 @@ int	execute_builtin(t_cmd *cmd, char **my_env)
 int	is_builtin(t_cmd *cmd)
 {
 	char	*name;
-	
+
 	if (!cmd->args || !cmd->args[0])
 		return (0);
 	name = cmd->args[0];
