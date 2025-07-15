@@ -26,6 +26,8 @@ BUGS:
 
 QUESTIONS - INFOS PARTAGEES:
 
+	- code exit: est ce qu'il renvoi une info a prendre en compte, verif?
+
 	- var=val KO (symbole '='?)
 
 	- codes d'erreur a verifier pour renvoi (last_status)
