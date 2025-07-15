@@ -3,33 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:50:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/25 18:04:38 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/14 15:52:26 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_export(char **my_env, char **args)
+// supprime dans local_env et ajoute ou update dans my_env
+int	ft_export(t_expander *exp, char **args)
 {
 	int	i;
 
+	if (!args[1])
+		return (print_env(exp->my_env), 0);
 	i = 1;
 	while (args[i])
 	{
-		if (!ft_strchr(args[i], '='))
+		if (!is_valid_identifier(args[i]))
 		{
-			printf("export: invalid format: %s\n", args[i]);
-			i++;
-			continue ;
-		}
-		if (set_env(my_env, args[i]) == -1)
-		{
-			perror("ft_export");
+			ft_putstr_fd("export: not a valid identifier\n", 2);
 			return (1);
 		}
+		remove_from_env(exp->local_env, args[i]);
+		exp->my_env = set_env(exp->my_env, args[i]);
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/24 11:36:07 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/08 15:26:56 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	handle_pipe(t_token **tokens, size_t *i)
 }
 
 /* Aprés avoir été appelé par le lexer:
-*  Cree un token de type (valeur): REDIR_IN (<), REDIR_OUT (>), REDIR_APPEND (>>) ou HEREDOC (<<)
-*  et l'ajoute à la liste des tokens.
+*  Cree un token de type (valeur): REDIR_IN (<), REDIR_OUT (>),
+*  REDIR_APPEND (>>) ou HEREDOC (<<), et l'ajoute à la liste des tokens.
 */
 void	handle_redirection(t_token **tokens, char *line, size_t *i)
 {
@@ -51,7 +51,8 @@ void	handle_redirection(t_token **tokens, char *line, size_t *i)
 
 /* Aprés avoir été appelé par le lexer:
 * Lit un mot qui n'est pas entre quotes jusqu'à un espace ou un separateur
-*  Crée un token de type WORD avec sa valeur correspondante (word) et l'ajoute a la liste des tokens
+*  Crée un token de type WORD avec sa valeur correspondante (word)
+* et l'ajoute a la liste des tokens
 */
 void	handle_word(t_token **tokens, char *line, size_t *i)
 {
@@ -70,7 +71,8 @@ void	handle_word(t_token **tokens, char *line, size_t *i)
 
 /*
 * Lit ce qui est entre quotes ' ou " sans les interpreter
-* Extrait la sous chaine a l'interieure et cree un token de type WORD avec valeur word
+* Extrait la sous chaine a l'interieure
+* et cree un token de type WORD avec valeur word
 */
 void	handle_quotes(t_token **tokens, char *line, size_t *i)
 {
@@ -79,17 +81,17 @@ void	handle_quotes(t_token **tokens, char *line, size_t *i)
 	size_t	start;
 	t_token	*new_token;
 
-	type_quote = line[*i]; //guillemet ouvrant (le premier)
-	start = ++(*i); // caractere suivant au guillemet ouvrant
+	type_quote = line[*i];
+	start = ++(*i);
 	while (line[*i] && line[*i] != type_quote)
-		(*i)++; // i incrementé jusqu'au dernier guillemet
-	word = ft_substr(line, start, *i - start); // extrait le mot/mots placé entre les guillemets
+		(*i)++;
+	word = ft_substr(line, start, *i - start);
 	new_token = create_token(WORD, word);
 	if (type_quote == '\'')
-		new_token->quoted_type = SINGLE_QUOTE; // si c'est un guillemet simple
+		new_token->quoted_type = SINGLE_QUOTE;
 	else
-		new_token->quoted_type = DOUBLE_QUOTE; // si c'est un guillemet double
+		new_token->quoted_type = DOUBLE_QUOTE;
 	add_token(tokens, new_token);
 	if (line[*i] == type_quote)
-		(*i)++; // se place dans le caractere suivant au dernier guillemet
+		(*i)++;
 }
