@@ -14,9 +14,24 @@ EN COURS:
 	test_main.c:	si ls apres unset $PATH: sortie de minishell,
 					voir si pareil avec main normal
 
+	Verifier si export export bien hors de minishell
+
+	-	-	expander/get_env.c -> handle_dollar voir normi
+		parser/heredoc.c -> handle_heredocs voir normi
+
+===============================================================================
+
+BUGS:
+
+	- echo hello > test.txt
+	- echo hello >> test.txt
+
+
 ===============================================================================
 
 QUESTIONS - INFOS PARTAGEES:
+
+	- code exit: est ce qu'il renvoi une info a prendre en compte, verif?
 
 	- var=val KO (symbole '='?)
 
@@ -43,6 +58,9 @@ GENERAL:
 
 	-	test_main.c:	si ls apres unset $PATH: sortie de minishell,
 						voir si pareil avec main normal
+
+-	-	expander/get_env.c -> handle_dollar voir normi
+		parser/heredoc.c -> handle_heredocs voir normi
 
 ===============================================================================
 

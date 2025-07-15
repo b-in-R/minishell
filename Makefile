@@ -6,7 +6,7 @@
 #    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/07/14 16:34:00 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/06/30 14:45:03 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,8 +33,8 @@ RST		:= \033[0m
 #
 
 SRCS_DIR = srcs
-#SRCS = main.c
-SRCS =	main.c
+SRCS = main.c 
+#SRCS =	test_main.c 
 
 LIBFT_DIR =  libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
