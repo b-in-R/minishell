@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:51:32 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/30 14:34:15 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/14 14:58:49 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,24 @@ void	free_env(char **my_env)
 	int	i;
 
 	if (!my_env)
-		return ;
+		return;
 	i = 0;
 	while (my_env[i])
 	{
 		free(my_env[i]);
+		my_env[i] = NULL;
 		i++;
 	}
 	free(my_env);
+}
+
+void	print_env(char **env)
+{
+	int	i = 0;
+
+	while (env && env[i])
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
 }

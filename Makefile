@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
+#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/30 14:25:31 by rabiner          ###   ########.fr        #
+#    Updated: 2025/07/14 16:34:00 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,9 +15,10 @@ NAME = minishell
 CC = gcc
 RM = rm -f
 RMDIR = rm -rf
-CFLAGS = -Wall -Wextra -Werror  -fdiagnostics-color=always
-MAKEFLAGS += --no-print-directory
+CFLAGS = -Wall -Wextra -Werror -g -fdiagnostics-color=always
 LIBS = -lreadline
+MAKEFLAGS += --no-print-directory
+
 
 # Colors
 GREEN	:= \033[0;32m
@@ -32,8 +33,8 @@ RST		:= \033[0m
 #
 
 SRCS_DIR = srcs
-#SRCS = main.c 
-SRCS =	test_main.c 
+#SRCS = main.c
+SRCS =	main.c
 
 LIBFT_DIR =  libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
@@ -54,7 +55,8 @@ BUILT = builtin_1.c \
 
 EXPAND_DIR = expander
 EXPAND = expand_tokens.c \
-		get_env.c
+		get_env.c \
+		var.c \
 
 LEXER_DIR = lexer
 LEXER = create_token.c \
@@ -65,6 +67,7 @@ PARSER_DIR = parser
 PARSER = create_cmd.c \
 		parser.c \
 		syntax_checker.c \
+		heredoc.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \
@@ -109,7 +112,7 @@ $(NAME): $(OBJS) $(LIBFT_A)
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
 		|| (cat .build_err && rm -f .build_err && false)
-		
+
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \

@@ -6,15 +6,15 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:43:15 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/24 12:55:43 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/14 15:53:48 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-*	Vérifie si le caractère c est un caractère valide pour une variable d'environnement.
-*	Un caractère valide est alphanumérique (a-z, A-Z, 0-9) ou un underscore (_).
+* Checks if the character c is a valid character for an environment variable.
+* A valid character is alphanumeric (a-z, A-Z, 0-9) or an underscore (_).
 */
 int	is_var_char(char c)
 {
@@ -22,30 +22,35 @@ int	is_var_char(char c)
 }
 
 /*
-*	gére l'expansion d’un $ dans une chaîne ($USER, $?, $VAR123, etc.) et ajoute le résultat à la chaîne result
-*	 - str : chaîne complète qu’on est en train d’analyser (ex. "echo $USER").
-*	 - i : pointeur sur l’indice actuel (pour avancer dans word).
-*	 - result : pointeur sur la chaîne qu’on est en train de construire (le mot après expansion).
-*	 - last_status : valeur de $? (code de retour de la dernière commande).
+* Handles the expansion of a $ character in a string
+* ($USER, $?, $VAR123, etc.) and appends the result to the string result.
+* 	- str: The entire string being parsed (e.g., "echo $USER").
+* 	- i: Pointer to the current index (to move forward in word).
+* 	- result: Pointer to the string being constructed(the word after expansion)
+* 	- last_status: The value of $? (return code of the last command).
 *
-*	Si on trouve un $ suivi de ?, on ajoute la valeur de last_status à result.
-*	Si on trouve un $ suivi d’un nom de variable, start = *i pour marquer le début du nom de variable
-*	et on increment i tant que alphanumérique ou underscore,et on extrait le nom de la variable, on récupère sa valeur avec getenv() et on l’ajoute à result.
+* If a $ character is found followed by a ? character,
+* 	add the value of last_status to result.
+* If a $ character is found followed by a variable name,
+*	start = *i to mark the beginning of the variable name.
+* Increment i as alphanumeric or underscore, extract the variable name,
+*	retrieve its value with getenv(), and append it to result.
 */
-int	handle_dollar(const char *str, int *i, char **result, int last_status)
+int	handle_dollar(const char *str, int *i, char **result, t_expander *exp)
 {
 	char	*key;
 	char	*value;
 	int		start;
 
-	(*i)++; // skip le $
+	(*i)++;
 	if (str[*i] == '?')
 	{
-		value = ft_itoa(last_status);
+		value = ft_itoa(exp->last_status);
 		if (!value)
 			return (0);
 		if (!str_append_free(result, value))
 			return (free(value), 0);
+		free(value);
 		(*i)++;
 		return (1);
 	}
@@ -55,7 +60,7 @@ int	handle_dollar(const char *str, int *i, char **result, int last_status)
 	key = ft_substr(str, start, *i - start);
 	if (!key)
 		return (0);
-	value = get_env_value(key);
+	value = get_env_value_from_exp(key, exp);
 	free(key);
 	if (!value)
 		return (0);
@@ -66,22 +71,25 @@ int	handle_dollar(const char *str, int *i, char **result, int last_status)
 }
 
 /*
-*	Utilisé pour gérer tous les caractères normaux qui ne sont pas $
-*	rajoute un caractère à la fin d’une chaîne dynamiquement.
+* Used to handle all normal characters that aren't $
+* Adds a character to the end of a string dynamically.
+* Puts the character in the buffer
+* Concatenates the buffer to the existing string and frees the old string
 */
 int	append_char(char **str, char c)
 {
 	char	buff[2];
-	buff[0] = c; // Met le caractère dans le buffer
+
+	buff[0] = c;
 	buff[1] = '\0';
-	return (str_append_free(str, buff)); // Concatène le buffer à la chaîne existante et libère l'ancienne chaîne
+	return (str_append_free(str, buff));
 }
 
 /*
-*	Concatène deux chaînes de caractères dynamiquement.
-*	Fait un strjoin classique mais en libérant s1 pour éviter les fuites mémoire.
-*	Utilsé dans append_char() pour ajouter un caractère à la chaîne result.
-*	et aussi dans handle_dollar() pour ajouter la valeur d’une variable à result.
+* Dynamically concatenates two strings.
+* Performs a classic strjoin, but frees s1 to avoid memory leaks.
+* Used in append_char() to add a character to the result string.
+* and also in handle_dollar() to add the value of a variable to result.
 */
 int	str_append_free(char **s1, const char *s2)
 {
@@ -106,13 +114,19 @@ int	str_append_free(char **s1, const char *s2)
 	return (1);
 }
 
-// obtenir la valuer de l'environnement ($USER, $PATH) avec getenv()
-char	*get_env_value(const char *key)
+/*
+*	Retrieves the value of an environment variable from the expander
+* 	first checks the local environment, then the global environment (export)
+*/
+char	*get_env_value_from_exp(const char *key, t_expander *exp)
 {
-	char	*value;
+	char	*val;
 
-	value = getenv(key);
-	if (!value)
-		return (ft_strdup("")); // Si la variable n'existe pas, retourne une chaîne vide
-	return (ft_strdup(value)); // Duplique la valeur trouvée
+	val = get_env(exp->local_env, (char *)key);
+	if (val)
+		return (ft_strdup(val));
+	val = get_env(exp->my_env, (char *)key);
+	if (val)
+		return (ft_strdup(val));
+	return (ft_strdup(""));
 }

@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:16:21 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/04 18:47:53 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/14 12:26:04 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	free_tokens(t_token *tokens)
 	{
 		tmp = tokens;
 		tokens = tokens->next;
-		free(tmp->value); // ft_strdup ou ft_substr => malloc
+		free(tmp->value);
 		free(tmp);
 	}
 }
@@ -34,7 +34,6 @@ void	free_cmds(t_cmd *cmds)
 	{
 		tmp = cmds;
 		cmds = cmds->next;
-		// libère le tableau d’arguments
 		if (tmp->args)
 		{
 			i = 0;
@@ -42,7 +41,6 @@ void	free_cmds(t_cmd *cmds)
 				free(tmp->args[i++]);
 			free(tmp->args);
 		}
-		// libère le reste d'elements allouées
 		if (tmp->infile)
 			free(tmp->infile);
 		if (tmp->outfile)
