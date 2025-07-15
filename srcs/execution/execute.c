@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/30 14:57:20 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/15 15:39:09 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,3 +124,4 @@ int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
 	}
 	return (1);
 }
+

@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/30 15:00:01 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/15 15:39:18 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,11 @@ void print_cmds(t_cmd *cmds)
 // Point d'entrée du programme, gestion de la boucle principale du shell.
 /*
 * setup_signals(); gere le signaux Ctrl+C et Ctrl+\
-* readline();  Affiche le prompt minishell$ attends l'entrée de l'utilisateur, lit l'entrée et  le stocke dans line
-*			Comme ca aprés on peut faire le parsing, exec, etc.
-* add_history(); // permets d'ajouter line (la commande entrée par le user dans l'histoirque) quand le user a tapé eu moins un caractere
+* readline();  Affiche le prompt minishell$ attends l'entrée de l'utilisateur, 
+* lit l'entrée et  le stocke dans line
+* Comme ca aprés on peut faire le parsing, exec, etc.
+* add_history(); // permets d'ajouter line (la commande entrée par le user dans l'histoirque)
+* quand le user a tapé eu moins un caractere
 * lexer(); appel le lexer pour identifier chaque token et creer la liste de tokens
 * rl_clear_history(); // Vide l'historique de readline avant de quitter
 */
