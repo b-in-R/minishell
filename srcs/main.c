@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/30 14:38:57 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/30 15:00:01 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	print_tokens(t_token *tokens)
 		tokens = tokens->next;
 	}
 }
-
+*/
 
 void	print_detailled_cmds(t_cmd *cmds)
 {
@@ -80,8 +80,9 @@ void print_cmds(t_cmd *cmds)
 			printf("Heredoc delimiter: %s\n", cmds->delimiter);
 		cmds = cmds->next;
 	}
+	printf("-----------------------\n\n");
 }
-*/
+
 // Point d'entrée du programme, gestion de la boucle principale du shell.
 /*
 * setup_signals(); gere le signaux Ctrl+C et Ctrl+\
@@ -182,7 +183,7 @@ int	main(int ac, char **av, char **envp)
 				if (cmds != NULL)
 				{
 					if (handle_heredocs(cmds))
-						last_status = execute(cmds, NULL, my_env);
+						last_status = execute(cmds, av, my_env);
 					else
 						last_status = 1;
 					free_cmds(cmds);

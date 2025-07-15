@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/26 18:23:14 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/06/30 14:57:20 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
 
 	cmd = cmds;
 
-	(void)av;
-	//if (av[1] && av[1][0] == 'd')
-	//	print_cmds(cmds);
+	//(void)av;
+	if (av[1] && av[1][0] == 'd')
+		print_cmds(cmds);
 
 	/*
 		setup_redirections:
@@ -78,7 +78,7 @@ int	execute(t_cmd *cmds, char **av, char **my_env)// av pour print_cmds (test)
 	if (!cmd->next && is_builtin(cmd))
 	{
 		//test
-		printf(YELL"just builtin - no fork\n"RST);
+	//	printf(YELL"just builtin - no fork\n"RST);
 		
 		fd[0] = -1;
 		fd[1] = -1;
