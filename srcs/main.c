@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/14 15:55:21 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/15 15:39:18 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	print_tokens(t_token *tokens)
 		tokens = tokens->next;
 	}
 }
-
+*/
 
 void	print_detailled_cmds(t_cmd *cmds)
 {
@@ -80,14 +80,17 @@ void print_cmds(t_cmd *cmds)
 			printf("Heredoc delimiter: %s\n", cmds->delimiter);
 		cmds = cmds->next;
 	}
+	printf("-----------------------\n\n");
 }
-*/
+
 // Point d'entrée du programme, gestion de la boucle principale du shell.
 /*
 * setup_signals(); gere le signaux Ctrl+C et Ctrl+\
-* readline();  Affiche le prompt minishell$ attends l'entrée de l'utilisateur, lit l'entrée et  le stocke dans line
-*			Comme ca aprés on peut faire le parsing, exec, etc.
-* add_history(); // permets d'ajouter line (la commande entrée par le user dans l'histoirque) quand le user a tapé eu moins un caractere
+* readline();  Affiche le prompt minishell$ attends l'entrée de l'utilisateur, 
+* lit l'entrée et  le stocke dans line
+* Comme ca aprés on peut faire le parsing, exec, etc.
+* add_history(); // permets d'ajouter line (la commande entrée par le user dans l'histoirque)
+* quand le user a tapé eu moins un caractere
 * lexer(); appel le lexer pour identifier chaque token et creer la liste de tokens
 * rl_clear_history(); // Vide l'historique de readline avant de quitter
 */

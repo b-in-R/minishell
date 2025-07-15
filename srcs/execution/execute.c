@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/14 16:26:07 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/15 15:39:09 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,10 @@ int	execute(t_cmd *cmds, char **av, t_expander *exp)
 	// si qu'1 cmd & is_builtin ok: pas de fork pour l'exec -- ?
 	if (!cmd->next && is_builtin(cmd))
 	{
+
+		//test
+	//	printf(YELL"just builtin - no fork\n"RST);
+
 		fd[0] = -1;
 		fd[1] = -1;
 		setup_redirections(exp->my_env, cmd, in_fd, fd);
@@ -122,3 +126,4 @@ int	execute(t_cmd *cmds, char **av, t_expander *exp)
 	}
 	return (1);
 }
+
