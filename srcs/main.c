@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/15 15:39:18 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/28 18:43:01 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ int	main(int ac, char **av, char **envp)
 					if (cmds != NULL)
 					{
 						if (handle_heredocs(cmds, &exp))
-							execute(cmds, NULL, &exp);
+							execute(cmds, &exp);
 						else
 							exp.last_status = 1;
 						free_cmds(cmds);

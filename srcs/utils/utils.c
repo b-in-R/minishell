@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/14 15:54:09 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/28 18:55:44 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,20 @@
 
 void	cleanup_parent(t_cmd *cmd, int *in_fd, int fd[2])
 {
-	(void)cmd;
-	(void)fd;
-
 	if (*in_fd != 0)
 	{
 		close(*in_fd);
 		*in_fd = 0;
+	}
+	if (cmd->next)
+	{
+		close(fd[1]);
+		*in_fd = fd[0];
+	}
+	else
+	{
+		close(fd[0]);
+		close(fd[1]);
 	}
 }
 

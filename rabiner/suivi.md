@@ -29,7 +29,7 @@ BUGS:
 
 QUESTIONS - INFOS PARTAGEES:
 
-	- codes d'erreur a verifier pour renvoi (last_status)
+	- codes d'erreur: ou renvoyer? est ce que lui imprime ca? comment c'est traite?
 
 ===============================================================================
 
