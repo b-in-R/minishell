@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/14 15:42:11 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/28 17:08:53 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,18 @@ typedef enum e_quote_type
 *	t_quote_type	quoted_type; // Type of quotes (SINGLE, DOUBLE, NONE)
 *	struct s_token	*next;  // Pointer to the next token in the list
 */
+
+
+/*
+pipe:
+	char			*value = '|';
+	t_token_type	type;
+	t_quote_type	quoted_type;
+	struct s_token	*next;
+
+	env | grep var
+
+*/
 typedef struct s_token
 {
 	char			*value;
@@ -87,7 +99,7 @@ typedef struct s_token
 */
 typedef struct s_cmd
 {
-	char	**args;
+	char	**args;//	1x env			1x grep var
 	char	*infile;
 	char	*outfile;
 	int		append;
@@ -97,6 +109,7 @@ typedef struct s_cmd
 	char	*delimiter;
 	struct s_cmd	*next;
 }	t_cmd;
+
 
 /*------Codes ANSI pour formatage------*/
 # define YELL	"\033[1;33m"

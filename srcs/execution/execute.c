@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/15 15:39:09 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/28 17:08:10 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 		struct:		t_cmd *cmd1;
 						cmd1->args = {"ls", "-l", NULL};
 						cmd1->infile = NULL;
-						cmd1->outfile = NULL;
+						cmd1->outfile = NULL;f
 						cmd1->append = 0;
 						cmd1->heredoc = 0;
 						cmd1->delimiter = NULL;
@@ -48,7 +48,7 @@ void	execute_command(t_cmd *cmd, char **my_env)
 		exit(127);
 	}
 	execve(path, cmd->args, my_env);
-	ft_putstr_fd("minishell: execve failed\n", 2);
+	ft_putstr_fd(RED"minishell: execve failed\n"RST, 2);
 	exit(126);
 }
 
@@ -127,3 +127,60 @@ int	execute(t_cmd *cmds, char **av, t_expander *exp)
 	return (1);
 }
 
+int	execute(t_cmd *cmds, t_expander *exp)
+{
+	t_cmd	*cmd;
+	int		fd[2];
+	int		in_fd = 0;
+	pid_t	pid;
+
+	cmd = cmds;
+
+	// si 1 cmd & is_buitin
+	if (!cmd->next && is_builtin(cmd))
+	{
+		fd[0] = -1;
+		fd[1] = -1;
+		setup_redirections(exp->my_env, cmd, in_fd, fd);
+		execute_builtin(cmd,exp);
+		return (1);
+	}
+
+	// si + d'1 cmd
+	while (cmd)
+	{
+		if (cmd->next && pipe(fd) == -1)
+			error_exit(exp->my_env, "execute: pipe");
+		
+		pid = fork();
+		if (pid == -1)
+			error_exit(exp->my_env, "fork");
+		
+		if (pid == 0)
+		{
+			setup_redirections(exp->my_env, cmd, in_fd, fd);
+			if (is_builtin(cmd))
+				execute_builtin(cmd, exp);
+			else
+				execute_command(cmd, exp->my_env);
+		}
+
+		else // autre erreur fork
+		{
+			cleanup_parent(cmd, &in_fd, fd);
+			if (cmd->next)
+			{
+				close(fd[1]);
+				in_fd = fd[0];
+			}
+			else
+			{
+				close(fd[0]);
+				close(fd[1]);
+			}
+			waitpid(pid, NULL, 0);
+			cmd = cmd->next;
+		}
+	}
+	return (1);
+}
