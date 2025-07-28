@@ -6,46 +6,71 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:09:18 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/24 11:36:13 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/14 16:22:01 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-volatile sig_atomic_t	g_signal = 0; // Variable globale pour stocker le status de sortie
+// Global variable to store the exit status
+volatile sig_atomic_t	g_signal = 0;
 
 /*
-*	Quand tu tapes Ctrl-C dans un shell Bash interactif :
-*		Le curseur saute à la ligne suivante, retour à la ligne
-*		Une ligne vide s’affiche
-*		Le prompt (minishell$) se réaffiche
-*		Mais rien ne s’exécute (la commande partiellement tapée est ignorée)
+* When you type Ctrl-C in an interactive Bash shell:
+* The cursor jumps to the next line, a newline
+* ​​A blank line is displayed
+* The prompt (minishell$) is redisplayed
+* But nothing is executed (the partially typed command is ignored)
+*
+* We ignore the value of `sig`
+* rl_replace_line("", 0); // Readline deletes the current line
+* write(1, "\n", 1); // We skip a line cleanly (like Bash does)
+* rl_on_new_line(); // readline prepares to display a new prompt
+* rl_redisplay(); // Readline redisplays the prompt (cleanly, without `^C`)
 */
 void	sigint_handler(int sig)
 {
-	(void)sig; // On ignore la valeur de `sig`, mais il faut quand même l’argument pour respecter la signature du handler
-	write(1, "\n", 1); // On saute une ligne proprement (comme Bash le fait)
-	rl_on_new_line(); // fonction builtin, readline se prépare à afficher un nouveau prompt
-	rl_replace_line("", 0); // readline efface la ligne en cours (l’utilisateur a peut-être tapé une commande partielle)
-	rl_redisplay(); // readline réaffiche le prompt (proprement, sans `^C`)
+	(void)sig;
+	rl_replace_line("", 0);
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
 /*
-	Comportement dans un shell classique (bash/zsh) :
-		Quand on tapes Ctrl-\, ça envoie le signal SIGQUIT (signal 3).
-		Bash, par défaut :
-			ne réagit pas dans le shell principal
-			affiche rien
-	Et surtout : n’interrompt pas le shell interactif
-	*/
+* Behavior in a classic shell (bash/zsh):
+* When you type Ctrl-\, it sends the SIGQUIT signal (signal 3).
+* Bash, by default:
+* Doesn't react in the main shell
+* Prints nothing
+* And most importantly: Doesn't interrupt the interactive shell
+* We do nothing, we ignore the SIGQUIT signal
+*/
 void	sigquit_handler(int sig)
 {
-	(void)sig; // On ne fait rien, on ignore le signal SIGQUIT
+	(void)sig;
 }
 
-/*Gère les signaux : Ctrl-C et Ctrl-\. Ctrl-D (via readline dans le main)
-* envoi le signal SIGINT (Ctrl-C) et appelle sigint_handler
-* envoie le signal SIGQUIT/ Ctrl-\, et appelle sigquit_handler qui ignore le signal, comme dans bash/zsh
+/*
+*	When you type Ctrl-C in a heredoc (here-document):
+* The cursor jumps to the next line, a newline
+* A blank line is displayed
+* The prompt (heredoc$) is not redisplayed
+* The heredoc is closed (the file descriptor is closed)
+* The shell continues to wait for the next command
+* We close the standard input (STDIN_FILENO) to stop reading from the heredoc
+*/
+void	sigint_heredoc(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	close(STDIN_FILENO);
+}
+
+/* Handles signals: Ctrl-C and Ctrl-\. Ctrl-D (via readline in main)
+* Sends the SIGINT signal (Ctrl-C) and calls sigint_handler
+* Sends the SIGQUIT signal (Ctrl-\), and calls sigquit_handler,
+* which ignores the signal
 */
 void	setup_signals(void)
 {

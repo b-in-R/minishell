@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/26 18:26:38 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/14 12:45:58 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	ft_echo(char **args)
 int	ft_cd(char **my_env, char **args)
 {
 	char	*path;
-	
+
 	if (!args[1])
 		path = get_env(my_env, "HOME");
 	else
@@ -55,15 +55,15 @@ int	ft_cd(char **my_env, char **args)
 int	ft_pwd(char **my_env, char **args)
 {
 	char	cwd[1024];// voir pour malloc
-	
+
 	char	*test[] = {"env", NULL};
 
 	(void)args;
-	
+
 	// unset pour test
 	ft_unset(my_env, test);
 	//
-	
+
 	if (getcwd(cwd, sizeof(cwd)))
 	{
 		printf("%s\n", cwd);
@@ -75,13 +75,6 @@ int	ft_pwd(char **my_env, char **args)
 
 int	ft_env(char **my_env)
 {
-	int	i;
-
-	i = 0;
-	while (my_env && my_env[i])
-	{
-		printf("%s\n", my_env[i]);
-		i++;
-	}
+	print_env(my_env);
 	return (0);
 }

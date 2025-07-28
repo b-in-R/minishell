@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:42 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/30 14:34:25 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/08 16:56:49 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

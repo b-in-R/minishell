@@ -6,14 +6,14 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:25 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/24 11:36:08 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/08 15:25:52 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /* Lexer:
-*	Converts the raw input line (char *line) into a linked list of t_token elements.
+*Converts the raw input line (char *line) into a linked list of t_token elemnts
 * Prends une ligne de commande brute (ex: echo "hello" > out.txt)
 * La scanne caractere par caractere et la découpe en tokens, ignore les spaces
 * Associe à chaque token son type (WORD, PIPE, REDIR_OUT, etc.)

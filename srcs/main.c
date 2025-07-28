@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
 /*   Updated: 2025/07/15 15:39:18 by rabiner          ###   ########.fr       */
@@ -40,7 +40,7 @@ void	print_tokens(t_token *tokens)
 void	print_detailled_cmds(t_cmd *cmds)
 {
 	int	i = 0;
-	
+
 	printf("\n\n### Detailled ###\n");
 	while (cmds->args[i])
 	{
@@ -144,62 +144,68 @@ int	main(int ac, char **av, char **envp)
 // precedent main
 int	main(int ac, char **av, char **envp)
 {
-	/*
-	char	*sdf = {"1", "2", NULL}; 
-	int		dfg = 42;
-
-	printf("%i", sdf + dfg);
-	*/	
-	if (ac  == 1)
-	{
+	if (ac == 1)
 		(void)av;
-	}
-	
-	char	*line;
-	t_token	*tokens;
-	t_cmd	*cmds;
-	int		last_status; // Code de retour de la dernière commande exécutée. (pour traiter $? dans l'expansion)
-	char	**my_env;
 
-	my_env = init_env(envp);
+	char		*line;
+	t_token		*tokens;
+	t_cmd		*cmds;
+	t_expander	exp;
+	int			skip_processing;
 
-	last_status = 0; // Initialisation du dernier statut à 0 (succès)
-	setup_signals(); // Gère les signaux (Ctrl-C, Ctrl-\), avant la boucle parce que readline() va attendre l'entrée de l'utilisateur et on veut que les signaux soient gérés correctement.
+	exp.my_env = init_env(envp);
+	exp.local_env = NULL;
+	exp.last_status = 0;
+	setup_signals();
 	while (1)
 	{
+		skip_processing = 0;
 		line = readline(GREE"minishell> "RST);
 		if (!line)
 		{
 			printf(BLUE"exit\n"RST);
 			rl_clear_history();
-			return (0); // Si readline retourne NULL, c'est qu'on a tapé Ctrl-D (EOF), on quitte le shell
+			free(line);
+			break;
 		}
 		if (line[0] != '\0')
 			add_history(line);
-		tokens = lexer(line);
-		if (!check_syntax_errors(tokens))
+
+		if (is_simple_assignment(line))
 		{
-			if (expand_tokens(tokens, last_status))
+			add_env_variable(&exp.local_env, line);
+			skip_processing = 1;
+		}
+		if (!skip_processing)
+		{
+			tokens = lexer(line);
+			if (!check_syntax_errors(tokens))
 			{
-				cmds = parser(tokens);
-				if (cmds != NULL)
+				if (expand_tokens(tokens, &exp))
 				{
-					if (handle_heredocs(cmds))
-						last_status = execute(cmds, av, my_env);
+					cmds = parser(tokens);
+					if (cmds != NULL)
+					{
+						if (handle_heredocs(cmds, &exp))
+							execute(cmds, NULL, &exp);
+						else
+							exp.last_status = 1;
+						free_cmds(cmds);
+					}
 					else
-						last_status = 1;
-					free_cmds(cmds);
+						exp.last_status = 2;
 				}
 				else
-					last_status = 2;
+					exp.last_status = 2;
 			}
 			else
-				last_status = 2; // échec de l'expansion
+				exp.last_status = 2;
+			free_tokens(tokens);
 		}
-		else
-			last_status = 2; // Si il y a une erreur de syntaxe, on met last_status à 2
-		free_tokens(tokens);
-		free(line); // readline fait malloc donc il faut free
+
+		free(line);
 	}
+	free_env(exp.my_env);
+	free_env(exp.local_env);
 	return (0);
 }

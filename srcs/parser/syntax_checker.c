@@ -6,22 +6,18 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:51:19 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/06/24 11:36:12 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/08 16:02:09 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-*	Repérer les erreurs de syntaxe évidentes dans la ligne de commande tokenisée (liste t_token)
-*	- Vérifie les pipes en début ou fin de ligne
-*	- Vérifie les redirections sans cible (ex: `>`, `<`, `>>`, `<<` sans mot suivant)
-*	- Vérifie les pipes consécutifs (ex: `||`)
-*	- Vérifie les redirections consécutives (ex: `>> >` ou `<< <`)
-*
-*	A implementer encore:
-*		- Vérifier les quotes non fermées (ex: `'`, `"` sans fermeture)
-*		- Si on veux envoyer message derreur avec le \ (échappement) ou ; (séparateur de commandes), implemter , sinon ces seront traités par le lexer comme mots
+* Spot obvious syntax errors in the tokenized command line (t_token list)
+* 	- Check for pipes at the beginning or end of a line
+* 	​​- Check for redirections without a target (e.g., `>`, `<`, `>>`, `<<`)
+* 	- Check for consecutive pipes (e.g., `||`)
+* 	- Check for consecutive redirections (e.g., `>> >` or `<< <`)
 */
 int	check_syntax_errors(t_token *tokens)
 {
@@ -34,12 +30,15 @@ int	check_syntax_errors(t_token *tokens)
 		return (printf("Syntax error: unexpected pipe\n"), 1);
 	while (tokens)
 	{
-		if (tokens->type == PIPE && (!tokens->next || tokens->next->type == PIPE))
+		if (tokens->type == PIPE
+			&& (!tokens->next || tokens->next->type == PIPE))
 			return (printf("Syntax error: invalid pipe usage\n"), 1);
 		if ((tokens->type == REDIR_IN || tokens->type == REDIR_OUT
 				|| tokens->type == REDIR_APPEND || tokens->type == HEREDOC)
-				&& (!tokens->next || tokens->next->type != WORD))
+			&& (!tokens->next || tokens->next->type != WORD))
+		{
 			return (printf("Syntax error: redirection without target\n"), 1);
+		}
 		prev = tokens;
 		tokens = tokens->next;
 	}

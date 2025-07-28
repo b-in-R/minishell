@@ -1,14 +1,3 @@
-gcc -Wall -Wextra -Werror -g \
-	main.c \
-	lexer/*.c \
-	parser/*.c \
-	utils/*.c \
-	expander/*.c \
-	../Libft/*.c \
-	-Iincludes \
-	-o minishell \
-	-lreadline
-
 
 Token usage in Minishell parsing process:
 
@@ -52,104 +41,43 @@ Ce contenu est ensuite donné à la commande comme si c'était l'entrée standar
 Dans ta structure : heredoc = 1;  delimiter = "END";
 
 
-CHECKLIST DÉTAILLÉE — Parsing & Signaux
-
-🧱 PHASE 0 — Préparation du projet
-Créer la structure du projet
-* main.c
-* minishell.h
-* parser/ : lexer.c, parser.c, expander.c
-* signals/ : signals.c
-* utils/ : utils.c, errors.c
-* Makefile
-Configuration du Makefile
-
-📟 PHASE 1 — Prompt et Signaux
-Utiliser readline() pour afficher un prompt
-* readline("minishell$ ")
-* Ajouter chaque ligne non vide à l’historique avec add_history()
-Gérer les signaux en mode interactif
-* Ctrl-C (SIGINT) → affiche une nouvelle ligne propre avec prompt
-* Ctrl-\ (SIGQUIT) → ignoré
-* Ctrl-D → détecté si readline() retourne NULL (EOF), donc on sort du shell proprement
-Créer un fichier signals.c
-* Fonction setup_signals() avec sigaction() ou signal()
-* Utiliser au plus une variable globale volatile sig_atomic_t g_signal
-
-🧠 PHASE 2 — Lexer (tokenisation)
-Analyser ligne en tokens (commande brute → tokens)
-Créer lexer() :
-* Respecter :
-    * " → expansion activée
-    * ' → pas d’expansion
-* Gérer :
-    * Pipes |
-    * Redirections <, >, >>, <<
-    * Mots simples (ls, cat, etc.)
-* Pas besoin de gérer \ ou ;
-Structure recommandée :
-typedef enum e_token_type {
-  WORD, PIPE, REDIR_IN, REDIR_OUT, REDIR_APPEND, HEREDOC
-} t_token_type;
-
-typedef struct s_token {
-  char *value;
-  t_token_type type;
-  struct s_token *next;
-} t_token;
-
-🧱 PHASE 3 — Parser (construction des commandes)
-Créer un parser() qui transforme la liste de t_token en t_cmd
-c
-CopierModifier
-typedef struct s_cmd {
-  char **args; // ex: {"ls", "-l", NULL}
-  char *infile;     // pour <
-  char *outfile;    // pour >
-  int   append;     // 1 pour >>, 0 sinon
-  int   heredoc;    // 1 pour <<
-  char *delimiter;  // pour <<
-  struct s_cmd *next; // pour le pipe
-} t_cmd;
-Gérer :
-* redirections <, >, >>, <<
-* séquence de pipes ls | wc | cat
-* stockage des arguments (args) en respectant les quotes
-
-💵 PHASE 4 — Expansion
-Implémenter $ + expansion dans expander.c
-* Gérer :
-    * $VAR → getenv("VAR")
-    * $? → status de la dernière commande
-* Attention :
-    * Entre '...' → rien n’est expansé
-    * Entre "..." → oui, expansion
-* Ajouter fonction expand_tokens(t_token *tokens, int last_status)
-
-📜 PHASE 5 — Vérification syntaxique
- Avant de parser, valider les tokens :
-* | en début ou fin
-* <<, >>, <, > sans argument
-* quotes non fermées
-Créer : int check_syntax_errors(t_token *tokens);
-
-💬 PHASE 6 — Heredoc (dans parsing)
- Gérer dans le parsing
-* Lire les lignes jusqu’au délimiteur (sans expansion si entre quotes)
-* Stocker dans pipe temporaire (utilisé par exec)
-
-🧪 PHASE 7 — Tests & intégration avec exec
- Simuler les entrées pour ton binôme
-* Tu peux afficher les t_cmd générées pour qu’il voie ce qu’il va exécuter
- Faire une fonction unique pour le parsing
-t_cmd *parse_input(char *line, int last_exit_code);
-
-🧽 PHASE 8 — Nettoyage & Valgrind
-Libérer toute la mémoire
-* Tokens
-* Cmds
-* Heredocs temporaires
-* Expansion
-
-🧠 Rappel des points clés du sujet :
-✔️ 1 seule variable globale (pour signal)✔️ Respect strict des quotes✔️ readline + add_history()✔️ Ctrl-C, Ctrl-D, Ctrl-\✔️ Pas d’interprétation de ; ou \✔️ Expansion ($VAR, $?)✔️ Redirections + Pipes✔️ Syntaxe valide
+/* EXAMPLE:
+*t_token
+* Used to parse the user's command line word by word.
+* Each word (command, argument, symbol like |, <, etc.) is a token.
+* This helps us understand the user's intent.
+* → This is called grammatical analysis (like breaking a sentence into words and types).
+*
+*t_cmd
+* Used to organize all this information for actual execution.
+* Once the tokens are identified, we group them together:
+* Arguments go together (ls, -l)
+* We store redirections (e.g., > or >>)
+* We link commands together if | is used
+* → This is the complete meaning construct, ready to be executed
+*
+* Transition: from t_token to t_cmd in the parser
+* E.g., line entered by the user:
+* "ls -l | grep hello > out.txt"
+*
+* Step 1: The lexer produces this list of tokens:
+* ["ls", WORD] → ["-l", WORD] → ["|", PIPE] → ["grep", WORD] → ["hello", WORD] → [">", REDIR_OUT] → ["out.txt", WORD]
+*
+* Step 2: The parser reads this list and constructs two t_cmds
+* First command: ls -l
+* t_cmd *cmd1;
+* cmd1->args = {"ls", "-l", NULL};
+* cmd1->outfile = NULL;
+* cmd1->next = cmd2;
+*
+* Second command: grep hello > out.txt
+* t_cmd *cmd2;
+* cmd2->args = {"grep", "hello", NULL};
+* cmd2->append = 0;
+* cmd2->next = NULL;
+*
+* Conclusion:
+* We parse (with t_token) to understand the user's input.
+* We organize (with t_cmd) to prepare for execution.
+* With this, we can call a function execute(t_cmd *cmds) and run the entire shell.
+*/
