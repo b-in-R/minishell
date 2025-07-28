@@ -16,8 +16,8 @@ EN COURS:
 
 	Verifier si export export bien hors de minishell
 
-	-	-	expander/get_env.c -> handle_dollar voir normi
-		parser/heredoc.c -> handle_heredocs voir normi
+	-	expander/get_env.c -> handle_dollar voir normi
+	-	parser/heredoc.c -> handle_heredocs voir normi
 
 ===============================================================================
 
