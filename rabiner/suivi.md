@@ -19,10 +19,11 @@ EN COURS:
 
 BUGS:
 
+	maj execute -> voir commit
+
 	- echo hello > test.txt
 	- echo hello >> test.txt
 
-	- pipes
 
 	builtin -> print 2x
 
@@ -41,7 +42,7 @@ Commande:			Result:
 
 QUESTIONS - INFOS PARTAGEES:
 
-	- codes d'erreur: ou renvoyer? est ce que lui imprime ca? comment c'est traite?
+	
 
 
 ===============================================================================
@@ -84,47 +85,5 @@ INFOS A TROUVER:
 			130 Interruption par Ctrl+C (SIGINT)    Tu fais sleep 10, tu tapes Ctrl+C
 			139	Erreur de segmentation (Segmentation fault) Un programme
 				plante à cause de la mémoire
-
-===============================================================================
-
-FONCTIONS:
-
-		general:
-
-			- textes d'erreur
-			- free (voir process avec top?)
-			- normi
-
-		builtin_1.c:
-
-			ft_pwd:						-  voir malloc 	char	cwd[1024];
-
-
-		builtin_utils.c:
-
-			set_env:					- normi (25 lignes)
-										- explications
-
-			unset_env:					- explications
-
-
-		check_builtin.c:
-
-			error_exit:					- voir les free avant
-
-
-		execute.c:
-
-			execute_command:			- texte d'erreur a voir selon bash?
-
-			execute:					- normi (25 lignes)
-										- explications
-
-
-		redirection.c:
-
-			setup_redirections:			- normi (25 lignes)
-										- explications
-
 
 ===============================================================================
