@@ -18,6 +18,12 @@ Commandes de test:
 	echo $var
 	env | grep var
 
+
+
+
+
+
+
 	echo bonjour ; |						result =	bash: erreur de syntaxe près du symbole inattendu « | »
 	echo bonjour | |						result =	bash: erreur de syntaxe près du symbole inattendu « | »
 	|										result =	bash: erreur de syntaxe près du symbole inattendu « | »
