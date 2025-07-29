@@ -4,20 +4,16 @@
 EN COURS:
 
 
-	uniquement commandes builtin ok..
+	pipes!
 
-	envp ok -> var=val ne marche pas (symbole '=' ?)
-
-	execute.c :		renvoi le code int last_status des commandes ( echo $? )
+	codes d'erreur:	renvoi le code int last_status des commandes ( echo $? )
 						0  1  126  127  ..
 
 	test_main.c:	si ls apres unset $PATH: sortie de minishell,
 					voir si pareil avec main normal
 
-	Verifier si export export bien hors de minishell
-
-	-	-	expander/get_env.c -> handle_dollar voir normi
-		parser/heredoc.c -> handle_heredocs voir normi
+	-	expander/get_env.c -> handle_dollar voir normi
+	-	parser/heredoc.c -> handle_heredocs voir normi
 
 ===============================================================================
 
@@ -26,16 +22,27 @@ BUGS:
 	- echo hello > test.txt
 	- echo hello >> test.txt
 
+	- pipes
+
+	builtin -> print 2x
+
+
+===============================================================================
+
+ERREURS SORTIE DE COMMANDES:
+
+Commande:			Result:
+
+| echo				bash:		bash: syntax error near unexpected token `|'
+					minishell:	Syntax error: unexpected pipe
+					
 
 ===============================================================================
 
 QUESTIONS - INFOS PARTAGEES:
 
-	- code exit: est ce qu'il renvoi une info a prendre en compte, verif?
+	- codes d'erreur: ou renvoyer? est ce que lui imprime ca? comment c'est traite?
 
-	- var=val KO (symbole '='?)
-
-	- codes d'erreur a verifier pour renvoi (last_status)
 
 ===============================================================================
 

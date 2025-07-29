@@ -14,6 +14,10 @@ voir si une var specifique existe							:	echo $VAR
 
 Commandes de test:
 
+	export var=val
+	echo $var
+	env | grep var
+
 	echo bonjour ; |						result =	bash: erreur de syntaxe près du symbole inattendu « | »
 	echo bonjour | |						result =	bash: erreur de syntaxe près du symbole inattendu « | »
 	|										result =	bash: erreur de syntaxe près du symbole inattendu « | »

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/15 15:39:18 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/29 13:57:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ int	main(int ac, char **av, char **envp)
 					if (cmds != NULL)
 					{
 						if (handle_heredocs(cmds, &exp))
-							execute(cmds, NULL, &exp);
+							execute(cmds, &exp);// recup status?
 						else
 							exp.last_status = 1;
 						free_cmds(cmds);
@@ -202,10 +202,10 @@ int	main(int ac, char **av, char **envp)
 				exp.last_status = 2;
 			free_tokens(tokens);
 		}
-
 		free(line);
 	}
 	free_env(exp.my_env);
 	free_env(exp.local_env);
+	printf(BLUE"main fin\n"RST);
 	return (0);
 }
