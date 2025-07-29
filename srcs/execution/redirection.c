@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:42 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/08 16:56:49 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/07/28 19:15:41 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	setup_redirections(char **my_env, t_cmd *cmd, int in_fd, int pipe_fd[2])
 		close(cmd->in_fd);
 	}
 	// redirection d'entree (par defaut in_fd = 0)
-	if (cmd->infile)
+	else if (cmd->infile)
 	{
 		fd_in = open(cmd->infile, O_RDONLY);
 		if (fd_in < 0)
@@ -54,9 +54,11 @@ void	setup_redirections(char **my_env, t_cmd *cmd, int in_fd, int pipe_fd[2])
 		close(fd_out);
 	}
 	else if (cmd->next)
+	{
 		dup2(pipe_fd[1], STDOUT_FILENO);
-
-	close(pipe_fd[0]);
+	}
+		
 	close(pipe_fd[1]);
+	close(pipe_fd[0]);
 }
 
