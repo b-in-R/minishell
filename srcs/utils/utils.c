@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/29 14:09:21 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/29 14:49:22 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ void	cleanup_parent(t_cmd *cmd, t_fork *data)
 }
 */
 
-void	cleanup_parent(t_cmd *cmd, int in_fd, int *fd)
+void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd)
 {
-	if (in_fd != 0)
+	if (*in_fd != 0)
 	{
-		close(in_fd);
-		in_fd = 0;
+		close(*in_fd);
+		*in_fd = 0;
 	}
 	if (cmd->next)
 	{
 		close(fd[1]);
-		in_fd = fd[0];
+		*in_fd = fd[0];
 	}
 	else
 	{

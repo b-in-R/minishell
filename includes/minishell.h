@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/29 14:30:06 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/29 14:49:45 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ extern volatile sig_atomic_t	g_signal;
 // /utils/utils.c
 void	error_exit(char **my_env, char *str);
 //void	cleanup_parent(t_cmd *cmd, t_fork *data);
-void	cleanup_parent(t_cmd *cmd, int in_fd, int *fd);
+void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
 
 // /srcs/main.c
 void	print_cmds(t_cmd *cmds);
