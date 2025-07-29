@@ -6,23 +6,44 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/28 18:55:44 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/29 14:09:21 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	cleanup_parent(t_cmd *cmd, int *in_fd, int fd[2])
+/*
+void	cleanup_parent(t_cmd *cmd, t_fork *data)
 {
-	if (*in_fd != 0)
+	if (data->in_fd != 0)
 	{
-		close(*in_fd);
-		*in_fd = 0;
+		close(data->in_fd);
+		data->in_fd = 0;
+	}
+	if (cmd->next)
+	{
+		close(data->fd[1]);
+		data->in_fd = data->fd[0];
+	}
+	else
+	{
+		close(data->fd[0]);
+		close(data->fd[1]);
+	}
+}
+*/
+
+void	cleanup_parent(t_cmd *cmd, int in_fd, int *fd)
+{
+	if (in_fd != 0)
+	{
+		close(in_fd);
+		in_fd = 0;
 	}
 	if (cmd->next)
 	{
 		close(fd[1]);
-		*in_fd = fd[0];
+		in_fd = fd[0];
 	}
 	else
 	{

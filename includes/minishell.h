@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/28 18:36:28 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/29 14:30:06 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,6 @@ typedef enum e_quote_type
 *	t_quote_type	quoted_type; // Type of quotes (SINGLE, DOUBLE, NONE)
 *	struct s_token	*next;  // Pointer to the next token in the list
 */
-
-
-/*
-pipe:
-	char			*value = '|';
-	t_token_type	type;
-	t_quote_type	quoted_type;
-	struct s_token	*next;
-
-	env | grep var
-
-*/
 typedef struct s_token
 {
 	char			*value;
@@ -111,6 +99,19 @@ typedef struct s_cmd
 }	t_cmd;
 
 
+/*
+*	Struct for execute.c
+*/
+typedef struct s_fork
+{
+	int	fd[2];
+	int	in_fd;
+	pid_t	*pid;
+	int	status;
+	int	last_status;
+}	t_fork;
+
+
 /*------Codes ANSI pour formatage------*/
 # define YELL	"\033[1;33m"
 # define GREE	"\033[1;32m"
@@ -131,7 +132,8 @@ extern volatile sig_atomic_t	g_signal;
 /*---------------Common---------------*/
 // /utils/utils.c
 void	error_exit(char **my_env, char *str);
-void	cleanup_parent(t_cmd *cmd, int *in_fd, int fd[2]);
+//void	cleanup_parent(t_cmd *cmd, t_fork *data);
+void	cleanup_parent(t_cmd *cmd, int in_fd, int *fd);
 
 // /srcs/main.c
 void	print_cmds(t_cmd *cmds);
@@ -139,7 +141,7 @@ void	print_detailled_cmds(t_cmd *cmds);
 
 /*-------------Execution--------------*/
 // /execution/execute.c
-int		execute(t_cmd *cmds, t_expander *exp);
+void	execute(t_cmd *cmds, t_expander *exp);
 void	execute_command(t_cmd *cmd, char **my_env);
 
 // /execution/redirection.c

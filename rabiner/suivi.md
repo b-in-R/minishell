@@ -24,12 +24,25 @@ BUGS:
 
 	- pipes
 
+	builtin -> print 2x
+
+
+===============================================================================
+
+ERREURS SORTIE DE COMMANDES:
+
+Commande:			Result:
+
+| echo				bash:		bash: syntax error near unexpected token `|'
+					minishell:	Syntax error: unexpected pipe
+					
 
 ===============================================================================
 
 QUESTIONS - INFOS PARTAGEES:
 
 	- codes d'erreur: ou renvoyer? est ce que lui imprime ca? comment c'est traite?
+
 
 ===============================================================================
 
