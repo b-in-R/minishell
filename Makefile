@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
+#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/07/28 14:56:09 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/08/12 15:15:18 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ LIBFT_DIR =  libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
 
 EXEC_DIR = execution
-EXEC = execute.c \
+EXEC =  execute.c \
+		execute_utils.c \
 		redirection.c \
 		path.c \
 

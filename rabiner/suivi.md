@@ -17,14 +17,12 @@ EN COURS:
 
 	- valgrind
 
+	- voir si besoin de creer fonction pour code exit
+
 
 ===============================================================================
 
 BUGS:
-
-	- builtin -> print 2x
-
-	- maj execute -> voir commit
 
 	- echo hello > test.txt (voir dessous)
 	- echo hello >> test.txt
@@ -32,6 +30,14 @@ BUGS:
 	- valgrind
 	
 	- unset $PATH marche pas
+
+	-	minishell> grep "2" test.txt | awk "{print $2}'
+		awk: 1: unexpected character '''
+
+		➜ minishell git:(rabiner) ✗ grep "2" test.txt | awk "{print $2}'
+		pipe dquote> 
+		(ctrl+c)
+
 
 
 ===============================================================================
@@ -55,15 +61,24 @@ sleep 10 (+ctrl-c)	bash:	code: [130]
 								--> voir a quel code est renvoye, si une modif
 									de status est faite, recup cette valeur
 
-echo hello > test.txt	bash:	creer fichier test.txt, bonjour
-						mini:	infinite loop
+echo hello > test.txt	bash:	creer fichier "test.txt", bonjour
+						mini:	creer fichier ">",	bonjour
+
+							--> arrive pour execution:
+									"echo" fonction echo
+									"hello" argument
+									">" append dit deja que c'est
+										une redirection, donc ">" est traite
+										comme le nom du fichier pointe
+									"test.txt" non traite 
 					
 
 ===============================================================================
 
 QUESTIONS - INFOS PARTAGEES:
 
-	
+	ou on va chercher l'info pour afficher	 $>echo $?
+
 
 
 ===============================================================================

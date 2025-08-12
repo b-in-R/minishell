@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/14 12:45:58 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/12 14:16:27 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,30 @@
 int	ft_echo(char **args)
 {
 	int	i;
-	int	newline;
+	int	j;
+	int	n;
 
 	i = 1;
-	newline = 1;
-	if (args[i] && !ft_strcmp(args[i], "-n"))
+	n = 1;
+	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
 	{
-		newline = 0;
+		j = 1;
+		while (args[i][j] == 'n')
+			j++;
+		if (args[i][j] != '\0')
+			break;
+		n = 1;
 		i++;
 	}
 	while (args[i])
 	{
-		//write(1, args[i], ft_strlen(args[i]));
-		printf("%s", args[i]);
+		write(1, args[i], ft_strlen(args[i]));
 		if (args[i + 1])
-			printf(" ");
-			//write(1, " ", 1);
+			write(1, " ", 1);
 		i++;
 	}
-	if (newline)
-		printf("\n");
-		//write(1, "\n", 1);
+	if (!n)
+		write(1, "\n", 1);
 	return (0);
 }
 
