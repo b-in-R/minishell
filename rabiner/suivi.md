@@ -3,22 +3,16 @@
 
 EN COURS:
 
-
-	- execute.c -> new_execute.c
-
 	codes d'erreur:	renvoi le code int last_status des commandes ( echo $? )
 						0  1  126  127  ..
 
-	test_main.c:	si ls apres unset $PATH: sortie de minishell,
-					voir si pareil avec main normal
-
-	-	expander/get_env.c -> handle_dollar voir normi
-	-	parser/heredoc.c -> handle_heredocs voir normi
+	- norminette
 
 	- valgrind
 
-	- voir si besoin de creer fonction pour code exit
+	- unset $PATH marche pas
 
+	-  ' ou "	execve failed
 
 ===============================================================================
 
@@ -77,7 +71,6 @@ echo hello > test.txt	bash:	creer fichier "test.txt", bonjour
 
 QUESTIONS - INFOS PARTAGEES:
 
-	ou on va chercher l'info pour afficher	 $>echo $?
 
 
 
