@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/12 14:16:27 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/12 15:55:42 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int	ft_echo(char **args)
 {
 	int	i;
 	int	j;
-	int	n;
+//	int	n;
 
 	i = 1;
-	n = 1;
+//	n = 1;
 	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
 	{
 		j = 1;
@@ -27,7 +27,7 @@ int	ft_echo(char **args)
 			j++;
 		if (args[i][j] != '\0')
 			break;
-		n = 1;
+//		n = 1;
 		i++;
 	}
 	while (args[i])
@@ -37,7 +37,7 @@ int	ft_echo(char **args)
 			write(1, " ", 1);
 		i++;
 	}
-	if (!n)
+//	if (n)
 		write(1, "\n", 1);
 	return (0);
 }
