@@ -1,2 +1,2 @@
-Hello
-[?2004h[1;32mminishell-test> [0m^C[?2004l
+bonjour space2	tab3
+ligne2 col2

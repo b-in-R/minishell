@@ -18,6 +18,16 @@ Commandes de test:
 	echo $var
 	env | grep var
 
+	cat test.txt | grep "2" | awk '{print $2}'		--|
+													  |== 
+	grep "2" test.txt | awk '{print $2}'			--|
+
+
+
+	echo sauvage > test.txt 123 abc	=	dans test.txt: sauvage 123 abc 
+
+
+
 	echo bonjour ; |						result =	bash: erreur de syntaxe près du symbole inattendu « | »
 	echo bonjour | |						result =	bash: erreur de syntaxe près du symbole inattendu « | »
 	|										result =	bash: erreur de syntaxe près du symbole inattendu « | »
