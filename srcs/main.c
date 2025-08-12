@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/29 13:57:43 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/12 15:43:15 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,13 @@ int	main(int ac, char **av, char **envp)
 	return (0);
 }*/
 
-// precedent main
+void	print_status(int status)
+{
+	printf("%d\n", status);
+}
+
+
+
 int	main(int ac, char **av, char **envp)
 {
 	if (ac == 1)
@@ -187,7 +193,7 @@ int	main(int ac, char **av, char **envp)
 					if (cmds != NULL)
 					{
 						if (handle_heredocs(cmds, &exp))
-							execute(cmds, &exp);// recup status?
+							execute(cmds, &exp);
 						else
 							exp.last_status = 1;
 						free_cmds(cmds);

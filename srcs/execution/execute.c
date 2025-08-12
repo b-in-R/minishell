@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/12 14:48:12 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/12 15:54:32 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	initialise_data(&data, cmd);
 	i = 0;
 	j = 0;
+	
 	if (!data.pid)
 		error_exit(exp->my_env, "execute: malloc pid fail\n");
 	if (!cmd->next && is_builtin(cmd))
@@ -130,6 +131,9 @@ void	execute(t_cmd *cmd, t_expander *exp)
 		execute_bis(&cmd, exp, &data, &i);
 	}
 	take_exit_code(&i, &j, &data);
+	
+	// voir pour remplacer data.last_status par exp->last_status
+	exp->last_status = data.last_status;
+
 	free(data.pid);
-//	return (data.last_status);
 }
