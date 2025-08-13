@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:42:45 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/14 15:47:29 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/13 15:21:53 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,13 +146,16 @@ int	remove_from_env(char **env, const char *key)
 {
 	int		i;
 	int		j;
-	size_t	len;
+	size_t	var_name_len;
 
-	len = ft_strlen(key);
+	var_name_len = 0;
+	while (key[var_name_len] && key[var_name_len] != '=')
+		var_name_len++;
+
 	i = 0;
 	while (env && env[i])
 	{
-		if (ft_strncmp(env[i], key, len) == 0 && env[i][len] == '=')
+		if (ft_strncmp(env[i], key, var_name_len) == 0 && env[i][var_name_len] == '=')
 		{
 			free(env[i]);
 			j = i;
