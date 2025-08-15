@@ -6,13 +6,13 @@ EN COURS:
 	codes d'erreur:	renvoi le code int last_status des commandes ( echo $? )
 						0  1  126  127  ..
 
-	- norminette
-
-	- valgrind
-
 	- unset $PATH marche pas
 
 	-  ' ou "	execve failed
+
+	- valgrind
+	
+	- norminette
 
 ===============================================================================
 
