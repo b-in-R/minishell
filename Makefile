@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
+#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/08/12 15:15:18 by rabiner          ###   ########.fr        #
+#    Updated: 2025/08/13 15:24:05 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,8 +33,8 @@ RST		:= \033[0m
 #
 
 SRCS_DIR = srcs
-SRCS = main.c
-#SRCS =	test_main.c
+#SRCS = main.c
+SRCS =	main.c
 
 LIBFT_DIR =  libft
 LIBFT_A = $(LIBFT_DIR)/libft.a
