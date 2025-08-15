@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:51:32 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/14 14:58:49 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/15 18:35:27 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ void	print_env(char **env)
 {
 	int	i = 0;
 
+	// trace env
+	printf("DGB my_env@print = %p\n", (void *)env);
+	fflush(stdout);// forcer l'affichage avant les write
+	//
+	
 	while (env && env[i])
 	{
 		printf("%s\n", env[i]);

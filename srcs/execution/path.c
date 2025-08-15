@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/26 16:48:24 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/15 15:40:58 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ char	*find_command_path(char **my_env, const char *cmd)
 	char	*path_var;
 	int		i;
 
-	// si la commande contient un '/' => chemin direct
 	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, X_OK) == 0)

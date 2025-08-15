@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:47:55 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/13 15:06:21 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/15 19:54:27 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 /*
 *	Checks if the line is a simple assignment of the form "KEY=VALUE".
 */
+
+/*
+//
+// modif test rabiner pour problemes env
+//
+
 int	is_simple_assignment(const char *line)
 {
 	int	i;
@@ -38,9 +44,7 @@ int	is_simple_assignment(const char *line)
 	return (1);
 }
 
-/*
-*	Updates the value of an environment variable my_env
-*/
+// Updates the value of an environment variable my_env
 int	add_env_variable(char ***env, const char *line)
 {
 	char	*trimmed_line;
@@ -65,4 +69,48 @@ int	add_env_variable(char ***env, const char *line)
 		return (0);
 	*env = result;
 	return (1);
+}
+*/
+
+
+/*
+** Détecte si la ligne est une assignation simple: NAME=VALUE, sans commande autour.
+** - NAME doit être un identifiant valide (même règle que export/unset)
+** - Il doit y avoir un '='
+** - On n'essaie pas ici de refuser des espaces autour (ton lexer s’en occupe).
+*/
+int	is_simple_assignment(const char *line)
+{
+	size_t i = 0;
+
+	if (!line || !*line)
+		return 0;
+	while (line[i] && line[i] != '=')
+		i++;
+	if (line[i] != '=')
+		return 0;
+	// Valider l'identifiant avant '='
+	return is_valid_identifier(line);                // CHANGED: réutilise ta validation d’identifiant
+}
+
+/*
+** Ajoute/maj dans local_env UNIQUEMENT (pas d'export).
+** *env peut être NULL -> set_env gère la création du tableau.
+** Retour: 0 ok, 1 erreur (alloc ou identifiant invalide).
+*/
+int	add_env_variable(char ***env, const char *line)
+{
+	char **newtab;
+
+	if (!env || !line)
+		return 1;                                    // CHANGED: garde invariant simple
+	if (!is_valid_identifier(line) || !ft_strchr(line, '='))
+		return 1;                                    // CHANGED: refuse les formes invalides
+
+	newtab = set_env(*env, line);                   // CHANGED: set_env peut réallouer
+	if (!newtab)
+		return 1;                                    // CHANGED: échec alloc (rare)
+
+	*env = newtab;                                   // CHANGED: propager la réalloc éventuelle à l’appelant
+	return 0;
 }
