@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/29 14:49:22 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/07/29 14:59:13 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd)
 
 void	error_exit(char **my_env, char *str)
 {
-	(void)my_env; // Don't free my_env in child processes
+	(void)my_env;
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("\n", 2);

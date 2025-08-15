@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/10 10:02:48 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/13 15:12:04 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,15 @@ char	*remove_outer_quotes(const char *str)
 void	handle_redirections(t_cmd *current, t_token *tokens)
 {
 	if (tokens->type == REDIR_IN)
-		current->infile = ft_strdup(tokens->value);
+		current->infile = ft_strdup(tokens->next->value);
 	else if (tokens->type == REDIR_OUT)
 	{
-		current->outfile = ft_strdup(tokens->value);
+		current->outfile = ft_strdup(tokens->next->value);
 		current->append = 0;
 	}
 	else if (tokens->type == REDIR_APPEND)
 	{
-		current->outfile = ft_strdup(tokens->value);
+		current->outfile = ft_strdup(tokens->next->value);
 		current->append = 1;
 	}
 	else if (tokens->type == HEREDOC)
