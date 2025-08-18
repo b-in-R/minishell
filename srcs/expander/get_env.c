@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:43:15 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/14 15:53:48 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/18 10:47:28 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,48 @@
 int	is_var_char(char c)
 {
 	return (ft_isalnum(c) || c == '_');
+}
+
+/*
+* Gère l'expansion de $? (exit status)
+*/
+static int	expand_exit_status(char **result, t_expander *exp, int *i)
+{
+	char	*value;
+
+	value = ft_itoa(exp->last_status);
+	if (!value)
+		return (0);
+	if (!str_append_free(result, value))
+		return (free(value), 0);
+	free(value);
+	(*i)++;
+	return (1);
+}
+
+/*
+* Extrait le nom de variable après $
+*/
+int	exp_variable(const char *str, int *i, char **result, t_expander *exp)
+{
+	char	*key;
+	char	*value;
+	int		start;
+
+	start = *i;
+	while (is_var_char(str[*i]))
+		(*i)++;
+	key = ft_substr(str, start, *i - start);
+	if (!key)
+		return (0);
+	value = get_env_value_from_exp(key, exp);
+	free(key);
+	if (!value)
+		return (0);
+	if (!str_append_free(result, value))
+		return (free(value), 0);
+	free(value);
+	return (1);
 }
 
 /*
@@ -38,80 +80,11 @@ int	is_var_char(char c)
 */
 int	handle_dollar(const char *str, int *i, char **result, t_expander *exp)
 {
-	char	*key;
-	char	*value;
-	int		start;
-
 	(*i)++;
 	if (str[*i] == '?')
-	{
-		value = ft_itoa(exp->last_status);
-		if (!value)
-			return (0);
-		if (!str_append_free(result, value))
-			return (free(value), 0);
-		free(value);
-		(*i)++;
-		return (1);
-	}
-	start = *i;
-	while (is_var_char(str[*i]))
-		(*i)++;
-	key = ft_substr(str, start, *i - start);
-	if (!key)
-		return (0);
-	value = get_env_value_from_exp(key, exp);
-	free(key);
-	if (!value)
-		return (0);
-	if (!str_append_free(result, value))
-		return (free(value), 0);
-	free(value);
-	return (1);
-}
-
-/*
-* Used to handle all normal characters that aren't $
-* Adds a character to the end of a string dynamically.
-* Puts the character in the buffer
-* Concatenates the buffer to the existing string and frees the old string
-*/
-int	append_char(char **str, char c)
-{
-	char	buff[2];
-
-	buff[0] = c;
-	buff[1] = '\0';
-	return (str_append_free(str, buff));
-}
-
-/*
-* Dynamically concatenates two strings.
-* Performs a classic strjoin, but frees s1 to avoid memory leaks.
-* Used in append_char() to add a character to the result string.
-* and also in handle_dollar() to add the value of a variable to result.
-*/
-int	str_append_free(char **s1, const char *s2)
-{
-	char	*tmp;
-
-	if (!s1 || !s2)
-		return (0);
-	if (!*s1)
-		tmp = strdup(s2);
+		return (expand_exit_status(result, exp, i));
 	else
-	{
-		tmp = malloc(strlen(*s1) + strlen(s2) + 1);
-		if (!tmp)
-			return (0);
-		strcpy(tmp, *s1);
-		strcat(tmp, s2);
-	}
-	if (!tmp)
-		return (0);
-	free(*s1);
-	*s1 = tmp;
-	return (1);
+		return (exp_variable(str, i, result, exp));
 }
 
 /*
