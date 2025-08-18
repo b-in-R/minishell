@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/18 10:44:48 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/15 15:16:04 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,12 +156,11 @@ int		execute_builtin(t_cmd *cmd, t_expander *exp);
 int		ft_echo(char **args);
 int		ft_cd(char **my_env, char **args);
 int		ft_pwd(char **my_env, char **args);
-int		ft_env(char **my_env);
 
 // /builtin/builtin_2.c
 int		ft_export(t_expander *exp, char **args);
 int		ft_unset(char **my_env, char **args);
-int		ft_exit(char **args, t_expander *exp);
+int		ft_env(char **my_env);
 
 // /execution/path.c
 char	*find_command_path(char **my_env, const char *cmd);

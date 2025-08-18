@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/12 15:55:42 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/15 16:04:29 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ int	ft_echo(char **args)
 {
 	int	i;
 	int	j;
-//	int	n;
 
 	i = 1;
-//	n = 1;
 	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
 	{
 		j = 1;
@@ -27,7 +25,6 @@ int	ft_echo(char **args)
 			j++;
 		if (args[i][j] != '\0')
 			break;
-//		n = 1;
 		i++;
 	}
 	while (args[i])
@@ -37,7 +34,7 @@ int	ft_echo(char **args)
 			write(1, " ", 1);
 		i++;
 	}
-//	if (n)
+	if (!(args[1][0] == '-' && args[1][1] == 'n'))	
 		write(1, "\n", 1);
 	return (0);
 }
@@ -51,7 +48,11 @@ int	ft_cd(char **my_env, char **args)
 	else
 		path =  args[1];
 	if (!path || chdir(path) == -1)
-		error_exit(my_env, "fd_cd");
+	{
+		write(1, "minishell: cd: n'est pas un dossier: ", 37);
+		write(1, path, ft_strlen(path));
+		write(1, "\n", 1);
+	}
 	return (0);
 }
 
@@ -59,12 +60,12 @@ int	ft_pwd(char **my_env, char **args)
 {
 	char	cwd[1024];// voir pour malloc
 
-	char	*test[] = {"env", NULL};
+//	char	*test[] = {"env", NULL};
 
 	(void)args;
 
 	// unset pour test
-	ft_unset(my_env, test);
+//	ft_unset(my_env, test);
 	//
 
 	if (getcwd(cwd, sizeof(cwd)))
@@ -76,8 +77,4 @@ int	ft_pwd(char **my_env, char **args)
 	return (1);
 }
 
-int	ft_env(char **my_env)
-{
-	print_env(my_env);
-	return (0);
-}
+

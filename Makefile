@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
+#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/08/18 10:59:07 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/08/15 10:52:57 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,6 @@ RST		:= \033[0m
 #
 
 SRCS_DIR = srcs
-#SRCS = main.c
 SRCS =	main.c
 
 LIBFT_DIR =  libft

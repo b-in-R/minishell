@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/18 10:43:52 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/15 18:34:17 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ void only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
     close(save_in);
     close(save_out);
     close(save_err);
+	
+	// maj code de retour builtin
+	exp->last_status = data->status;
 }
 
 

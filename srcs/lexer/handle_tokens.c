@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/08 15:26:56 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/15 20:00:16 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ void	handle_word(t_token **tokens, char *line, size_t *i)
 * Extrait la sous chaine a l'interieure
 * et cree un token de type WORD avec valeur word
 */
+
+// rabiner: ' " ne fais pas le retour a la ligne avec > 
+
 void	handle_quotes(t_token **tokens, char *line, size_t *i)
 {
 	char	type_quote;
