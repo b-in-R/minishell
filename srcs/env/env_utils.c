@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:42:45 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/13 15:21:53 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/15 16:27:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,14 @@ char **set_env(char **env, const char *arg)
 	{
 		if (!ft_strncmp(env[i], key, len) && env[i][len] == '=')
 		{
-			free(env[i]);
-			env[i] = ft_strdup(arg);
-			if (!env[i])
+			char *new_entry = ft_strdup(arg);
+			if (!new_entry)                  
 			{
-				free(key);
-				return (env);
+				free(key);                   
+				return (env);                
 			}
+			free(env[i]);                    
+			env[i] = new_entry;              
 			free(key);
 			return (env);
 		}

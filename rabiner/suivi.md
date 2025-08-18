@@ -6,9 +6,9 @@ EN COURS:
 	codes d'erreur:	renvoi le code int last_status des commandes ( echo $? )
 						0  1  126  127  ..
 
-	- unset $PATH marche pas
-
-	-  ' ou "	execve failed
+	-  ' ou "	execve failed -> voir qui doit s'en occuper
+				ne font pas le retour a la ligne avec > 
+				voir handle_tokens.c -> handle quotes
 
 	- valgrind
 	
@@ -18,19 +18,17 @@ EN COURS:
 
 BUGS:
 
-	- echo hello > test.txt (voir dessous)
-	- echo hello >> test.txt
-
 	- valgrind
-	
-	- unset $PATH marche pas
+
 
 	-	minishell> grep "2" test.txt | awk "{print $2}'
 		awk: 1: unexpected character '''
 
-		➜ minishell git:(rabiner) ✗ grep "2" test.txt | awk "{print $2}'
+		(➜ minishell git:(rabiner) ✗ grep "2" test.txt | awk "{print $2}'
 		pipe dquote> 
-		(ctrl+c)
+		(ctrl+c))
+
+		' " ne font pas le retour a la ligne avec > 
 
 
 
@@ -55,24 +53,6 @@ sleep 10 (+ctrl-c)	bash:	code: [130]
 								--> voir a quel code est renvoye, si une modif
 									de status est faite, recup cette valeur
 
-echo hello > test.txt	bash:	creer fichier "test.txt", bonjour
-						mini:	creer fichier ">",	bonjour
-
-							--> arrive pour execution:
-									"echo" fonction echo
-									"hello" argument
-									">" append dit deja que c'est
-										une redirection, donc ">" est traite
-										comme le nom du fichier pointe
-									"test.txt" non traite 
-					
-
-===============================================================================
-
-QUESTIONS - INFOS PARTAGEES:
-
-
-
 
 ===============================================================================
 
@@ -90,14 +70,10 @@ GENERAL:
 
 	-	free - gestion memoire (voir process avec top?, valgrind?)
 
-	-	redirections avec heredoc (t_cmd->heredoc   t_cmd->delimiter)
-		--> fonction handle_heredoc
-
-	-	test_main.c:	si ls apres unset $PATH: sortie de minishell,
-						voir si pareil avec main normal
 
 -	-	expander/get_env.c -> handle_dollar voir normi
 		parser/heredoc.c -> handle_heredocs voir normi
+
 
 ===============================================================================
 
@@ -114,5 +90,24 @@ INFOS A TROUVER:
 			130 Interruption par Ctrl+C (SIGINT)    Tu fais sleep 10, tu tapes Ctrl+C
 			139	Erreur de segmentation (Segmentation fault) Un programme
 				plante à cause de la mémoire
+
+
+
+	VAR=val seul ⇒		crée/maj une variable de shell (locale au shell). Elle n’apparaît
+						pas dans env tant que tu ne l’as pas exportée.
+
+	export VAR (ou export VAR=val) ⇒	marque la variable pour qu’elle fasse partie de 
+										l’environnement transmis aux processus enfants. 
+										Elle apparaît dans env.
+
+	unset VAR ⇒			supprime la variable (et son export éventuel).
+
+	VAR=val cmd ⇒		n’exporte rien “de façon globale” : ça injecte VAR=val uniquement
+						dans l’environnement de cmd (et de ses enfants), sans modifier
+						l’état du shell après l’exécution.
+
+	env ⇒ 				affiche l’environnement courant (les variables exportées + les
+						assignments temporaires passés à env lui‑même).
+
 
 ===============================================================================
