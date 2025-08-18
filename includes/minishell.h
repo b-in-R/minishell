@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
 /*   Updated: 2025/08/15 15:16:04 by rabiner          ###   ########.fr       */
@@ -87,30 +87,28 @@ typedef struct s_token
 */
 typedef struct s_cmd
 {
-	char	**args;//	1x env			1x grep var
-	char	*infile;
-	char	*outfile;
-	int		append;
-	int		heredoc;
-	int		expand_heredoc;
-	int		in_fd;
-	char	*delimiter;
+	char			**args;
+	char			*infile;
+	char			*outfile;
+	int				append;
+	int				heredoc;
+	int				expand_heredoc;
+	int				in_fd;
+	char			*delimiter;
 	struct s_cmd	*next;
 }	t_cmd;
-
 
 /*
 *	Struct for execute.c
 */
 typedef struct s_fork
 {
-	int	fd[2];
-	int	in_fd;
+	int		fd[2];
+	int		in_fd;
 	pid_t	*pid;
-	int	status;
-	int	last_status;
+	int		status;
+	int		last_status;
 }	t_fork;
-
 
 /*------Codes ANSI pour formatage------*/
 # define YELL	"\033[1;33m"
@@ -148,7 +146,7 @@ void	initialise_data(t_fork *data, t_cmd *cmd);
 int		count_cmds(t_cmd *cmd);
 
 // /execution/redirection.c
-void	setup_redirections(char **my_env, t_cmd *cmd, int int_fd, int pipe_fd[2]);
+void	set_redirection(char **my_env, t_cmd *cmd, int int_fd, int pipe_fd[2]);
 
 // /builtin/check_builtin.c
 int		is_builtin(t_cmd *cmd);
@@ -174,7 +172,7 @@ void	print_env(char **env);
 
 // env/env_utils.c
 char	*get_env(char **env, char *str);
-char 	**set_env(char **env, const char *arg);
+char	**set_env(char **env, const char *arg);
 void	unset_env(char **env, char *arg);
 int		is_valid_identifier(const char *str);
 int		remove_from_env(char **env, const char *key);
@@ -206,6 +204,7 @@ char	*expand_word(const char *word, t_expander *exp);
 char	*join_tokens(t_token *tokens);
 char	*get_env_value_from_exp(const char *key, t_expander *exp);
 void	update_quote_flags(char c, int *in_single, int *in_double);
+int		exp_variable(const char *str, int *i, char **result, t_expander *exp);
 int		handle_dollar(const char *word, int *i, char **result, t_expander *exp);
 int		append_char(char **str, char c);
 int		str_append_free(char **s1, const char *s2);

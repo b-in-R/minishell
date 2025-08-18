@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 14:19:42 by rabiner           #+#    #+#             */
 /*   Updated: 2025/08/15 13:49:47 by rabiner          ###   ########.fr       */
@@ -32,7 +32,7 @@ static void safe_dup2_close(int src, int dst)
 }
 
 // configure stdin/stdout avant execution d'une commande selon pipe ou cmd unique
-void setup_redirections(char **my_env, t_cmd *cmd, int in_fd, int pipe_fd[2])
+void set_redirection(char **my_env, t_cmd *cmd, int in_fd, int pipe_fd[2])
 {
     int fd_in;
     int flags;
