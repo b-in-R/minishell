@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/15 18:34:17 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/18 15:45:39 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-
 
 void	execute_command(t_cmd *cmd, char **my_env)
 {
@@ -31,34 +29,30 @@ void	execute_command(t_cmd *cmd, char **my_env)
 	exit(126);
 }
 
-void only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
+void	only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
 {
-    int save_in  = dup(STDIN_FILENO);
-    int save_out = dup(STDOUT_FILENO);
-    int save_err = dup(STDERR_FILENO);
-    if (save_in == -1 || save_out == -1 || save_err == -1)
-        error_exit(exp->my_env, "only_builtin: dup save std fds");
-    data->fd[0] = -1;
-    data->fd[1] = -1;
-    set_redirection(exp->my_env, cmd, /*in_fd=*/0, data->fd);
+	int	save_in;
+	int	save_out;
+	int	save_err;
 
-    // exécute dans parent, redirigé
-    data->status = execute_builtin(cmd, exp);
-
-    // restauration fd ftd
-    if (dup2(save_in,  STDIN_FILENO)  == -1
-    	|| dup2(save_out, STDOUT_FILENO) == -1
-    	|| dup2(save_err, STDERR_FILENO) == -1)
-        error_exit(exp->my_env, "only_builtin: dup2 restore std fds");
-
-    close(save_in);
-    close(save_out);
-    close(save_err);
-	
-	// maj code de retour builtin
+	save_in = dup(STDIN_FILENO);
+	save_out = dup(STDOUT_FILENO);
+	save_err = dup(STDERR_FILENO);
+	if (save_in == -1 || save_out == -1 || save_err == -1)
+		error_exit(exp->my_env, "only_builtin: dup save std fds");
+	data->fd[0] = -1;
+	data->fd[1] = -1;
+	set_redirection(exp->my_env, cmd, 0, data->fd);
+	data->status = execute_builtin(cmd, exp);
+	if (dup2(save_in, STDIN_FILENO) == -1
+		|| dup2(save_out, STDOUT_FILENO) == -1
+		|| dup2(save_err, STDERR_FILENO) == -1)
+		error_exit(exp->my_env, "only_builtin: dup2 restore std fds");
+	close(save_in);
+	close(save_out);
+	close(save_err);
 	exp->last_status = data->status;
 }
-
 
 void	execute_bis(t_cmd **cmd, t_expander *exp, t_fork *data, int *i)
 {
@@ -67,7 +61,6 @@ void	execute_bis(t_cmd **cmd, t_expander *exp, t_fork *data, int *i)
 	data->pid[*i] = fork();
 	if (data->pid[*i] == -1)
 		error_exit(exp->my_env, "execute bis: fork");
-
 	if (data->pid[*i] == 0)
 	{
 		set_redirection(exp->my_env, *cmd, data->in_fd, data->fd);
@@ -118,12 +111,11 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	initialise_data(&data, cmd);
 	i = 0;
 	j = 0;
-
 	if (!data.pid)
 		error_exit(exp->my_env, "execute: malloc pid fail\n");
 	if (!cmd->next && is_builtin(cmd))
 	{
-		only_builtin(cmd, exp, &data);// voir return status
+		only_builtin(cmd, exp, &data);
 		free(data.pid);
 		return ;
 	}
@@ -134,9 +126,6 @@ void	execute(t_cmd *cmd, t_expander *exp)
 		execute_bis(&cmd, exp, &data, &i);
 	}
 	take_exit_code(&i, &j, &data);
-
-	// voir pour remplacer data.last_status par exp->last_status
 	exp->last_status = data.last_status;
-
 	free(data.pid);
 }

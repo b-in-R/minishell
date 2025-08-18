@@ -3,16 +3,28 @@
 
 EN COURS:
 
-	codes d'erreur:	renvoi le code int last_status des commandes ( echo $? )
-						0  1  126  127  ..
-
 	-  ' ou "	execve failed -> voir qui doit s'en occuper
 				ne font pas le retour a la ligne avec > 
 				voir handle_tokens.c -> handle quotes
 
+				--> faire message pour ' " 
+
+					(si besoin "(quote)>" , voir: variables et environnement shell)
+
+
+	- codes d'erreur:	renvoi le code int last_status des commandes 
+		( echo $? )
+
+
 	- valgrind
 	
 	- norminette
+
+	- sleep 10 + ctrl-c  -> 	minishell> minishell>
+
+
+	- execute.c:	only_builtin:	dup -> dup2?
+
 
 ===============================================================================
 
@@ -28,9 +40,9 @@ BUGS:
 		pipe dquote> 
 		(ctrl+c))
 
-		' " ne font pas le retour a la ligne avec > 
+		(  ' " ne font pas le retour a la ligne avec >  )
 
-
+	- sleep 10 + ctrl-c  -> 	minishell> minishell>
 
 ===============================================================================
 
@@ -58,10 +70,6 @@ sleep 10 (+ctrl-c)	bash:	code: [130]
 
 GENERAL:
 
-	-	toutes les commandes builtin sont executees dans un fork
-		--> quand il n'y a pas de pipe (1 seule cmd builtin), executer direct
-			dans le parent (actuellement child)
-
 	-	gestion signaux dans child et parent, ne doit pas reagir comme un shell
 		en plein readline pendant waitpid
 		--> bloquer/ignorer certains signaux temporairement dans les child
@@ -69,10 +77,6 @@ GENERAL:
 	-	textes d'erreur a preciser
 
 	-	free - gestion memoire (voir process avec top?, valgrind?)
-
-
--	-	expander/get_env.c -> handle_dollar voir normi
-		parser/heredoc.c -> handle_heredocs voir normi
 
 
 ===============================================================================

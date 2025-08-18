@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:42:45 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/15 16:27:43 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/18 15:35:55 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ char	*get_env(char **my_env, char *str)
 	while (my_env && my_env[i])
 	{
 		if (!ft_strncmp(my_env[i], str, len) && my_env[i][len] == '=')
-			return (my_env[i] + len  + 1);
+			return (my_env[i] + len + 1);
 		i++;
 	}
 	return (NULL);
 }
 
 // defini ou modifie une variable d'environnement
-char **set_env(char **env, const char *arg)
+char	**set_env(char **env, const char *arg)
 {
 	char	*key;
 	char	**new_env;
@@ -152,11 +152,11 @@ int	remove_from_env(char **env, const char *key)
 	var_name_len = 0;
 	while (key[var_name_len] && key[var_name_len] != '=')
 		var_name_len++;
-
 	i = 0;
 	while (env && env[i])
 	{
-		if (ft_strncmp(env[i], key, var_name_len) == 0 && env[i][var_name_len] == '=')
+		if (ft_strncmp(env[i], key, var_name_len) == 0
+			&& env[i][var_name_len] == '=')
 		{
 			free(env[i]);
 			j = i;

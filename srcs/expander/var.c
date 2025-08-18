@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:47:55 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/15 19:54:27 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/18 14:25:26 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	add_env_variable(char ***env, const char *line)
 
 	*env = newtab;                                   // CHANGED: propager la réalloc éventuelle à l’appelant
 	return 0;
-
+}
 
 /*
 * Used to handle all normal characters that aren't $
@@ -122,7 +122,7 @@ int	add_env_variable(char ***env, const char *line)
 * Puts the character in the buffer
 * Concatenates the buffer to the existing string and frees the old string
 */
-  /*
+
 int	append_char(char **str, char c)
 {
 	char	buff[2];
@@ -131,14 +131,14 @@ int	append_char(char **str, char c)
 	buff[1] = '\0';
 	return (str_append_free(str, buff));
 }
-*/
+
 /*
 * Dynamically concatenates two strings.
 * Performs a classic strjoin, but frees s1 to avoid memory leaks.
 * Used in append_char() to add a character to the result string.
 * and also in handle_dollar() to add the value of a variable to result.
 */
-  /*
+
 int	str_append_free(char **s1, const char *s2)
 {
 	char	*tmp;
@@ -162,4 +162,4 @@ int	str_append_free(char **s1, const char *s2)
 	return (1);
 
 }
-*/
+
