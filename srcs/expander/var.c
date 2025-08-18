@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:47:55 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/13 15:06:21 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/18 10:20:33 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,49 @@ int	add_env_variable(char ***env, const char *line)
 	if (!result)
 		return (0);
 	*env = result;
+	return (1);
+}
+
+/*
+* Used to handle all normal characters that aren't $
+* Adds a character to the end of a string dynamically.
+* Puts the character in the buffer
+* Concatenates the buffer to the existing string and frees the old string
+*/
+int	append_char(char **str, char c)
+{
+	char	buff[2];
+
+	buff[0] = c;
+	buff[1] = '\0';
+	return (str_append_free(str, buff));
+}
+
+/*
+* Dynamically concatenates two strings.
+* Performs a classic strjoin, but frees s1 to avoid memory leaks.
+* Used in append_char() to add a character to the result string.
+* and also in handle_dollar() to add the value of a variable to result.
+*/
+int	str_append_free(char **s1, const char *s2)
+{
+	char	*tmp;
+
+	if (!s1 || !s2)
+		return (0);
+	if (!*s1)
+		tmp = strdup(s2);
+	else
+	{
+		tmp = malloc(strlen(*s1) + strlen(s2) + 1);
+		if (!tmp)
+			return (0);
+		strcpy(tmp, *s1);
+		strcat(tmp, s2);
+	}
+	if (!tmp)
+		return (0);
+	free(*s1);
+	*s1 = tmp;
 	return (1);
 }

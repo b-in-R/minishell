@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 09:55:28 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/14 10:19:09 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/08/18 10:57:22 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,55 +26,75 @@ char	*expand_variables(const char *line, t_expander *exp)
 	return (result);
 }
 
-int	handle_heredocs(t_cmd *cmds, t_expander *exp)
+static void	heredoc_child_process(int pipe_fd[2], t_cmd *cmd, t_expander *exp)
 {
-	int		pipe_fd[2];
-	pid_t	pid;
-	int		status;
 	char	*line;
 	char	*expanded_line;
 
+	signal(SIGINT, SIG_DFL);
+	close(pipe_fd[0]);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			exit(0);
+		if (ft_strcmp(line, cmd->delimiter) == 0)
+		{
+			free(line);
+			exit(0);
+		}
+		expanded_line = expand_variables(line, exp);
+		write(pipe_fd[1], expanded_line, ft_strlen(expanded_line));
+		write(pipe_fd[1], "\n", 1);
+		free(line);
+		free(expanded_line);
+	}
+}
+
+static int	heredoc_parent_process(int pipe_fd[2], pid_t pid, t_cmd *cmd)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	close(pipe_fd[1]);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		close(pipe_fd[0]);
+		cmd->in_fd = -1;
+		return (0);
+	}
+	cmd->in_fd = pipe_fd[0];
+	return (1);
+}
+
+static int	process_single_heredoc(t_cmd *cmd, t_expander *exp)
+{
+	int		pipe_fd[2];
+	pid_t	pid;
+
+	if (pipe(pipe_fd) == -1)
+		return (perror("pipe"), 0);
+	pid = fork();
+	if (pid == -1)
+		return (perror("fork"), 0);
+	if (pid == 0)
+		heredoc_child_process(pipe_fd, cmd, exp);
+	else
+		return (heredoc_parent_process(pipe_fd, pid, cmd));
+	return (1);
+}
+
+/*
+* Version refactorisée de handle_heredocs (maintenant 15 lignes)
+*/
+int	handle_heredocs(t_cmd *cmds, t_expander *exp)
+{
 	while (cmds)
 	{
 		if (cmds->heredoc && cmds->delimiter)
 		{
-			if (pipe(pipe_fd) == -1)
-				return (perror("pipe"), 0);
-			pid = fork();
-			if (pid == -1)
-				return (perror("fork"), 0);
-			if (pid == 0)
-			{
-				signal(SIGINT, SIG_DFL);
-				while (1)
-				{
-					line = readline("> ");
-					if (!line)
-						exit(0);
-					if (ft_strcmp(line, cmds->delimiter) == 0)
-					{
-						free(line);
-						exit(0);
-					}
-					expanded_line = expand_variables(line, exp);
-					write(pipe_fd[1], expanded_line, ft_strlen(expanded_line));
-					write(pipe_fd[1], "\n", 1);
-					free(line);
-					free(expanded_line);
-				}
-			}
-			else
-			{
-				waitpid(pid, &status, 0);
-				close(pipe_fd[1]);
-				if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-				{
-					close(pipe_fd[0]);
-					cmds->in_fd = -1;
-					return (0);
-				}
-				cmds->in_fd = pipe_fd[0];
-			}
+			if (!process_single_heredoc(cmds, exp))
+				return (0);
 		}
 		cmds = cmds->next;
 	}

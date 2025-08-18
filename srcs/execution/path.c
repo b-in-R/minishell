@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/06/26 16:48:24 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/18 10:44:14 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

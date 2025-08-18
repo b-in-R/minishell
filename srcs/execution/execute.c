@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/12 15:54:32 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/18 10:43:52 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
         error_exit(exp->my_env, "only_builtin: dup save std fds");
     data->fd[0] = -1;
     data->fd[1] = -1;
-    setup_redirections(exp->my_env, cmd, /*in_fd=*/0, data->fd);
+    set_redirection(exp->my_env, cmd, /*in_fd=*/0, data->fd);
 
     // exécute dans parent, redirigé
     data->status = execute_builtin(cmd, exp);
@@ -61,13 +61,13 @@ void	execute_bis(t_cmd **cmd, t_expander *exp, t_fork *data, int *i)
 {
 	if ((*cmd)->next && pipe(data->fd) == -1)
 		error_exit(exp->my_env, "execute_bis: pipe");
-	data->pid[*i] = fork();		
+	data->pid[*i] = fork();
 	if (data->pid[*i] == -1)
 		error_exit(exp->my_env, "execute bis: fork");
-		
+
 	if (data->pid[*i] == 0)
 	{
-		setup_redirections(exp->my_env, *cmd, data->in_fd, data->fd);
+		set_redirection(exp->my_env, *cmd, data->in_fd, data->fd);
 		if (is_builtin(*cmd))
 		{
 			data->status = execute_builtin(*cmd, exp);
@@ -115,7 +115,7 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	initialise_data(&data, cmd);
 	i = 0;
 	j = 0;
-	
+
 	if (!data.pid)
 		error_exit(exp->my_env, "execute: malloc pid fail\n");
 	if (!cmd->next && is_builtin(cmd))
@@ -131,7 +131,7 @@ void	execute(t_cmd *cmd, t_expander *exp)
 		execute_bis(&cmd, exp, &data, &i);
 	}
 	take_exit_code(&i, &j, &data);
-	
+
 	// voir pour remplacer data.last_status par exp->last_status
 	exp->last_status = data.last_status;
 
