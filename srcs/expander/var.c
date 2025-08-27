@@ -6,7 +6,7 @@
 /*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:47:55 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/27 15:24:01 by aoutumur         ###   ########.fr       */
+/*   Updated: 2025/08/27 18:04:26 by aoutumur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,7 @@ int	is_simple_assignment(const char *line)
 		i++;
 	if (line[i] != '=')
 		return (0);
-	// Valider l'identifiant avant '='
 	return (is_valid_identifier(line));
-	// CHANGED: réutilise ta validation d’identifiant
 }
 
 /*
@@ -106,13 +104,13 @@ int	add_env_variable(char ***env, const char *line)
 	char	**newtab;
 
 	if (!env || !line)
-		return (1); // CHANGED: garde invariant simple
+		return (1);
 	if (!is_valid_identifier(line) || !ft_strchr(line, '='))
-		return (1);               // CHANGED: refuse les formes invalides
-	newtab = set_env(*env, line); // CHANGED: set_env peut réallouer
+		return (1);
+	newtab = set_env(*env, line);
 	if (!newtab)
-		return (1); // CHANGED: échec alloc (rare)
-	*env = newtab;  // CHANGED: propager la réalloc éventuelle à l’appelant
+		return (1);
+	*env = newtab;
 	return (0);
 }
 
