@@ -25,6 +25,13 @@ EN COURS:
 
 	- execute.c:	only_builtin:	dup -> dup2?
 
+	- BUG commande avec bcp d'args:	
+					echo a a a a a a a a a a a 
+					---> remonter l'historique
+
+	- bug unset (tjs dispo localement)
+
+
 
 ===============================================================================
 
@@ -43,6 +50,18 @@ BUGS:
 		(  ' " ne font pas le retour a la ligne avec >  )
 
 	- sleep 10 + ctrl-c  -> 	minishell> minishell>
+
+	- commande avec bcp d'args:	
+					echo a a a a a a a a a a a 
+					---> remonter l'historique
+
+	- -->	VAR=val
+			echo $VAR		val
+			export VAR
+			env | grep VAR	VAR=val
+			unset VAR		
+			echo $VAR			KO	val
+			env | grep VAR		ok	...
 
 ===============================================================================
 

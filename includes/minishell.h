@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/15 15:16:04 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/27 18:41:21 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,11 +171,13 @@ void	free_env(char **my_env);
 void	print_env(char **env);
 
 // env/env_utils.c
-char	*get_env(char **env, char *str);
 char	**set_env(char **env, const char *arg);
-void	unset_env(char **env, char *arg);
-int		is_valid_identifier(const char *str);
+
+// env/env_utils_2.c
+char	*get_env(char **my_env, char *str);
+void	unset_env(char **my_env, char *arg);
 int		remove_from_env(char **env, const char *key);
+int		is_valid_identifier(const char *str);
 
 /*---------------Lexer----------------*/
 t_token	*create_token(t_token_type type, char *value);

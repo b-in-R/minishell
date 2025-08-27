@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/15 15:40:58 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/27 19:04:56 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,11 @@ char	*join_path(const char *dir, const char *cmd)
 	return (path);
 }
 
-char	*find_command_path(char **my_env, const char *cmd)
+char	*find_command_path_2(const char *cmd, char **paths)
 {
-	char	**paths;
-	char	*path;
-	char	*path_var;
 	int		i;
+	char	*path;
 
-	if (ft_strchr(cmd, '/'))
-	{
-		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
-		return (NULL);
-	}
-	path_var = get_env(my_env, "PATH");
-	if (!path_var)
-		return (NULL);
-	paths = ft_split(path_var, ':');
-	if (!paths)
-		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
@@ -58,4 +44,24 @@ char	*find_command_path(char **my_env, const char *cmd)
 	}
 	ft_split_free(paths);
 	return (NULL);
+}
+
+char	*find_command_path(char **my_env, const char *cmd)
+{
+	char	**paths;
+	char	*path_var;
+
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
+	path_var = get_env(my_env, "PATH");
+	if (!path_var)
+		return (NULL);
+	paths = ft_split(path_var, ':');
+	if (!paths)
+		return (NULL);	
+	return (find_command_path_2(cmd, paths));
 }
