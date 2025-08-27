@@ -6,7 +6,7 @@
 /*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/27 17:55:06 by aoutumur         ###   ########.fr       */
+/*   Updated: 2025/08/27 18:27:03 by aoutumur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	process_input(char *line, t_expander *exp)
 	if (is_simple_assignment(line))
 		return (add_env_variable(&exp->local_env, line), 0);
 	tokens = lexer(line);
-	if (!check_syntax_errors(tokens))
+	if (!check_syntax_errors(tokens, line))
 	{
 		if (expand_tokens(tokens, exp))
 		{
