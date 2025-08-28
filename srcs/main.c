@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/23 12:19:48 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/27 18:27:03 by aoutumur         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/08/28 12:42:50 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+// Point d'entrée du programme, gestion de la boucle principale du shell.
+/*
+* setup_signals(); gere le signaux Ctrl+C et Ctrl+\
+* readline();  Affiche le prompt minishell$ attends l'entrée de l'utilisateur,
+* lit l'entrée et  le stocke dans line
+* Comme ca aprés on peut faire le parsing, exec, etc.
+* add_history(); // permets d'ajouter line (la commande entrée par le user dans l'histoirque)
+* quand le user a tapé eu moins un caractere
+* lexer(); appel le lexer pour identifier chaque token et creer la liste de tokens
+* rl_clear_history(); // Vide l'historique de readline avant de quitter
+*/
 
 /*
 int	main(int ac, char **av, char **envp)
@@ -29,6 +41,7 @@ int	main(int ac, char **av, char **envp)
 	exp.local_env = NULL;
 	exp.last_status = 0;
 	setup_signals();
+	interactive = isatty(STDIN_FILENO);
 	while (1)
 	{
 		skip_processing = 0;
@@ -120,11 +133,16 @@ int	main(int ac, char **av, char **envp)
 	setup_signals();
 	while (1)
 	{
-		line = readline(GREE"minishell> "RST);
+		rl_on_new_line();
+		rl_redisplay();
+		line = readline("\001\033[32m\002minishell> \001\033[0m\002");
 		if (!line)
 			return (rl_clear_history(), 0);
-		if (line[0] != '\0' && process_input(line, &exp))
+		if (line[0] != '\0')
+		{
 			add_history(line);
+			process_input(line, &exp);
+		}
 		free(line);
 	}
 	return (0);
