@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/15 15:16:04 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/27 18:30:30 by aoutumur         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,8 @@ int		add_arg(char ***args, const char *value);
 void	handle_redirections(t_cmd *current, t_token *tokens);
 char	*expand_variables(const char *line, t_expander *exp);
 int		handle_heredocs(t_cmd *cmds, t_expander *exp);
-int		check_syntax_errors(t_token *tokens);
+int		has_unclosed_quotes(const char *line);
+int		check_syntax_errors(t_token *tokens, char *line);
 char	*remove_outer_quotes(const char *str);
 
 /*--------------Expander--------------*/
