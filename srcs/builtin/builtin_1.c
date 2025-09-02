@@ -3,14 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/27 17:21:45 by aoutumur         ###   ########.fr       */
+/*   Updated: 2025/09/02 19:28:59 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/*
+
+int	ft_echo(char **args)
+{
+	int	i;
+	int	j;
+	int	newline;
+
+	i = 1;
+	newline = 1;
+	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
+	{
+		j = 1;
+		while (args[i][j++] == 'n')
+		if (args[i][j - 1] != '\0')
+			break ;
+		newline = 0;
+		i++;
+	}
+	while (args[i])
+	{
+		write(1, args[i], ft_strlen(args[i]));
+		if (args[i + 1])
+			write(1, " ", 1);
+		i++;
+	}
+	if (newline)
+		write(1, "\n", 1);
+	return (0);
+}
+*/
+
 
 int	ft_echo(char **args)
 {
