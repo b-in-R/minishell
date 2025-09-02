@@ -3,35 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/07/29 14:59:13 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/02 18:03:09 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*
-void	cleanup_parent(t_cmd *cmd, t_fork *data)
-{
-	if (data->in_fd != 0)
-	{
-		close(data->in_fd);
-		data->in_fd = 0;
-	}
-	if (cmd->next)
-	{
-		close(data->fd[1]);
-		data->in_fd = data->fd[0];
-	}
-	else
-	{
-		close(data->fd[0]);
-		close(data->fd[1]);
-	}
-}
-*/
 
 void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd)
 {

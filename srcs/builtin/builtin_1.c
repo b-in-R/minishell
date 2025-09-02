@@ -61,12 +61,9 @@ int	ft_cd(char **my_env, char **args)
 
 int	ft_pwd(char **my_env, char **args)
 {
-	char cwd[1024]; // voir pour malloc
-	//	char	*test[] = {"env", NULL};
+	char	cwd[1024];
+
 	(void)args;
-	// unset pour test
-	//	ft_unset(my_env, test);
-	//
 	if (getcwd(cwd, sizeof(cwd)))
 	{
 		printf("%s\n", cwd);

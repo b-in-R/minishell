@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:51:32 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/15 18:35:27 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/08/18 15:32:39 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	free_env(char **my_env)
 	int	i;
 
 	if (!my_env)
-		return;
+		return ;
 	i = 0;
 	while (my_env[i])
 	{
@@ -59,17 +59,12 @@ void	free_env(char **my_env)
 
 void	print_env(char **env)
 {
-	int	i = 0;
+	int	i;
 
-	// trace env
-	printf("DGB my_env@print = %p\n", (void *)env);
-	fflush(stdout);// forcer l'affichage avant les write
-	//
-	
+	i = 0;
 	while (env && env[i])
 	{
 		printf("%s\n", env[i]);
 		i++;
 	}
 }
-

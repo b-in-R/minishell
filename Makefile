@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/08/15 10:52:57 by rabiner          ###   ########.fr        #
+#    Updated: 2025/08/27 19:03:00 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ EXEC =  execute.c \
 ENV_DIR = env
 ENV = env.c \
 		env_utils.c \
+		env_utils_2.c \
 
 BUILT_DIR = builtin
 BUILT = builtin_1.c \
