@@ -159,7 +159,7 @@ int		ft_pwd(char **my_env, char **args);
 
 // /builtin/builtin_2.c
 int		ft_export(t_expander *exp, char **args);
-int		ft_unset(char **my_env, char **args);
+int		ft_unset(t_expander *exp, char **args);
 int		ft_env(char **my_env);
 
 // /execution/path.c
@@ -171,11 +171,13 @@ void	free_env(char **my_env);
 void	print_env(char **env);
 
 // env/env_utils.c
-char	*get_env(char **env, char *str);
 char	**set_env(char **env, const char *arg);
-void	unset_env(char **env, char *arg);
-int		is_valid_identifier(const char *str);
+
+// env/env_utils_2.c
+char	*get_env(char **my_env, char *str);
+void	unset_env(char **my_env, char *arg);
 int		remove_from_env(char **env, const char *key);
+int		is_valid_identifier(const char *str);
 
 /*---------------Lexer----------------*/
 t_token	*create_token(t_token_type type, char *value);
