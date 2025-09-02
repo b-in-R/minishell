@@ -3,31 +3,14 @@
 
 EN COURS:
 
-	-  ' ou "	execve failed -> voir qui doit s'en occuper
-				ne font pas le retour a la ligne avec > 
-				voir handle_tokens.c -> handle quotes
-
-				--> faire message pour ' " 
-
-					(si besoin "(quote)>" , voir: variables et environnement shell)
-
-
 	- codes d'erreur:	renvoi le code int last_status des commandes 
 		( echo $? )
 
 
 	- valgrind
-	
-	- norminette
 
 	- sleep 10 + ctrl-c  -> 	minishell> minishell>
 
-
-	- execute.c:	only_builtin:	dup -> dup2?
-
-	- BUG commande avec bcp d'args:	
-					echo a a a a a a a a a a a
-					---> remonter l'historique
 
 
 ===============================================================================
@@ -36,21 +19,7 @@ BUGS:
 
 	- valgrind
 
-
-	-	minishell> grep "2" test.txt | awk "{print $2}'
-		awk: 1: unexpected character '''
-
-		(➜ minishell git:(rabiner) ✗ grep "2" test.txt | awk "{print $2}'
-		pipe dquote> 
-		(ctrl+c))
-
-		(  ' " ne font pas le retour a la ligne avec >  )
-
 	- sleep 10 + ctrl-c  -> 	minishell> minishell>
-
-	- commande avec bcp d'args:	
-					echo a a a a a a a a a a a 
-					---> remonter l'historique
 
 
 ===============================================================================

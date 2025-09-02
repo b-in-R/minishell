@@ -7,3 +7,4 @@ minishell
 test*
 in.txt
 old_*
+builtin_1 copy.c
