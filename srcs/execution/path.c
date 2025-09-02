@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/27 19:04:56 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/01 15:46:14 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,6 @@ char	*find_command_path(char **my_env, const char *cmd)
 		return (NULL);
 	paths = ft_split(path_var, ':');
 	if (!paths)
-		return (NULL);	
+		return (NULL);
 	return (find_command_path_2(cmd, paths));
 }

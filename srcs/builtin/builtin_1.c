@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/18 15:02:28 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/02 18:03:23 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	ft_cd(char **my_env, char **args)
 	return (0);
 }
 
-// voir pour malloc cwd
 int	ft_pwd(char **my_env, char **args)
 {
 	char	cwd[1024];

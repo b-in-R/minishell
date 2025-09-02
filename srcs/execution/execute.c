@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/18 15:45:39 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/02 18:05:13 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
 	save_out = dup(STDOUT_FILENO);
 	save_err = dup(STDERR_FILENO);
 	if (save_in == -1 || save_out == -1 || save_err == -1)
-		error_exit(exp->my_env, "only_builtin: dup save std fds");
+		error_exit(exp->my_env, "only_builtin: dup save std fds");// texte
 	data->fd[0] = -1;
 	data->fd[1] = -1;
 	set_redirection(exp->my_env, cmd, 0, data->fd);
@@ -47,7 +47,7 @@ void	only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
 	if (dup2(save_in, STDIN_FILENO) == -1
 		|| dup2(save_out, STDOUT_FILENO) == -1
 		|| dup2(save_err, STDERR_FILENO) == -1)
-		error_exit(exp->my_env, "only_builtin: dup2 restore std fds");
+		error_exit(exp->my_env, "only_builtin: dup2 restore std fds");// texte
 	close(save_in);
 	close(save_out);
 	close(save_err);
@@ -112,7 +112,7 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	i = 0;
 	j = 0;
 	if (!data.pid)
-		error_exit(exp->my_env, "execute: malloc pid fail\n");
+		error_exit(exp->my_env, "execute: malloc pid fail");
 	if (!cmd->next && is_builtin(cmd))
 	{
 		only_builtin(cmd, exp, &data);

@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/27 18:41:21 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/02 17:46:45 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ int		ft_pwd(char **my_env, char **args);
 
 // /builtin/builtin_2.c
 int		ft_export(t_expander *exp, char **args);
-int		ft_unset(char **my_env, char **args);
+int		ft_unset(t_expander *exp, char **args);
 int		ft_env(char **my_env);
 
 // /execution/path.c

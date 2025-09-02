@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:50:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/18 15:31:19 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/02 17:51:53 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,30 +70,7 @@ int	ft_export(t_expander *exp, char **args)
 	return (ret);
 }
 
-/*
-int	ft_unset(char **my_env, char **args)
-{
-	int	i;
-	int	ret;
-
-	i = 1;
-	ret = 0;
-	while (args[i])
-	{
-		if (!is_valid_identifier(args[i]))
-		{
-			ft_putstr_fd("unset: not a valid identifier\n", 2);
-			ret = 1;
-		}
-		else
-			remove_from_env(my_env, args[i]);
-		i++;
-	}
-	return (ret);
-}
-*/
-
-int	ft_unset(char **my_env, char **args)
+int	ft_unset(t_expander *exp, char **args)
 {
 	int	i;
 	int	ret;
@@ -110,7 +87,10 @@ int	ft_unset(char **my_env, char **args)
 			ret = 1;
 		}
 		else
-			remove_from_env(my_env, args[i]);
+		{
+			remove_from_env(exp->my_env, args[i]);
+			remove_from_env(exp->local_env, args[i]);
+		}
 		i++;
 	}
 	return (ret);
