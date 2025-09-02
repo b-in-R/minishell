@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/08/28 12:42:50 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/02 19:39:20 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,8 @@ int	main(int ac, char **av, char **envp)
 	setup_signals();
 	while (1)
 	{
-		rl_on_new_line();
-		rl_redisplay();
+	//	rl_on_new_line();
+	//	rl_redisplay();
 		line = readline("\001\033[32m\002minishell> \001\033[0m\002");
 		if (!line)
 			return (rl_clear_history(), 0);
