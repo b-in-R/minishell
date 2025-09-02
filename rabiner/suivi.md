@@ -23,8 +23,6 @@ EN COURS:
 	- sleep 10 + ctrl-c  -> 	minishell> minishell>
 
 
-	- execute.c:	only_builtin:	dup -> dup2?
-
 	- BUG commande avec bcp d'args:	
 					echo a a a a a a a a a a a
 					---> remonter l'historique
