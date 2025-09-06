@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/08/27 19:03:00 by rabiner          ###   ########.fr        #
+#    Updated: 2025/09/06 08:32:57 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -122,6 +122,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 clean:
 	@$(RM) $(OBJS)
 	@$(MAKE) -C $(LIBFT_DIR) clean
+	@printf "$(BLUE)[srcs clean]$(RST)\n"
 
 fclean: clean
 	@$(RM) $(NAME)

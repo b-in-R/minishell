@@ -11,6 +11,8 @@ EN COURS:
 
 	- sleep 10 + ctrl-c  -> 	minishell> minishell>
 
+	- env -i minishell : message d'erreur
+
 
 
 ===============================================================================
@@ -28,10 +30,6 @@ ERREURS SORTIE DE COMMANDES:
 
 Commande:			Result:
 
-| echo				bash:	bash: syntax error near unexpected token `|'
-							code: [2]
-					mini:	Syntax error: unexpected pipe
-							code: [2]
 							
 echo bonjour |;		bash:	bash: syntax error near unexpected token `;'
 							code: [2]

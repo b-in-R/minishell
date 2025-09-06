@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/01 14:56:11 by rabiner           #+#    #+#              #
-#    Updated: 2025/06/17 22:02:20 by rabiner          ###   ########.fr        #
+#    Updated: 2025/09/06 08:31:37 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,12 +63,11 @@ $(OBJS_DIR)/%.o: %.c
 
 clean:
 	@$(RM) $(OBJS)
-	@printf "$(BLUE)[petit nettoyage]$(RST)\n"
+	@printf "$(BLUE)[libft clean]$(RST)\n"
 	
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RMDIR) $(OBJS_DIR)
-	@printf "$(BLUE)[Tout tout gros nettoyage]$(RST)\n"
 	
 re: fclean all
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/27 18:30:30 by aoutumur         ###   ########.fr       */
+/*   Updated: 2025/09/06 10:28:32 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,9 @@ void	execute(t_cmd *cmd, t_expander *exp);
 void	execute_command(t_cmd *cmd, char **my_env);
 
 // /execution/execute_utils.c
-void	initialise_data(t_fork *data, t_cmd *cmd);
+void	initialise_data(t_fork *data, t_cmd *cmd, t_expander *exp);
 int		count_cmds(t_cmd *cmd);
+void	take_exit_code(int *i, int *j, t_fork *data);
 
 // /execution/redirection.c
 void	set_redirection(char **my_env, t_cmd *cmd, int int_fd, int pipe_fd[2]);

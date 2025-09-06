@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:09:18 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/14 16:22:01 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/06 09:59:28 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,10 @@ void	sigint_heredoc(int sig)
 * Sends the SIGQUIT signal (Ctrl-\), and calls sigquit_handler,
 * which ignores the signal
 */
+
 void	setup_signals(void)
 {
 	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, sigquit_handler);
+	//signal(SIGQUIT, sigquit_handler); modif rabiner pour double prompt
+	signal(SIGQUIT, SIG_IGN);
 }

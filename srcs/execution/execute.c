@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/02 18:05:13 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/06 10:29:05 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,51 +54,50 @@ void	only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
 	exp->last_status = data->status;
 }
 
-void	execute_bis(t_cmd **cmd, t_expander *exp, t_fork *data, int *i)
+void	execute_bis_2(t_cmd **cmd, t_expander *exp, t_fork *data)
 {
-	if ((*cmd)->next && pipe(data->fd) == -1)
-		error_exit(exp->my_env, "execute_bis: pipe");
-	data->pid[*i] = fork();
-	if (data->pid[*i] == -1)
-		error_exit(exp->my_env, "execute bis: fork");
-	if (data->pid[*i] == 0)
-	{
+		signal(SIGINT, SIG_DFL);//
+		signal(SIGQUIT, SIG_DFL);//
 		set_redirection(exp->my_env, *cmd, data->in_fd, data->fd);
+		if (data->fd[0] != -1)//
+			close(data->fd[0]);//
+		if (data->fd[1] != -1)//
+			close(data->fd[1]);//
+		if (data->in_fd != 0)//
+			close(data->in_fd);//
 		if (is_builtin(*cmd))
 		{
 			data->status = execute_builtin(*cmd, exp);
 			exit(data->status);
 		}
 		else
+		{
 			execute_command(*cmd, exp->my_env);
+			error_exit(exp->my_env, "execute_bis: execve fail");
+		}
+}
+
+	
+void	execute_bis(t_cmd **cmd, t_expander *exp, t_fork *data, int *i)
+{
+	if ((*cmd)->next && pipe(data->fd) == -1)
+		error_exit(exp->my_env, "execute_bis: pipe");
+	else
+	{
+		data->fd[0] = -1;
+		data->fd[1] = -1;
 	}
+	data->pid[*i] = fork();
+	if (data->pid[*i] == -1)
+		error_exit(exp->my_env, "execute bis: fork");
+	
+	if (data->pid[*i] == 0)
+		execute_bis_2(cmd, exp, data);
 	else
 	{
 		cleanup_parent(*cmd, &data->in_fd, data->fd);
 		*cmd = (*cmd)->next;
 		(*i)++;
-	}
-}
-
-void	take_exit_code(int *i, int *j, t_fork *data)
-{
-	int	stat;
-
-	stat = data->status;
-	while (*j < *i)
-	{
-		if (data->pid[*j] > 0)
-		{
-			waitpid(data->pid[*j], &stat, 0);
-			if (*j == *i - 1)
-			{
-				if (WIFEXITED(stat))
-					data->last_status = WEXITSTATUS(stat);
-				else if (WIFSIGNALED(stat))
-					data->last_status = 128 + WTERMSIG(stat);
-			}
-		}
-		(*j)++;
 	}
 }
 
@@ -108,17 +107,17 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	int		i;
 	int		j;
 
-	initialise_data(&data, cmd);
 	i = 0;
 	j = 0;
-	if (!data.pid)
-		error_exit(exp->my_env, "execute: malloc pid fail");
+	initialise_data(&data, cmd, exp);
 	if (!cmd->next && is_builtin(cmd))
 	{
 		only_builtin(cmd, exp, &data);
 		free(data.pid);
 		return ;
 	}
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	while (cmd)
 	{
 		data.fd[0] = -1;
@@ -127,5 +126,6 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	}
 	take_exit_code(&i, &j, &data);
 	exp->last_status = data.last_status;
+	setup_signals();
 	free(data.pid);
 }
