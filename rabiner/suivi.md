@@ -13,7 +13,7 @@ EN COURS:
 
 
 
-	- modifie:
+	- modif:
 				var.c:	str_append_free
 
 
@@ -21,24 +21,17 @@ EN COURS:
 
 Malloc / free
 
-env_utils.c:	set_no_env:	char **new_env		return:
 
-				add_entry:	char *new_entry		
+CTRL+D:
 
-				free_copy_env_2:	new_env[i] (strdup)
+	t_cmd *current->args;
 
-				free_copy_env:	char **new_env		return:
-
-				set_env:	char *key		return (set_no_env(key, arg));
-											return (free_copy_env(env, key, arg));
-											!!!! return (env) !!! pas free
-
-env.c:			init_env:	char **copy	(+strdup)	return:
-													!!! return (NULL) !!! pas free
-				
-execute_utils.c:	initialise_data: t_fork* data->pid		-> depuis main
-
-execute.c:
+	==45906==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+	==45906==    by 0x10CA01: add_arg (create_cmd.c:101)	// malloc + strdup ici
+	==45906==    by 0x10CB04: process_token (parser.c:45)
+	==45906==    by 0x10CC7C: parser (parser.c:81)	// initialisation t_cmd *current
+	==45906==    by 0x1094D7: process_input (main.c:39)
+	==45906==    by 0x1095F9: main (main.c:75)
 
 
 

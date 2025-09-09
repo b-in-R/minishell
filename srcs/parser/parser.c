@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/13 15:12:04 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/09 13:47:58 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	process_token(t_token **tokens, t_cmd **current)
 	if ((*tokens)->type == WORD)
 	{
 		clean = remove_outer_quotes((*tokens)->value);
-		add_arg(&(*current)->args, clean);
+		add_arg(&(*current)->args, clean);// -> malloc apres(current->args)
 		free(clean);
 		*tokens = (*tokens)->next;
 	}
@@ -67,7 +67,7 @@ int	process_token(t_token **tokens, t_cmd **current)
 t_cmd	*parser(t_token *tokens)
 {
 	t_cmd	*cmds;
-	t_cmd	*current;
+	t_cmd	*current;// initialisation
 
 	cmds = NULL;
 	current = NULL;
@@ -78,9 +78,10 @@ t_cmd	*parser(t_token *tokens)
 			current = create_cmd();
 			add_cmd(&cmds, current);
 		}
-		if (!process_token(&tokens, &current))
+		if (!process_token(&tokens, &current))// -> malloc (current->args)
 			return (free_cmds(cmds), NULL);
 	}
+//	free_allocs(current->args);
 	return (cmds);
 }
 

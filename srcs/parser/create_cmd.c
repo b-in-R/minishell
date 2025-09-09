@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:06:32 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/08 15:31:13 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/09 13:57:41 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
 * Comme on doit modifier le champ `args` (le pointeur lui-même) dans la struct
 * on a besoin de passer un pointeur vers ce pointeur → char ***
 *
-* C'est pour cela qu'on appelle : add_arg(&current->args, value);
+* C'est pour cela qu'on appelle : add_arg(&(*current)->args, value);
 * ce qui fait que add_arg() reçoit un triple pointeur : char ***
 *
 * Cela permet à add_arg() de faire : *args = nouveau_tableau
@@ -98,7 +98,7 @@ int	add_arg(char ***args, const char *value)
 		while ((*args)[count])
 			count++;
 	}
-	new_args = malloc(sizeof(char *) * (count + 2));
+	new_args = malloc(sizeof(char *) * (count + 2));// -> malloc ici
 	if (!new_args)
 		return (0);
 	i = 0;
@@ -107,7 +107,7 @@ int	add_arg(char ***args, const char *value)
 		new_args[i] = (*args)[i];
 		i++;
 	}
-	new_args[i] = ft_strdup(value);
+	new_args[i] = ft_strdup(value);// -> malloc ici
 	new_args[i + 1] = NULL;
 	(*args) = new_args;
 	return (1);

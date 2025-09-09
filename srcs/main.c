@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/09/08 18:41:57 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/09 13:32:51 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	process_input(char *line, t_expander *exp)
 	{
 		if (expand_tokens(tokens, exp))
 		{
-			cmds = parser(tokens);
+			cmds = parser(tokens);// -> malloc
 			if (cmds && handle_heredocs(cmds, exp))
 				execute(cmds, exp);
 			else
@@ -72,7 +72,7 @@ int	main(int ac, char **av, char **envp)
 		if (line[0] != '\0')
 		{
 			add_history(line);
-			process_input(line, &exp);
+			process_input(line, &exp);// -> malloc ()
 		}
 		free(line);
 	}

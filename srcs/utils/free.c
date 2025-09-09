@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:16:21 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/09 11:13:48 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/09 13:52:56 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,16 @@ void	free_allocs(char **tofree)
 	int	i;
 
 	i = 0;
-	while (tofree[i])
+	if (tofree)
 	{
-		free(tofree[i]);
-		i++;
+		if (tofree[i])
+		{
+		while (tofree[i])
+			{
+				free(tofree[i]);
+				i++;
+			}
+		}
+		free(tofree);
 	}
-	free(tofree);
-	return ;
 }
