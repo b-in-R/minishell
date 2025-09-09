@@ -9,19 +9,60 @@ EN COURS:
 
 	- valgrind
 
-	- sleep 10 + ctrl-c  -> 	minishell> minishell>
+	- echo "'salut'"	bash: 'salut'		minishell:	salut
 
-	- env -i minishell : message d'erreur
+
+
+	- modifie:
+				var.c:	str_append_free
+
+
+===============================================================================
+
+Malloc / free
+
+env_utils.c:	set_no_env:	char **new_env		return:
+
+				add_entry:	char *new_entry		
+
+				free_copy_env_2:	new_env[i] (strdup)
+
+				free_copy_env:	char **new_env		return:
+
+				set_env:	char *key		return (set_no_env(key, arg));
+											return (free_copy_env(env, key, arg));
+											!!!! return (env) !!! pas free
+
+env.c:			init_env:	char **copy	(+strdup)	return:
+													!!! return (NULL) !!! pas free
+				
+execute_utils.c:	initialise_data: t_fork* data->pid		-> depuis main
+
+execute.c:
+
 
 
 
 ===============================================================================
 
+open / close
+
+
+
+
+
+===============================================================================
+
+
 BUGS:
 
 	- valgrind
 
-	- sleep 10 + ctrl-c  -> 	minishell> minishell>
+
+	- echo bonjour |;		bash:	bash: syntax error near unexpected token `;'
+									code: [2]
+							mini:	minishell: command not found: ;
+									code: [2] + last_status[127] ??
 
 
 ===============================================================================
@@ -35,11 +76,6 @@ echo bonjour |;		bash:	bash: syntax error near unexpected token `;'
 							code: [2]
 					mini:	minishell: command not found: ;
 							code: [2] + last_status[127] ??
-
-sleep 10 (+ctrl-c)	bash:	code: [130]
-					mini:	code: [0] + last_status[130] ??
-								--> voir a quel code est renvoye, si une modif
-									de status est faite, recup cette valeur
 
 
 ===============================================================================

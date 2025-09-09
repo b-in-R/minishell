@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_checker.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:51:19 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/27 18:46:54 by aoutumur         ###   ########.fr       */
+/*   Updated: 2025/09/08 16:17:17 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
  *		ca veut dire quelle est fermee donc a la fin on retourne 0
  *	A la fin, si une quote est ouverte en retoune erreur
  */
+
+ /*
 int	has_unclosed_quotes(const char *line)
 {
 	char	quote;
@@ -28,9 +30,10 @@ int	has_unclosed_quotes(const char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == '\'' || line[i] == '\"')
+		if (line[i] == '\'' || line[i] == '\"')// ' ou "	'
 		{
-			quote = line[i++];
+			quote = line[i];
+			i++;
 			while (line[i] && line[i] != quote)
 				i++;
 			if (line[i] != quote)
@@ -40,6 +43,31 @@ int	has_unclosed_quotes(const char *line)
 			i++;
 	}
 	return (0);
+}
+*/
+
+// modif rabiner
+int	has_unclosed_quotes(const char *line)
+{
+	int		i;
+	int		single_quote;
+	int		double_quote;
+
+	i = 0;
+	single_quote = 0;
+	double_quote = 0;
+	while (line[i])
+	{
+		if (line[i] == '\'')
+			single_quote++;
+		else if (line[i] == '\"')
+			double_quote++;
+		i++;
+	}
+	if (single_quote % 2 == 0 || double_quote % 2 == 0)
+		return (0);
+	else
+		return (1);
 }
 
 /*

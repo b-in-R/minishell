@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   var.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:47:55 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/27 18:04:26 by aoutumur         ###   ########.fr       */
+/*   Updated: 2025/09/08 18:47:52 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,10 @@ int	add_env_variable(char ***env, const char *line)
 	if (!newtab)
 		return (1);
 	*env = newtab;
+
+	// free newtab -> nop si return(env), oui si return(new_env)
+
+
 	return (0);
 }
 
@@ -140,18 +144,21 @@ int	append_char(char **str, char c)
 int	str_append_free(char **s1, const char *s2)
 {
 	char	*tmp;
+	size_t	len;
 
+	len = 0;
 	if (!s1 || !s2)
 		return (0);
 	if (!*s1)
-		tmp = strdup(s2);
+		tmp = ft_strdup(s2);
 	else
 	{
-		tmp = malloc(strlen(*s1) + strlen(s2) + 1);
+		len = ft_strlen(*s1) + ft_strlen(s2) + 1;
+		tmp = malloc(sizeof(char *) * len);
 		if (!tmp)
 			return (0);
-		strcpy(tmp, *s1);
-		strcat(tmp, s2);
+		ft_strlcpy(tmp, *s1, ft_strlen(*s1) + 1);
+		ft_strlcat(tmp, s2, len);
 	}
 	if (!tmp)
 		return (0);

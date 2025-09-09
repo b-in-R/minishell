@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 09:55:28 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/18 10:57:22 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/09 11:23:16 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

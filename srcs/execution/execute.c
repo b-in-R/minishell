@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/06 10:29:05 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/09 11:21:13 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,6 @@ void	execute_bis(t_cmd **cmd, t_expander *exp, t_fork *data, int *i)
 {
 	if ((*cmd)->next && pipe(data->fd) == -1)
 		error_exit(exp->my_env, "execute_bis: pipe");
-	else
-	{
-		data->fd[0] = -1;
-		data->fd[1] = -1;
-	}
 	data->pid[*i] = fork();
 	if (data->pid[*i] == -1)
 		error_exit(exp->my_env, "execute bis: fork");

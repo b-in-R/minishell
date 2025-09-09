@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/06 08:35:53 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/08 11:05:27 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ft_cd(char **my_env, char **args)
 		path = get_env(my_env, "HOME");
 		if (!path)
 		{
-			write(2, "minishell: cd: 'HOME' not set\n", 29);
+			write(2, "minishell: cd: 'HOME' not set\n", 30);
 			return (1);
 		}
 	}

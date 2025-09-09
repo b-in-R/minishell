@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:42:45 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/02 18:02:10 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/08 18:54:35 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,8 @@ char	**set_env(char **env, const char *arg)
 	if (!key)
 		return (env);
 	if (!env)
-		return (set_no_env(key, arg));
+		return (set_no_env(key, arg));// return ((char **)new_env);
 	if (add_entry(env, key, len, arg))
 		return (env);
-	return (free_copy_env(env, key, arg));
+	return (free_copy_env(env, key, arg));// return ((char **)new_env);
 }

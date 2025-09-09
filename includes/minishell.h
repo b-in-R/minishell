@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/06 10:28:32 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/08 16:22:57 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ extern volatile sig_atomic_t	g_signal;
 void	error_exit(char **my_env, char *str);
 void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
 
-// /srcs/main.c
+// /utils/utils.c
 void	print_cmds(t_cmd *cmds);
 void	print_detailled_cmds(t_cmd *cmds);
 
@@ -217,10 +217,13 @@ int		add_env_variable(char ***env, const char *line);
 int		is_simple_assignment(const char *line);
 
 /*--------------Utils---------------*/
-void	free_tokens(t_token *tokens);
-void	free_cmds(t_cmd *cmds);
 void	free_env(char **env);
 char	*ft_strjoin_3(char *s1, char *s2, char *s3);
+
+/*---------------Free----------------*/
+void	free_allocs(char **tofree);
+void	free_tokens(t_token *tokens);
+void	free_cmds(t_cmd *cmds);
 
 /*--------------Signals--------------*/
 void	setup_signals(void);

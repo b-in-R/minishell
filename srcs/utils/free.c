@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:16:21 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/14 12:26:04 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/09 11:13:48 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ void	free_tokens(t_token *tokens)
 	{
 		tmp = tokens;
 		tokens = tokens->next;
-		free(tmp->value);
-		free(tmp);
+		if (tmp->value)
+			free(tmp->value);
+		if (tmp)
+			free(tmp);
 	}
 }
 
@@ -49,4 +51,18 @@ void	free_cmds(t_cmd *cmds)
 			free(tmp->delimiter);
 		free(tmp);
 	}
+}
+
+void	free_allocs(char **tofree)
+{
+	int	i;
+
+	i = 0;
+	while (tofree[i])
+	{
+		free(tofree[i]);
+		i++;
+	}
+	free(tofree);
+	return ;
 }
