@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/13 15:12:04 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/10 12:23:42 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,9 @@
 */
 int	process_token(t_token **tokens, t_cmd **current)
 {
-	char	*clean;
-
 	if ((*tokens)->type == WORD)
 	{
-		clean = remove_outer_quotes((*tokens)->value);
-		add_arg(&(*current)->args, clean);
-		free(clean);
+		add_arg(&(*current)->args, (*tokens)->value);
 		*tokens = (*tokens)->next;
 	}
 	else if ((*tokens)->type == REDIR_IN || (*tokens)->type == REDIR_OUT
