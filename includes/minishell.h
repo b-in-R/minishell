@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoutumur <aoutumur@student.42.fr>          +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/27 18:30:30 by aoutumur         ###   ########.fr       */
+/*   Updated: 2025/09/10 12:28:01 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -197,6 +198,7 @@ int		add_arg(char ***args, const char *value);
 void	handle_redirections(t_cmd *current, t_token *tokens);
 char	*expand_variables(const char *line, t_expander *exp);
 int		handle_heredocs(t_cmd *cmds, t_expander *exp);
+char	get_unclosed_quote_type(const char *line);
 int		has_unclosed_quotes(const char *line);
 int		check_syntax_errors(t_token *tokens, char *line);
 char	*remove_outer_quotes(const char *str);
