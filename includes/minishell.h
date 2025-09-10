@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/10 12:37:41 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/10 12:42:02 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,6 +221,7 @@ void	free_tokens(t_token *tokens);
 void	free_cmds(t_cmd *cmds);
 void	free_env(char **env);
 char	*ft_strjoin_3(char *s1, char *s2, char *s3);
+char	**create_clean_args(char **args);
 
 /*--------------Signals--------------*/
 void	setup_signals(void);
