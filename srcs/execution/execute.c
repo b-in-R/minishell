@@ -3,20 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/02 18:05:13 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/10 12:23:16 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/*
+* Creates a copy of the arguments array with outer quotes removed.
+ * This is necessary because execve needs the actual command arguments
+ * without the shell quotes, but we keep the original args intact
+ * for other uses (like echo which needs to preserve inner quotes).
+ *
+ * Example:
+ *		Input:  ["echo", "'hello'", NULL]
+ * 		Output: ["echo", "hello", NULL]
+ *
+ * Returns: A newly allocated array with cleaned arguments.
+*/
+static char	**create_clean_args(char **args)
+{
+	char	**clean_args;
+	int		i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	clean_args = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (args[i])
+	{
+		clean_args[i] = remove_outer_quotes(args[i]);
+		i++;
+	}
+	clean_args[i] = NULL;
+	return (clean_args);
+}
+
 void	execute_command(t_cmd *cmd, char **my_env)
 {
 	char	*path;
+	char	**clean_args;
 
-	path = find_command_path(my_env, cmd->args[0]);
+	clean_args = create_clean_args(cmd->args);
+	path = find_command_path(my_env, clean_args[0]);
 	if (!path)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);
@@ -39,7 +72,7 @@ void	only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
 	save_out = dup(STDOUT_FILENO);
 	save_err = dup(STDERR_FILENO);
 	if (save_in == -1 || save_out == -1 || save_err == -1)
-		error_exit(exp->my_env, "only_builtin: dup save std fds");// texte
+		error_exit(exp->my_env, "only_builtin: dup save std fds");
 	data->fd[0] = -1;
 	data->fd[1] = -1;
 	set_redirection(exp->my_env, cmd, 0, data->fd);
@@ -47,7 +80,7 @@ void	only_builtin(t_cmd *cmd, t_expander *exp, t_fork *data)
 	if (dup2(save_in, STDIN_FILENO) == -1
 		|| dup2(save_out, STDOUT_FILENO) == -1
 		|| dup2(save_err, STDERR_FILENO) == -1)
-		error_exit(exp->my_env, "only_builtin: dup2 restore std fds");// texte
+		error_exit(exp->my_env, "only_builtin: dup2 restore std fds");
 	close(save_in);
 	close(save_out);
 	close(save_err);
@@ -112,7 +145,7 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	i = 0;
 	j = 0;
 	if (!data.pid)
-		error_exit(exp->my_env, "execute: malloc pid fail");
+		error_exit(exp->my_env, "execute: malloc pid fail\n");
 	if (!cmd->next && is_builtin(cmd))
 	{
 		only_builtin(cmd, exp, &data);
