@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/10 12:23:28 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/10 12:41:03 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	ft_cd(char **my_env, char **args)
 
 int	ft_pwd(char **my_env, char **args)
 {
-	char cwd[1024];
+	char	cwd[1024];
 
 	(void)args;
 	if (getcwd(cwd, sizeof(cwd)))
