@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:09:18 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/14 16:22:01 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/10 11:11:25 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ volatile sig_atomic_t	g_signal = 0;
 void	sigint_handler(int sig)
 {
 	(void)sig;
-	rl_replace_line("", 0);
 	write(1, "\n", 1);
 	rl_on_new_line();
+	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
