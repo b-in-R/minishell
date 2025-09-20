@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:25 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/08 15:25:52 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/12 00:29:33 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ t_token	*lexer(char *line)
 		if (line[i] == ' ')
 			i++;
 		else if (line[i] == '|')
-			handle_pipe(&tokens, &i);
+			handle_pipe(&tokens, &i);// -> malloc
 		else if (line[i] == '<' || line[i] == '>')
-			handle_redirection(&tokens, line, &i);
+			handle_redirection(&tokens, line, &i);// -> malloc
 		else if (line[i] == '\'' || line[i] == '"' )
-			handle_quotes(&tokens, line, &i);
+			handle_quotes(&tokens, line, &i);// --> malloc
 		else
-			handle_word(&tokens, line, &i);
+			handle_word(&tokens, line, &i);// -->malloc
 	}
 	return (tokens);
 }

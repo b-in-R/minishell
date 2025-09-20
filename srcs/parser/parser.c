@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/10 12:23:42 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/20 00:29:22 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,11 @@ int	process_token(t_token **tokens, t_cmd **current)
 {
 	if ((*tokens)->type == WORD)
 	{
-		add_arg(&(*current)->args, (*tokens)->value);
+  // modif rabiner:
+		clean = remove_outer_quotes((*tokens)->value);
+		add_arg(&(*current)->args, clean);
+		pool_free_ctx(clean);
+  //add_arg(&(*current)->args, (*tokens)->value); (remplace)
 		*tokens = (*tokens)->next;
 	}
 	else if ((*tokens)->type == REDIR_IN || (*tokens)->type == REDIR_OUT
@@ -92,14 +96,14 @@ char	*remove_outer_quotes(const char *str)
 		return (NULL);
 	len = ft_strlen(str);
 	if (len < 2)
-		return (ft_strdup(str));
+		return (pool_strdup_ctx(str));
 	if ((str[0] == '\'' && str[len - 1] == '\'')
 		|| (str[0] == '"' && str[len - 1] == '"'))
 	{
-		res = ft_substr(str, 1, len - 2);
+		res = pool_substr_ctx(str, 1, len - 2);
 	}
 	else
-		res = ft_strdup(str);
+		res = pool_strdup_ctx(str);
 	return (res);
 }
 
@@ -108,21 +112,34 @@ char	*remove_outer_quotes(const char *str)
 */
 void	handle_redirections(t_cmd *current, t_token *tokens)
 {
+	char	*value;
+
+	value = tokens->next->value;
 	if (tokens->type == REDIR_IN)
-		current->infile = ft_strdup(tokens->next->value);
+	{
+		if (current->infile)
+			pool_free_ctx(current->infile);
+		current->infile = pool_strdup_ctx(value);
+	}
 	else if (tokens->type == REDIR_OUT)
 	{
-		current->outfile = ft_strdup(tokens->next->value);
+		if (current->outfile)
+			pool_free_ctx(current->outfile);
+		current->outfile = pool_strdup_ctx(value);
 		current->append = 0;
 	}
 	else if (tokens->type == REDIR_APPEND)
 	{
-		current->outfile = ft_strdup(tokens->next->value);
+		if (current->outfile)
+			pool_free_ctx(current->outfile);
+		current->outfile = pool_strdup_ctx(value);
 		current->append = 1;
 	}
 	else if (tokens->type == HEREDOC)
 	{
+		if (current->delimiter)
+			pool_free_ctx(current->delimiter);
 		current->heredoc = 1;
-		current->delimiter = remove_outer_quotes(tokens->next->value);
+		current->delimiter = remove_outer_quotes(value);
 	}
 }

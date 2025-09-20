@@ -13,6 +13,7 @@
 #include "../../includes/minishell.h"
 
 // pour le cas "export NAME" (sans '=').
+// Promotes NAME from local env to export when no value is provided.
 static int	export_name_only(t_expander *exp, const char *name)
 {
 	char	*val;
@@ -27,20 +28,21 @@ static int	export_name_only(t_expander *exp, const char *name)
 			return (1);
 		exp->my_env = set_env(exp->my_env, pair);
 		remove_from_env(exp->local_env, name);
-		free(pair);
+		pool_free_ctx(pair);
 		return (0);
 	}
 	if (get_env(exp->my_env, (char *) name))
 		return (0);
-	tmp = ft_strjoin(name, "=");
+	tmp = pool_strjoin_ctx(name, "=");
 	if (!tmp)
 		return (1);
 	exp->my_env = set_env(exp->my_env, tmp);
-	free(tmp);
+	pool_free_ctx(tmp);
 	return (0);
 }
 
 // supprime dans local_env et ajoute ou update dans my_env
+// Adds or updates environment variables in the exported scope.
 int	ft_export(t_expander *exp, char **args)
 {
 	int		i;
@@ -70,6 +72,7 @@ int	ft_export(t_expander *exp, char **args)
 	return (ret);
 }
 
+// Removes variables from both exported and local environments.
 int	ft_unset(t_expander *exp, char **args)
 {
 	int	i;
@@ -96,6 +99,7 @@ int	ft_unset(t_expander *exp, char **args)
 	return (ret);
 }
 
+// Displays every exported environment entry.
 int	ft_env(char **my_env)
 {
 	print_env(my_env);

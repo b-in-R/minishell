@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/10 12:42:02 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/19 15:46:42 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include "mem_manager.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -47,6 +48,7 @@ typedef struct s_expander
 	int		last_status;
 	char	**my_env;
 	char	**local_env;
+	t_pool	*pool;
 }	t_expander;
 
 /*
@@ -95,6 +97,7 @@ typedef struct s_cmd
 	int				expand_heredoc;
 	int				in_fd;
 	char			*delimiter;
+	t_pool			*pool;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -132,7 +135,7 @@ extern volatile sig_atomic_t	g_signal;
 void	error_exit(char **my_env, char *str);
 void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
 
-// /srcs/main.c
+// /utils/utils.c
 void	print_cmds(t_cmd *cmds);
 void	print_detailled_cmds(t_cmd *cmds);
 
@@ -142,8 +145,9 @@ void	execute(t_cmd *cmd, t_expander *exp);
 void	execute_command(t_cmd *cmd, char **my_env);
 
 // /execution/execute_utils.c
-void	initialise_data(t_fork *data, t_cmd *cmd);
+void	initialise_data(t_fork *data, t_cmd *cmd, t_expander *exp);
 int		count_cmds(t_cmd *cmd);
+void	take_exit_code(int *i, int *j, t_fork *data);
 
 // /execution/redirection.c
 void	set_redirection(char **my_env, t_cmd *cmd, int int_fd, int pipe_fd[2]);
@@ -166,7 +170,7 @@ int		ft_env(char **my_env);
 char	*find_command_path(char **my_env, const char *cmd);
 
 // /env/env.c
-char	**init_env(char **envp);
+char	**init_env(char **envp, t_pool *global);
 void	free_env(char **my_env);
 void	print_env(char **env);
 
@@ -217,11 +221,14 @@ int		add_env_variable(char ***env, const char *line);
 int		is_simple_assignment(const char *line);
 
 /*--------------Utils---------------*/
-void	free_tokens(t_token *tokens);
-void	free_cmds(t_cmd *cmds);
 void	free_env(char **env);
 char	*ft_strjoin_3(char *s1, char *s2, char *s3);
 char	**create_clean_args(char **args);
+
+/*---------------Free----------------*/
+void	free_allocs(char **tofree);
+void	free_tokens(t_token *tokens);
+void	free_cmds(t_cmd *cmds);
 
 /*--------------Signals--------------*/
 void	setup_signals(void);

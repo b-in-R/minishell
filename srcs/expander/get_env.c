@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:43:15 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/18 10:47:28 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/12 00:30:58 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ static int	expand_exit_status(char **result, t_expander *exp, int *i)
 	value = ft_itoa(exp->last_status);
 	if (!value)
 		return (0);
+	pool_track_ctx(value);
 	if (!str_append_free(result, value))
-		return (free(value), 0);
-	free(value);
+		return (pool_free_ctx(value), 0);
+	pool_free_ctx(value);
 	(*i)++;
 	return (1);
 }
@@ -50,16 +51,16 @@ int	exp_variable(const char *str, int *i, char **result, t_expander *exp)
 	start = *i;
 	while (is_var_char(str[*i]))
 		(*i)++;
-	key = ft_substr(str, start, *i - start);
+	key = pool_substr_ctx(str, start, *i - start);
 	if (!key)
 		return (0);
 	value = get_env_value_from_exp(key, exp);
-	free(key);
+	pool_free_ctx(key);
 	if (!value)
 		return (0);
 	if (!str_append_free(result, value))
-		return (free(value), 0);
-	free(value);
+		return (pool_free_ctx(value), 0);
+	pool_free_ctx(value);
 	return (1);
 }
 
@@ -97,9 +98,9 @@ char	*get_env_value_from_exp(const char *key, t_expander *exp)
 
 	val = get_env(exp->local_env, (char *)key);
 	if (val)
-		return (ft_strdup(val));
+		return (pool_strdup_ctx(val));
 	val = get_env(exp->my_env, (char *)key);
 	if (val)
-		return (ft_strdup(val));
-	return (ft_strdup(""));
+		return (pool_strdup_ctx(val));
+	return (pool_strdup_ctx(""));
 }

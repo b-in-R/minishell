@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:50 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/14 15:53:33 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/12 00:30:21 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	expand_tokens(t_token *tokens, t_expander *exp)
 			new_value = expand_word(tokens->value, exp);
 			if (!new_value)
 				return (0);
-			free(tokens->value);
+			pool_free_ctx(tokens->value);
 			tokens->value = new_value;
 		}
 		tokens = tokens->next;
@@ -70,7 +70,7 @@ char	*expand_word(const char *word, t_expander *exp)
 	i = 0;
 	in_single = 0;
 	in_double = 0;
-	result = ft_strdup("");
+	result = pool_strdup_ctx("");
 	if (!result)
 		return (NULL);
 	while (word[i])
@@ -79,10 +79,10 @@ char	*expand_word(const char *word, t_expander *exp)
 		if (word[i] == '$')
 		{
 			if (!handle_dollar(word, &i, &result, exp))
-				return (free(result), NULL);
+				return (pool_free_ctx(result), NULL);
 		}
 		else if (!append_char(&result, word[i++]))
-			return (free(result), NULL);
+			return (pool_free_ctx(result), NULL);
 	}
 	return (result);
 }
@@ -95,18 +95,18 @@ char	*join_tokens(t_token *tokens)
 	char	*result;
 	t_token	*curr;
 
-	result = ft_strdup("");
+	result = pool_strdup_ctx("");
 	if (!result)
 		return (NULL);
 	curr = tokens;
 	while (curr)
 	{
 		if (!str_append_free(&result, curr->value))
-			return (free(result), NULL);
+			return (pool_free_ctx(result), NULL);
 		if (curr->next)
 		{
 			if (!str_append_free(&result, " "))
-				return (free(result), NULL);
+				return (pool_free_ctx(result), NULL);
 		}
 		curr = curr->next;
 	}

@@ -9,17 +9,53 @@ EN COURS:
 
 	- valgrind
 
-	- sleep 10 + ctrl-c  -> 	minishell> minishell>
+	- echo "'salut'"	bash: 'salut'		minishell:	salut
+
+
+
+	- modif:
+				var.c:	str_append_free
+
+
+===============================================================================
+
+Malloc / free
+
+
+CTRL+D:
+
+	t_cmd *current->args;
+
+	==45906==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+	==45906==    by 0x10CA01: add_arg (create_cmd.c:101)	// malloc + strdup ici
+	==45906==    by 0x10CB04: process_token (parser.c:45)
+	==45906==    by 0x10CC7C: parser (parser.c:81)	// initialisation t_cmd *current
+	==45906==    by 0x1094D7: process_input (main.c:39)
+	==45906==    by 0x1095F9: main (main.c:75)
+
 
 
 
 ===============================================================================
 
+open / close
+
+
+
+
+
+===============================================================================
+
+
 BUGS:
 
 	- valgrind
 
-	- sleep 10 + ctrl-c  -> 	minishell> minishell>
+
+	- echo bonjour |;		bash:	bash: syntax error near unexpected token `;'
+									code: [2]
+							mini:	minishell: command not found: ;
+									code: [2] + last_status[127] ??
 
 
 ===============================================================================
@@ -28,20 +64,11 @@ ERREURS SORTIE DE COMMANDES:
 
 Commande:			Result:
 
-| echo				bash:	bash: syntax error near unexpected token `|'
-							code: [2]
-					mini:	Syntax error: unexpected pipe
-							code: [2]
 							
 echo bonjour |;		bash:	bash: syntax error near unexpected token `;'
 							code: [2]
 					mini:	minishell: command not found: ;
 							code: [2] + last_status[127] ??
-
-sleep 10 (+ctrl-c)	bash:	code: [130]
-					mini:	code: [0] + last_status[130] ??
-								--> voir a quel code est renvoye, si une modif
-									de status est faite, recup cette valeur
 
 
 ===============================================================================

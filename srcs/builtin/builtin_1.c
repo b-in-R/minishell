@@ -6,12 +6,13 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/10 12:41:03 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/08 11:05:27 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// Prints arguments separated by spaces, handling the optional -n flag.
 int	ft_echo(char **args)
 {
 	int	i;
@@ -41,12 +42,20 @@ int	ft_echo(char **args)
 	return (0);
 }
 
+// Changes directory, falling back to $HOME when no path is given.
 int	ft_cd(char **my_env, char **args)
 {
 	char	*path;
 
 	if (!args[1])
+	{
 		path = get_env(my_env, "HOME");
+		if (!path)
+		{
+			write(2, "minishell: cd: 'HOME' not set\n", 30);
+			return (1);
+		}
+	}
 	else
 		path = args[1];
 	if (!path || chdir(path) == -1)
@@ -59,6 +68,7 @@ int	ft_cd(char **my_env, char **args)
 	return (0);
 }
 
+// Outputs the absolute path of the current working directory.
 int	ft_pwd(char **my_env, char **args)
 {
 	char	cwd[1024];

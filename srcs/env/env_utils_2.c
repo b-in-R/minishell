@@ -6,13 +6,14 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:37:51 by rabiner           #+#    #+#             */
-/*   Updated: 2025/08/27 18:39:17 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/19 22:44:56 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // retrouver la valeur d'une variable d'environnement (aussi avant execve)
+// Retrieves an environment value matching the provided key prefix.
 char	*get_env(char **my_env, char *str)
 {
 	int		i;
@@ -32,6 +33,7 @@ char	*get_env(char **my_env, char *str)
 }
 
 // supprime une variable d'environnement
+// Deletes a variable from the exported environment array.
 void	unset_env(char **my_env, char *arg)
 {
 	int		i;
@@ -46,7 +48,7 @@ void	unset_env(char **my_env, char *arg)
 	{
 		if (!ft_strncmp(my_env[i], arg, len) && my_env[i][len] == '=')
 		{
-			free(my_env[i]);
+			pool_free_ctx(my_env[i]);
 			j = i;
 			while (my_env[j + 1])
 			{
@@ -64,6 +66,7 @@ void	unset_env(char **my_env, char *arg)
 *	Removes a variable from the environment.
 *	To move one variable from local_env to my_env
 */
+// Removes an entry from env when it matches `key` (before '=').
 int	remove_from_env(char **env, const char *key)
 {
 	int		i;
@@ -79,7 +82,7 @@ int	remove_from_env(char **env, const char *key)
 		if (ft_strncmp(env[i], key, var_name_len) == 0
 			&& env[i][var_name_len] == '=')
 		{
-			free(env[i]);
+			pool_free_ctx(env[i]);
 			j = i;
 			while (env[j])
 			{
@@ -96,6 +99,7 @@ int	remove_from_env(char **env, const char *key)
 /*
 *	Checks if a string is a valid identifier for an environment variable
 */
+// Validates shell identifier syntax up to the optional '=' separator.
 int	is_valid_identifier(const char *str)
 {
 	int	i;

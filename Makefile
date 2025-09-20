@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/08/27 19:03:00 by rabiner          ###   ########.fr        #
+#    Updated: 2025/09/20 08:06:49 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,12 @@ EXEC =  execute.c \
 		execute_utils.c \
 		redirection.c \
 		path.c \
+
+MEM_DIR = mem_manager
+MEM =	fd_manager.c \
+		mem_manager.c \
+		pool_context.c \
+		pool_strings.c \
 
 ENV_DIR = env
 ENV = env.c \
@@ -87,6 +93,7 @@ SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
 		$(addprefix $(SRCS_DIR)/$(LEXER_DIR)/, $(LEXER)) \
 		$(addprefix $(SRCS_DIR)/$(PARSER_DIR)/, $(PARSER)) \
 		$(addprefix $(SRCS_DIR)/$(SIGNAL_DIR)/, $(SIGNAL)) \
+		$(addprefix $(SRCS_DIR)/$(MEM_DIR)/, $(MEM)) \
 
 
 OBJS_DIR = $(SRCS_DIR)/objs
@@ -122,6 +129,7 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 clean:
 	@$(RM) $(OBJS)
 	@$(MAKE) -C $(LIBFT_DIR) clean
+	@printf "$(BLUE)[srcs clean]$(RST)\n"
 
 fclean: clean
 	@$(RM) $(NAME)
@@ -131,4 +139,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-

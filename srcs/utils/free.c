@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:16:21 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/14 12:26:04 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/20 00:07:27 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ void	free_tokens(t_token *tokens)
 	{
 		tmp = tokens;
 		tokens = tokens->next;
-		free(tmp->value);
-		free(tmp);
+		if (tmp->value)
+			pool_free_ctx(tmp->value);
+		if (tmp)
+			pool_free_ctx(tmp);
 	}
 }
 
@@ -38,15 +40,34 @@ void	free_cmds(t_cmd *cmds)
 		{
 			i = 0;
 			while (tmp->args[i])
-				free(tmp->args[i++]);
-			free(tmp->args);
+				pool_free_ctx(tmp->args[i++]);
+			pool_free_ctx(tmp->args);
 		}
 		if (tmp->infile)
-			free(tmp->infile);
+			pool_free_ctx(tmp->infile);
 		if (tmp->outfile)
-			free(tmp->outfile);
+			pool_free_ctx(tmp->outfile);
 		if (tmp->delimiter)
-			free(tmp->delimiter);
-		free(tmp);
+			pool_free_ctx(tmp->delimiter);
+		pool_free_ctx(tmp);
+	}
+}
+
+void	free_allocs(char **tofree)
+{
+	int	i;
+
+	i = 0;
+	if (tofree)
+	{
+		if (tofree[i])
+		{
+			while (tofree[i])
+			{
+				pool_free_ctx(tofree[i]);
+				i++;
+			}
+		}
+		pool_free_ctx(tofree);
 	}
 }

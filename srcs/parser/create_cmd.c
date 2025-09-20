@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:06:32 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/08 15:31:13 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/09 13:57:41 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_cmd	*create_cmd(void)
 {
 	t_cmd	*cmd;
 
-	cmd = malloc(sizeof(t_cmd));
+	cmd = pool_alloc_ctx(sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
@@ -35,6 +35,7 @@ t_cmd	*create_cmd(void)
 	cmd->heredoc = 0;
 	cmd->in_fd = -1;
 	cmd->delimiter = NULL;
+	cmd->pool = pool_get_context();
 	cmd->next = NULL;
 	return (cmd);
 }
@@ -77,7 +78,7 @@ void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
 * Comme on doit modifier le champ `args` (le pointeur lui-même) dans la struct
 * on a besoin de passer un pointeur vers ce pointeur → char ***
 *
-* C'est pour cela qu'on appelle : add_arg(&current->args, value);
+* C'est pour cela qu'on appelle : add_arg(&(*current)->args, value);
 * ce qui fait que add_arg() reçoit un triple pointeur : char ***
 *
 * Cela permet à add_arg() de faire : *args = nouveau_tableau
@@ -89,26 +90,35 @@ void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
 int	add_arg(char ***args, const char *value)
 {
 	char	**new_args;
+	char	**old_args;
 	int		count;
 	int		i;
 
 	count = 0;
+	old_args = *args;
 	if (*args)
 	{
-		while ((*args)[count])
+		while (old_args[count])
 			count++;
 	}
-	new_args = malloc(sizeof(char *) * (count + 2));
+	new_args = pool_alloc_ctx(sizeof(char *) * (count + 2));
 	if (!new_args)
 		return (0);
 	i = 0;
 	while (i < count)
 	{
-		new_args[i] = (*args)[i];
+		new_args[i] = old_args[i];
 		i++;
 	}
-	new_args[i] = ft_strdup(value);
+	new_args[i] = pool_strdup_sys(pool_get_context(), value);
+	if (!new_args[i])
+	{
+		pool_free_ctx(new_args);
+		return (0);
+	}
 	new_args[i + 1] = NULL;
-	(*args) = new_args;
+	*args = new_args;
+	if (old_args)
+		pool_free_ctx(old_args);
 	return (1);
 }
