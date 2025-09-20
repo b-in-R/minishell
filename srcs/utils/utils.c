@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
 /*   Updated: 2025/09/20 00:08:11 by rabiner          ###   ########.fr       */
@@ -11,6 +11,37 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/*
+* Creates a copy of the arguments array with outer quotes removed.
+ * This is necessary because execve needs the actual command arguments
+ * without the shell quotes, but we keep the original args intact
+ * for other uses (like echo which needs to preserve inner quotes).
+ *
+ * Example:
+ *		Input:  ["echo", "'hello'", NULL]
+ * 		Output: ["echo", "hello", NULL]
+ *
+ * Returns: A newly allocated array with cleaned arguments.
+*/
+char	**create_clean_args(char **args)
+{
+	char	**clean_args;
+	int		i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	clean_args = malloc(sizeof(char *) * (i + 1));
+	i = 0;
+	while (args[i])
+	{
+		clean_args[i] = remove_outer_quotes(args[i]);
+		i++;
+	}
+	clean_args[i] = NULL;
+	return (clean_args);
+}
 
 void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd)
 {

@@ -13,40 +13,44 @@
 #include "../../includes/minishell.h"
 
 /*
- *	Detecte sil y a une quote simple ou double non fermee
- *	Parcours la ligne caractere par caractere
- *	Quand une quote est ouverte on la stocke
- *	Si on retombe sur le meme type de quote apres,
- *		ca veut dire quelle est fermee donc a la fin on retourne 0
- *	A la fin, si une quote est ouverte en retoune erreur
+ * Returns the type of unclosed quote if any, otherwise 0
  */
 
+//------------------------------------------------------------------------
+// Version alberto
+
+/*
+char	get_unclosed_quote_type(const char *line)
+{
+	int		i;
+	char	in_quote;
+
+	i = 0;
+	in_quote = 0;
+	while (line[i])
+	{
+		if (!in_quote && (line[i] == '\'' || line[i] == '"'))
+			in_quote = line[i];
+		else if (in_quote && line[i] == in_quote)
+			in_quote = 0;
+		i++;
+	}
+	return (in_quote);
+}
+/*
+/*
+ * Verify if there are unclosed quotes in the input line
+ */
  /*
 int	has_unclosed_quotes(const char *line)
 {
-	char	quote;
-	int		i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '\'' || line[i] == '\"')// ' ou "	'
-		{
-			quote = line[i];
-			i++;
-			while (line[i] && line[i] != quote)
-				i++;
-			if (line[i] != quote)
-				return (1);
-		}
-		else
-			i++;
-	}
-	return (0);
+	return (get_unclosed_quote_type(line) != 0);
 }
 */
 
-// modif rabiner
+//--------------------------------------------------------------------------------
+// version rabiner
+
 int	has_unclosed_quotes(const char *line)
 {
 	int		i;
@@ -80,6 +84,7 @@ int	check_syntax_errors(t_token *tokens, char *line)
 {
 	t_token	*prev;
 
+	(void)line;
 	prev = NULL;
 	if (!tokens)
 		return (1);

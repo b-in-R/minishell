@@ -201,6 +201,7 @@ int		add_arg(char ***args, const char *value);
 void	handle_redirections(t_cmd *current, t_token *tokens);
 char	*expand_variables(const char *line, t_expander *exp);
 int		handle_heredocs(t_cmd *cmds, t_expander *exp);
+char	get_unclosed_quote_type(const char *line);
 int		has_unclosed_quotes(const char *line);
 int		check_syntax_errors(t_token *tokens, char *line);
 char	*remove_outer_quotes(const char *str);
@@ -222,6 +223,7 @@ int		is_simple_assignment(const char *line);
 /*--------------Utils---------------*/
 void	free_env(char **env);
 char	*ft_strjoin_3(char *s1, char *s2, char *s3);
+char	**create_clean_args(char **args);
 
 /*---------------Free----------------*/
 void	free_allocs(char **tofree);

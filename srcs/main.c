@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
 /*   Updated: 2025/09/19 15:33:27 by rabiner          ###   ########.fr       */
@@ -12,15 +12,13 @@
 
 #include "../includes/minishell.h"
 
-// Point d'entrée du programme, gestion de la boucle principale du shell.
 /*
-* setup_signals(); gere le signaux Ctrl+C et Ctrl+\
-* readline();  Affiche le prompt minishell$ attends l'entrée de l'utilisateur,
-* lit l'entrée et  le stocke dans line
-* Comme ca aprés on peut faire le parsing, exec, etc.
-* add_history(); // permets d'ajouter line (la commande entrée par le user dans l'histoirque)
-* quand le user a tapé eu moins un caractere
-* lexer(); appel le lexer pour identifier chaque token et creer la liste de tokens
+* setup_signals(); Handles the Ctrl+C and Ctrl+\ signals
+* readline(); Displays the minishell prompt and waits for user input
+* Reads the input and stores it in line
+* ​​So we can then perform parsing, exec, etc.
+* When the user has typed at least one character
+* lexer();calls lexer to tokenize the input line into a linked list of t_token
 * rl_clear_history(); // Vide l'historique de readline avant de quitter
 */
 

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
 /*   Updated: 2025/09/20 00:32:29 by rabiner          ###   ########.fr       */
@@ -16,8 +16,10 @@
 void	execute_command(t_cmd *cmd, char **my_env)
 {
 	char	*path;
+	char	**clean_args;
 
-	path = find_command_path(my_env, cmd->args[0]);
+	clean_args = create_clean_args(cmd->args);
+	path = find_command_path(my_env, clean_args[0]);
 	if (!path)
 	{
 		ft_putstr_fd("minishell: command not found: ", 2);

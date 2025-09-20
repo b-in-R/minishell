@@ -37,13 +37,13 @@
 */
 int	process_token(t_token **tokens, t_cmd **current)
 {
-	char	*clean;
-
 	if ((*tokens)->type == WORD)
 	{
+  // modif rabiner:
 		clean = remove_outer_quotes((*tokens)->value);
 		add_arg(&(*current)->args, clean);
 		pool_free_ctx(clean);
+  //add_arg(&(*current)->args, (*tokens)->value); (remplace)
 		*tokens = (*tokens)->next;
 	}
 	else if ((*tokens)->type == REDIR_IN || (*tokens)->type == REDIR_OUT

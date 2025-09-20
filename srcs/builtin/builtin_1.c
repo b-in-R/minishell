@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
 /*   Updated: 2025/09/08 11:05:27 by rabiner          ###   ########.fr       */
@@ -76,7 +76,8 @@ int	ft_pwd(char **my_env, char **args)
 	(void)args;
 	if (getcwd(cwd, sizeof(cwd)))
 	{
-		printf("%s\n", cwd);
+		write(STDOUT_FILENO, cwd, ft_strlen(cwd));
+		write(STDOUT_FILENO, "\n", 1);
 		return (0);
 	}
 	error_exit(my_env, "ft_pwd");
