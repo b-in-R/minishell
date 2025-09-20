@@ -13,6 +13,7 @@
 #include "../../includes/minishell.h"
 
 // renvoie sur la bonne fonction builtin
+// Dispatches the builtin implementation matching the command name.
 int	execute_builtin(t_cmd *cmd, t_expander *exp)
 {
 	if (!ft_strcmp(cmd->args[0], "echo"))
@@ -28,11 +29,15 @@ int	execute_builtin(t_cmd *cmd, t_expander *exp)
 	if (!ft_strcmp(cmd->args[0], "env"))
 		return (ft_env(exp->my_env));
 	if (!ft_strcmp(cmd->args[0], "exit"))
+	{
+		pool_cleanup_ctx();
 		exit(0);
+	}
 	return (1);
 }
 
 // Verifie si la commande entree est une builtin
+// Returns 1 when the command name matches a supported builtin.
 int	is_builtin(t_cmd *cmd)
 {
 	char	*name;

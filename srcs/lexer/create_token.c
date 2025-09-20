@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_token.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:56:16 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/07/08 15:56:30 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/12 00:26:02 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token	*create_token(t_token_type type, char *value)
 {
 	t_token	*token;
 
-	token = malloc(sizeof(t_token));
+	token = pool_alloc_ctx(sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = value;
