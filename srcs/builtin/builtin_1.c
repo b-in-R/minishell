@@ -12,6 +12,7 @@
 
 #include "../../includes/minishell.h"
 
+// Prints arguments separated by spaces, handling the optional -n flag.
 int	ft_echo(char **args)
 {
 	int	i;
@@ -41,6 +42,7 @@ int	ft_echo(char **args)
 	return (0);
 }
 
+// Changes directory, falling back to $HOME when no path is given.
 int	ft_cd(char **my_env, char **args)
 {
 	char	*path;
@@ -66,6 +68,7 @@ int	ft_cd(char **my_env, char **args)
 	return (0);
 }
 
+// Outputs the absolute path of the current working directory.
 int	ft_pwd(char **my_env, char **args)
 {
 	char	cwd[1024];

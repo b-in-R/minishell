@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/09 11:27:48 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/20 00:08:11 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@ void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd)
 {
 	if (*in_fd != 0 && *in_fd != -1)
 	{
-		close(*in_fd);
+		pool_close_ctx(*in_fd);
 		*in_fd = 0;
 	}
 	if (cmd->next && fd[1] > 0)
 	{
-		close(fd[1]);
+		pool_close_ctx(fd[1]);
 		*in_fd = fd[0];
 	}
 	else if (fd[0] > 0 && fd[1] > 0)
 	{
-		close(fd[0]);
-		close(fd[1]);
+		pool_close_ctx(fd[0]);
+		pool_close_ctx(fd[1]);
 	}
 }
 
@@ -37,6 +37,7 @@ void	error_exit(char **my_env, char *str)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("\n", 2);
+	pool_cleanup_ctx();
 	exit(1);
 }
 
@@ -45,11 +46,16 @@ char	*ft_strjoin_3(char *s1, char *s2, char *s3)
 	char	*tmp;
 	char	*res;
 
-	tmp = ft_strjoin(s1, s2);
+	tmp = pool_strjoin_ctx(s1, s2);
 	if (!tmp)
 		return (NULL);
-	res = ft_strjoin(tmp, s3);
-	free(tmp);
+	res = pool_strjoin_ctx(tmp, s3);
+	if (!res)
+	{
+		pool_free_ctx(tmp);
+		return (NULL);
+	}
+	pool_free_ctx(tmp);
 	return (res);
 }
 /*
@@ -92,7 +98,8 @@ void print_cmds(t_cmd *cmds)
 		if (cmds->infile)
 			printf("Infile: %s\n", cmds->infile);
 		if (cmds->outfile)
-			printf("Outfile: %s (%s)\n", cmds->outfile, cmds->append ? "append" : "truncate");
+			printf("Outfile: %s (%s)\n", cmds->outfile, \
+			cmds->append ? "append" : "truncate");
 		if (cmds->heredoc)
 			printf("Heredoc delimiter: %s\n", cmds->delimiter);
 		cmds = cmds->next;

@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/08 16:22:57 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/19 15:46:42 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include "mem_manager.h"
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -47,6 +48,7 @@ typedef struct s_expander
 	int		last_status;
 	char	**my_env;
 	char	**local_env;
+	t_pool	*pool;
 }	t_expander;
 
 /*
@@ -95,6 +97,7 @@ typedef struct s_cmd
 	int				expand_heredoc;
 	int				in_fd;
 	char			*delimiter;
+	t_pool			*pool;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -167,7 +170,7 @@ int		ft_env(char **my_env);
 char	*find_command_path(char **my_env, const char *cmd);
 
 // /env/env.c
-char	**init_env(char **envp);
+char	**init_env(char **envp, t_pool *global);
 void	free_env(char **my_env);
 void	print_env(char **env);
 

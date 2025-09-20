@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:47:55 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/08 18:47:52 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/12 00:23:57 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,33 +41,6 @@ int	is_simple_assignment(const char *line)
 			return (0);
 		i++;
 	}
-	return (1);
-}
-
-// Updates the value of an environment variable my_env
-int	add_env_variable(char ***env, const char *line)
-{
-	char	*trimmed_line;
-	char	**result;
-	int		i;
-	int		j;
-
-	if (!line || !env)
-		return (0);
-	i = 0;
-	while (line[i] && (line[i] == ' ' || line[i] == '\t'))
-		i++;
-	trimmed_line = ft_strdup(line + i);
-	if (!trimmed_line)
-		return (0);
-	j = ft_strlen(trimmed_line) - 1;
-	while (j >= 0 && (trimmed_line[j] == ' ' || trimmed_line[j] == '\t'))
-		trimmed_line[j--] = '\0';
-	result = set_env(*env, trimmed_line);
-	free(trimmed_line);
-	if (!result)
-		return (0);
-	*env = result;
 	return (1);
 }
 
@@ -107,7 +80,7 @@ int	add_env_variable(char ***env, const char *line)
 		return (1);
 	if (!is_valid_identifier(line) || !ft_strchr(line, '='))
 		return (1);
-	newtab = set_env(*env, line);
+	newtab = set_env(*env, line);// --> malloc
 	if (!newtab)
 		return (1);
 	*env = newtab;
@@ -144,25 +117,16 @@ int	append_char(char **str, char c)
 int	str_append_free(char **s1, const char *s2)
 {
 	char	*tmp;
-	size_t	len;
-
-	len = 0;
 	if (!s1 || !s2)
 		return (0);
 	if (!*s1)
-		tmp = ft_strdup(s2);
+		tmp = pool_strdup_ctx(s2);
 	else
-	{
-		len = ft_strlen(*s1) + ft_strlen(s2) + 1;
-		tmp = malloc(sizeof(char *) * len);
-		if (!tmp)
-			return (0);
-		ft_strlcpy(tmp, *s1, ft_strlen(*s1) + 1);
-		ft_strlcat(tmp, s2, len);
-	}
+		tmp = pool_strjoin_ctx(*s1, s2);
 	if (!tmp)
 		return (0);
-	free(*s1);
+	if (*s1)
+		pool_free_ctx(*s1);
 	*s1 = tmp;
 	return (1);
 }

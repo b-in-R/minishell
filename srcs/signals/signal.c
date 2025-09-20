@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:09:18 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/09 11:23:58 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/20 00:30:49 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ void	sigint_heredoc(int sig)
 {
 	(void)sig;
 	write(1, "\n", 1);
-	close(STDIN_FILENO);
+	pool_track_fd(pool_get_context(), STDIN_FILENO);
+	pool_close_ctx(STDIN_FILENO);
 }
 
 /* Handles signals: Ctrl-C and Ctrl-\. Ctrl-D (via readline in main)
@@ -72,10 +73,8 @@ void	sigint_heredoc(int sig)
 * Sends the SIGQUIT signal (Ctrl-\), and calls sigquit_handler,
 * which ignores the signal
 */
-
 void	setup_signals(void)
 {
 	signal(SIGINT, sigint_handler);
-	//signal(SIGQUIT, sigquit_handler); modif rabiner pour double prompt
 	signal(SIGQUIT, SIG_IGN);
 }

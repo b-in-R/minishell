@@ -12,12 +12,14 @@
 
 #include "../../includes/minishell.h"
 
+// Closes tracked file descriptors while preserving stdio.
 static void	safe_close(int fd)
 {
 	if (fd > 2)
-		close(fd);
+		pool_close_ctx(fd);
 }
 
+// Duplicates src onto dst then closes the original descriptor if needed.
 static void	safe_dup2_close(int src, int dst)
 {
 	if (src >= 0 && src != dst)
@@ -28,6 +30,7 @@ static void	safe_dup2_close(int src, int dst)
 	}
 }
 
+// Sets stdout to outfile or pipe write end then closes descriptors.
 void	set_redirection_2(char **my_env, t_cmd *cmd, int pipe_fd[2])
 {
 	int	flags;
@@ -40,7 +43,7 @@ void	set_redirection_2(char **my_env, t_cmd *cmd, int pipe_fd[2])
 			flags |= O_APPEND;
 		else
 			flags |= O_TRUNC;
-		fd_out = open(cmd->outfile, flags, 0644);
+		fd_out = pool_open_ctx(cmd->outfile, flags, 0644);
 		if (fd_out < 0)
 			error_exit(my_env, "setup_redirection :open outfile");
 		safe_dup2_close(fd_out, STDOUT_FILENO);
@@ -56,6 +59,7 @@ void	set_redirection_2(char **my_env, t_cmd *cmd, int pipe_fd[2])
 		safe_close(pipe_fd[1]);
 }
 
+// Sets up input redirections, then delegates to handle outputs/pipe ends.
 void	set_redirection(char **my_env, t_cmd *cmd, int in_fd, int pipe_fd[2])
 {
 	int	fd_in;
@@ -65,7 +69,7 @@ void	set_redirection(char **my_env, t_cmd *cmd, int in_fd, int pipe_fd[2])
 		safe_dup2_close(cmd->in_fd, STDIN_FILENO);
 	else if (cmd->infile)
 	{
-		fd_in = open(cmd->infile, O_RDONLY);
+		fd_in = pool_open_ctx(cmd->infile, O_RDONLY, 0);
 		if (fd_in < 0)
 			error_exit(my_env, "setup_redirection: open infile");
 		safe_dup2_close(fd_in, STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/08/15 20:00:16 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/12 00:28:42 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 */
 void	handle_pipe(t_token **tokens, size_t *i)
 {
-	add_token(tokens, create_token(PIPE, ft_strdup("|")));
-	(*i)++;
+	add_token(tokens, create_token(PIPE, pool_strdup_ctx("|")));
+	(*i)++;// 2x malloc: create token, ft_strdup
 }
 
 /* Aprés avoir été appelé par le lexer:
@@ -29,23 +29,23 @@ void	handle_redirection(t_token **tokens, char *line, size_t *i)
 {
 	if (line[*i] == '>' && line [*i + 1] == '>')
 	{
-		add_token(tokens, create_token(REDIR_APPEND, ft_strdup(">>")));
-		*i += 2;
+		add_token(tokens, create_token(REDIR_APPEND, pool_strdup_ctx(">>")));
+		*i += 2;// 2x malloc: create token, ft_strdup
 	}
 	else if (line[*i] == '<' && line[*i + 1] == '<')
 	{
-		add_token(tokens, create_token(HEREDOC, ft_strdup("<<")));
-		*i += 2;
+		add_token(tokens, create_token(HEREDOC, pool_strdup_ctx("<<")));
+		*i += 2;// 2x malloc: create token, ft_strdup
 	}
 	else if (line[*i] == '>')
 	{
-		add_token(tokens, create_token(REDIR_OUT, ft_strdup(">")));
-		(*i)++;
+		add_token(tokens, create_token(REDIR_OUT, pool_strdup_ctx(">")));
+		(*i)++;// 2x malloc: create token, ft_strdup
 	}
 	else if (line[*i] == '<')
 	{
-		add_token(tokens, create_token(REDIR_IN, ft_strdup("<")));
-		(*i)++;
+		add_token(tokens, create_token(REDIR_IN, pool_strdup_ctx("<")));
+		(*i)++;// 2x malloc: create token, ft_strdup
 	}
 }
 
@@ -65,8 +65,8 @@ void	handle_word(t_token **tokens, char *line, size_t *i)
 	{
 		(*i)++;
 	}
-	word = ft_substr(line, start, *i - start);
-	add_token(tokens, create_token(WORD, word));
+	word = pool_substr_ctx(line, start, *i - start);
+	add_token(tokens, create_token(WORD, word));// -> malloc
 }
 
 /*
@@ -88,8 +88,8 @@ void	handle_quotes(t_token **tokens, char *line, size_t *i)
 	start = ++(*i);
 	while (line[*i] && line[*i] != type_quote)
 		(*i)++;
-	word = ft_substr(line, start, *i - start);
-	new_token = create_token(WORD, word);
+	word = pool_substr_ctx(line, start, *i - start);
+	new_token = create_token(WORD, word);// -> malloc
 	if (type_quote == '\'')
 		new_token->quoted_type = SINGLE_QUOTE;
 	else

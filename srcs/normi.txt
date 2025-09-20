@@ -1,0 +1,58 @@
+builtin
+- minishell/srcs/builtin/builtin_1.c:27 TOO_FEW_TAB (indent manquant) x2
+
+env
+- minishell/srcs/env/env.c:89 NEWLINE_PRECEDES_FUNC (manque une ligne vide 
+	avant la fonction)
+- minishell/srcs/env/env_utils.c:47-57 TOO_FEW_TAB (indent manquant) x11
+- minishell/srcs/env/env_utils.c:124 SPC_AFTER_PAR (pas d’espace après parenthèse)
+- minishell/srcs/env/env_utils.c:123,124,126 WRONG_SCOPE_COMMENT 
+	(commentaire au mauvais endroit) x6
+
+execution
+- minishell/srcs/execution/execute.c:44-72 WRONG_SCOPE_COMMENT x18
+- minishell/srcs/execution/execute.c:64-83 TOO_MANY_TAB x18
+- minishell/srcs/execution/execute.c:67,69,71 SPC_AFTER_PAR x3
+- minishell/srcs/execution/execute.c:86 CONSECUTIVE_NEWLINES x1
+- minishell/srcs/execution/execute.c:86,99 SPACE_EMPTY_LINE x2
+- minishell/srcs/execution/execute.c:99 EMPTY_LINE_FUNCTION x1
+
+expander
+- minishell/srcs/expander/var.c:83,88 WRONG_SCOPE_COMMENT x3
+- minishell/srcs/expander/var.c:87,89,90 EMPTY_LINE_FUNCTION x3
+- minishell/srcs/expander/var.c:90 CONSECUTIVE_NEWLINES x1
+- minishell/srcs/expander/var.c:120 NL_AFTER_VAR_DECL x1
+
+lexer
+- minishell/srcs/lexer/handle_tokens.c:21-92 WRONG_SCOPE_COMMENT x14
+- minishell/srcs/lexer/lexer.c:49-55 WRONG_SCOPE_COMMENT x8
+
+mem_manager
+- minishell/srcs/mem_manager/mem_manager.c:112,120 TOO_MANY_FUNCS x2
+- minishell/srcs/mem_manager/pool_context.c:15 notice GLOBAL_VAR_DETECTED
+- minishell/srcs/mem_manager/pool_strings.c:17 LINE_TOO_LONG x1
+- minishell/srcs/mem_manager/pool_strings.c:62 EMPTY_LINE_EOF x1
+- minishell/srcs/mem_manager/fd_manager.c:39 SPACE_EMPTY_LINE x1
+- minishell/srcs/mem_manager/fd_manager.c:63 TOO_MANY_LINES x1
+- minishell/srcs/mem_manager/fd_manager.c:64 NEWLINE_PRECEDES_FUNC x1
+- minishell/srcs/mem_manager/fd_manager.c:66 SPACE_REPLACE_TAB x1
+- minishell/srcs/mem_manager/fd_manager.c:73 WRONG_SCOPE_COMMENT x2
+- minishell/srcs/mem_manager/fd_manager.c:103,123 TOO_MANY_FUNCS x2
+- minishell/srcs/mem_manager/fd_manager.c:110 EMPTY_LINE_FUNCTION x1
+
+bof parser
+- minishell/srcs/parser/syntax_checker.c:24 SPACE_EMPTY_LINE x1
+- minishell/srcs/parser/create_cmd.c:124 TOO_MANY_LINES x1
+- minishell/srcs/parser/heredoc.c:57 TOO_MANY_LINES x1
+- minishell/srcs/parser/parser.c:45,70,81,84 WRONG_SCOPE_COMMENT x6
+- minishell/srcs/parser/parser.c:71 EMPTY_LINE_FUNCTION x1
+- minishell/srcs/parser/parser.c:81 SPC_AFTER_PAR x1
+- minishell/srcs/parser/parser.c:146 TOO_MANY_LINES x1
+
+ok signals
+ minishell/srcs/signals/signal.c:16 notice GLOBAL_VAR_DETECTED
+ minishell/srcs/signals/signal.c:80 WRONG_SCOPE_COMMENT x1
+
+ok	utils
+ minishell/srcs/utils/free.c:65 TOO_FEW_TAB x1
+ minishell/srcs/utils/utils.c:101 LINE_TOO_LONG x1

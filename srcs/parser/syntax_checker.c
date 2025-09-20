@@ -64,10 +64,9 @@ int	has_unclosed_quotes(const char *line)
 			double_quote++;
 		i++;
 	}
-	if (single_quote % 2 == 0 || double_quote % 2 == 0)
-		return (0);
-	else
+	if ((single_quote % 2 != 0) || (double_quote % 2 != 0))
 		return (1);
+	return (0);
 }
 
 /*
