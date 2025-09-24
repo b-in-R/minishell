@@ -3,85 +3,231 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/09/19 15:33:27 by rabiner          ###   ########.fr       */
+/*   Created: 2025/09/22 22:54:25 by rabiner           #+#    #+#             */
+/*   Updated: 2025/09/22 22:54:46 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-/*
-* setup_signals(); Handles the Ctrl+C and Ctrl+\ signals
-* readline(); Displays the minishell prompt and waits for user input
-* Reads the input and stores it in line
-* ​​So we can then perform parsing, exec, etc.
-* When the user has typed at least one character
-* lexer();calls lexer to tokenize the input line into a linked list of t_token
-* rl_clear_history(); // Vide l'historique de readline avant de quitter
-*/
+#define PROMPT "\001\033[32m\002minishell> \001\033[0m\002"
 
-int	process_input(char *line, t_expander *exp)
+static int	assignments_only(t_token *tokens)
 {
-	t_token		*tokens;
-	t_cmd		*cmds;
-
-	if (is_simple_assignment(line))
-		return (add_env_variable(&exp->local_env, line), 0);// --> malloc
-	tokens = lexer(line);// malloc
-	if (!check_syntax_errors(tokens, line))
+	while (tokens)
 	{
-		if (expand_tokens(tokens, exp))
-		{
-			cmds = parser(tokens);// -> malloc
-			if (cmds && handle_heredocs(cmds, exp))
-				execute(cmds, exp);
-			else
-				exp->last_status = 1;
-			free_cmds(cmds);
-		}
-		else
-			exp->last_status = 2;
+		if (tokens->type != WORD || !is_simple_assignment(tokens->value))
+			return (0);
+		tokens = tokens->next;
 	}
-	else
-		exp->last_status = 2;
-	free_tokens(tokens);
 	return (1);
+}
+
+static t_token	*discard_assignment_prefix(t_token *tokens, t_pool *pool)
+{
+	t_token	*next;
+
+	while (tokens && tokens->type == WORD
+		&& is_simple_assignment(tokens->value))
+	{
+		next = tokens->next;
+		pool_free_ctx(pool, tokens->value);
+		pool_free_ctx(pool, tokens);
+		tokens = next;
+	}
+	return (tokens);
+}
+
+static int	store_only_assignments(t_token *tokens, t_expander *exp)
+{
+	t_token	*iter;
+
+	iter = tokens;
+	while (iter)
+	{
+		if (add_env_variable(exp->pool, &exp->local_env, iter->value))
+		{
+			free_tokens(exp->pool, tokens);
+			exp->last_status = 1;
+			return (-1);
+		}
+		iter = iter->next;
+	}
+	free_tokens(exp->pool, tokens);
+	return (1);
+}
+
+static int	handle_assignments(t_token **tokens, t_expander *exp)
+{
+	int	state;
+
+	if (assignments_only(*tokens))
+	{
+		state = store_only_assignments(*tokens, exp);
+		*tokens = NULL;
+		return (state);
+	}
+	*tokens = discard_assignment_prefix(*tokens, exp->pool);
+	if (!*tokens)
+		return (1);
+	return (0);
+}
+
+/*
+** Pilote la construction du pipeline: vérifie syntaxe, expansions et heredocs.
+*/
+static void	run_pipeline(t_token *tokens, char *line, t_expander *exp)
+{
+	t_cmd	*cmds;
+
+	if (check_syntax_errors(tokens, line))
+	{
+		exp->last_status = 2;
+		return ;
+	}
+	if (!expand_tokens(tokens, exp))
+	{
+		exp->last_status = 2;
+		return ;
+	}
+	cmds = parser(tokens, exp);
+	if (cmds && handle_heredocs(cmds, exp))
+		execute(cmds, exp);
+	else
+	{
+		if (!cmds)
+			exp->last_status = 1;
+		else if (exp->last_status == 0)
+			exp->last_status = 1;
+	}
+	free_cmds(exp->pool, cmds);
+}
+
+static int	process_tokens(char *line, t_expander *exp)
+{
+	t_token	*tokens;
+	int		state;
+
+	tokens = lexer(line, exp);
+	if (!tokens)
+		return (1);
+	state = handle_assignments(&tokens, exp);
+	if (state != 0)
+		return (1);
+	run_pipeline(tokens, line, exp);
+	free_tokens(exp->pool, tokens);
+	return (1);
+}
+
+static int	process_segment(char *line, size_t start, size_t len,
+				t_expander *exp)
+{
+	char	*slice;
+
+	if (len == 0)
+		return (1);
+	slice = pool_substr_ctx(exp->pool, line, start, len);
+	if (!slice)
+		return (0);
+	process_tokens(slice, exp);
+	pool_free_ctx(exp->pool, slice);
+	return (1);
+}
+
+static int	process_multiline(char *line, t_expander *exp)
+{
+	size_t	i;
+	size_t	start;
+
+	i = 0;
+	start = 0;
+	while (line[i])
+	{
+		if (line[i] == '\n')
+		{
+			if (!process_segment(line, start, i - start, exp))
+				return (0);
+			start = i + 1;
+		}
+		i++;
+	}
+	if (!process_segment(line, start, i - start, exp))
+		return (0);
+	return (1);
+}
+
+static int	handle_interrupted_read(t_expander *exp)
+{
+	if (g_signal != SIGINT)
+		return (0);
+	exp->last_status = 130;
+	g_signal = 0;
+	return (1);
+}
+
+static void	track_line_or_exit(char *line, t_expander *exp)
+{
+	if (pool_track_ctx(exp->pool, line))
+		return ;
+	free(line);
+	error_exit(exp->pool, exp->my_env, "shell_loop: track line");
+}
+
+static void	process_non_empty(char *line, t_expander *exp)
+{
+	add_history(line);
+	process_multiline(line, exp);
+}
+
+static int	shell_loop(t_expander *exp)
+{
+	char	*line;
+
+	while (1)
+	{
+		g_signal = 0;
+		line = readline(PROMPT);
+		if (!line)
+		{
+			if (handle_interrupted_read(exp))
+				continue ;
+			break ;
+		}
+		track_line_or_exit(line, exp);
+		if (line[0])
+			process_non_empty(line, exp);
+		pool_free_ctx(exp->pool, line);
+	}
+	return (0);
+}
+
+static void	init_shell(t_expander *exp, t_pool *global, char **envp)
+{
+	pool_init(global);
+	exp->pool = global;
+	exp->my_env = init_env(envp, global);
+	exp->local_env = NULL;
+	exp->last_status = 0;
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_expander	exp;
-	t_pool		global;//
-	char		*line;
+	t_pool		global;
 
 	(void)av;
 	if (ac != 1)
 		return (1);
-	pool_init(&global);
-	pool_set_context(&global);
-	exp.pool = &global;
-	exp.my_env = init_env(envp, &global);
-	exp.local_env = NULL;
-	exp.last_status = 0;
+	init_shell(&exp, &global, envp);
 	setup_signals();
-	while (1)
+	if (!shell_loop(&exp))
 	{
-		line = readline("\001\033[32m\002minishell> \001\033[0m\002");
-		if (!line)
-		{
-			pool_close_all(&global);
-			pool_clear(&global);
-			return (rl_clear_history(), 0);
-		}
-		pool_track_ctx(line);
-		if (line[0] != '\0')
-		{
-			add_history(line);
-			process_input(line, &exp);// -> malloc ()
-		}
-		pool_free_ctx(line);
+		pool_close_all(&global);
+		pool_clear(&global);
+		rl_clear_history();
+		return (0);
 	}
 	pool_close_all(&global);
 	pool_clear(&global);

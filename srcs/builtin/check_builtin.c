@@ -19,7 +19,7 @@ int	execute_builtin(t_cmd *cmd, t_expander *exp)
 	if (!ft_strcmp(cmd->args[0], "echo"))
 		return (ft_echo(cmd->args));
 	if (!ft_strcmp(cmd->args[0], "cd"))
-		return (ft_cd(exp->my_env, cmd->args));
+		return (ft_cd(exp, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "pwd"))
 		return (ft_pwd(exp->my_env, cmd->args));
 	if (ft_strcmp(cmd->args[0], "export") == 0)
@@ -30,7 +30,7 @@ int	execute_builtin(t_cmd *cmd, t_expander *exp)
 		return (ft_env(exp->my_env));
 	if (!ft_strcmp(cmd->args[0], "exit"))
 	{
-		pool_cleanup_ctx();
+		pool_cleanup_ctx(exp->pool);
 		exit(0);
 	}
 	return (1);

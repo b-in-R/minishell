@@ -14,6 +14,20 @@ voir si une var specifique existe							:	echo $VAR
 
 Commandes de test:
 
+	# HEREDOC
+	cat <<EOF
+	user: $USER
+	EOF							result =	affiche user: <login> (expansion active)
+	cat <<'EOF'
+	user: $USER
+	EOF							result =	affiche user: $USER (pas d'expansion)
+	cat <<EOF
+	ligne avec <TAB> tabulation
+	EOF | cat -v					result =	ligne avec^I tabulation (insère Tab via Ctrl-V puis Tab)
+	cat <<EOF
+	avant ctrl-c
+	Ctrl-C						result =	retour prompt, echo $? -> 130
+
 	export var=val
 	echo $var
 	env | grep var

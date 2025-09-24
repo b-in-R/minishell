@@ -31,6 +31,7 @@ volatile sig_atomic_t	g_signal = 0;
 void	sigint_handler(int sig)
 {
 	(void)sig;
+	g_signal = SIGINT;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -62,10 +63,9 @@ void	sigquit_handler(int sig)
 */
 void	sigint_heredoc(int sig)
 {
-	(void)sig;
+	g_signal = sig;
 	write(1, "\n", 1);
-	pool_track_fd(pool_get_context(), STDIN_FILENO);
-	pool_close_ctx(STDIN_FILENO);
+	close(STDIN_FILENO);
 }
 
 /* Handles signals: Ctrl-C and Ctrl-\. Ctrl-D (via readline in main)

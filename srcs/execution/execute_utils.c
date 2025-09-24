@@ -32,9 +32,9 @@ void	initialise_data(t_fork *data, t_cmd *cmd, t_expander *exp)
 	data->fd[0] = -1;
 	data->fd[1] = -1;
 	data->in_fd = 0;
-	data->pid = pool_alloc_ctx(sizeof(pid_t) * count_cmds(cmd));
+	data->pid = pool_alloc_ctx(exp->pool, sizeof(pid_t) * count_cmds(cmd));
 	if (!data->pid)
-		error_exit(exp->my_env, "execute: malloc data->pid fail");
+		error_exit(exp->pool, exp->my_env, "execute: malloc data->pid fail");
 	data->status = 0;
 	data->last_status = 0;
 }

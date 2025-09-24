@@ -34,7 +34,7 @@ char	*get_env(char **my_env, char *str)
 
 // supprime une variable d'environnement
 // Deletes a variable from the exported environment array.
-void	unset_env(char **my_env, char *arg)
+void	unset_env(t_pool *pool, char **my_env, char *arg)
 {
 	int		i;
 	int		j;
@@ -48,7 +48,7 @@ void	unset_env(char **my_env, char *arg)
 	{
 		if (!ft_strncmp(my_env[i], arg, len) && my_env[i][len] == '=')
 		{
-			pool_free_ctx(my_env[i]);
+			pool_free_ctx(pool, my_env[i]);
 			j = i;
 			while (my_env[j + 1])
 			{
@@ -67,7 +67,7 @@ void	unset_env(char **my_env, char *arg)
 *	To move one variable from local_env to my_env
 */
 // Removes an entry from env when it matches `key` (before '=').
-int	remove_from_env(char **env, const char *key)
+int	remove_from_env(t_pool *pool, char **env, const char *key)
 {
 	int		i;
 	int		j;
@@ -82,7 +82,7 @@ int	remove_from_env(char **env, const char *key)
 		if (ft_strncmp(env[i], key, var_name_len) == 0
 			&& env[i][var_name_len] == '=')
 		{
-			pool_free_ctx(env[i]);
+			pool_free_ctx(pool, env[i]);
 			j = i;
 			while (env[j])
 			{

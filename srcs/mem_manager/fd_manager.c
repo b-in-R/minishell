@@ -15,6 +15,10 @@
 #include <fcntl.h>
 #include "../../includes/mem_manager.h"
 
+#ifndef O_CLOEXEC
+# define O_CLOEXEC 0
+#endif
+
 // Registers an already opened file descriptor for later cleanup.
 int	pool_track_fd(t_pool *p, int fd)
 {
@@ -83,22 +87,13 @@ int	pool_open(t_pool *p, const char *path, int flags, int mode)
 	return (fd);
 }
 
-// Convenience wrapper that opens using the current global pool.
-int	pool_open_ctx(const char *path, int flags, int mode)
-{
-	return (pool_open(pool_get_context(), path, flags, mode));
-}
-
-// Opens a file, tracks it, and sets O_CLOEXEC when available.
+// Opens a file, tracks it, et ajoute O_CLOEXEC quand disponible.
 int	pool_open_coe(t_pool *p, const char *path, int flags, int mode)
 {
 	int	fd;
 	int	co_flags;
 
-	co_flags = flags;
-#ifdef O_CLOEXEC
-	co_flags |= O_CLOEXEC;
-#endif
+	co_flags = flags | O_CLOEXEC;
 	fd = pool_open(p, path, co_flags, mode);
 	if (fd < 0)
 		return (-1);

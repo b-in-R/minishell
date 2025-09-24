@@ -24,69 +24,83 @@
  *
  * Returns: A newly allocated array with cleaned arguments.
 */
-char	**create_clean_args(char **args)
+char	**create_clean_args(t_pool *pool, char **args)
 {
 	char	**clean_args;
 	int		i;
 
 	i = 0;
+	if (!args || !args[0])
+	{
+		clean_args = pool_alloc_ctx(pool, sizeof(char *));
+		if (!clean_args)
+			return (NULL);
+		clean_args[0] = NULL;
+		return (clean_args);
+	}
 	while (args[i])
 		i++;
-	clean_args = malloc(sizeof(char *) * (i + 1));
+	clean_args = pool_alloc_ctx(pool, sizeof(char *) * (i + 1));
+	if (!clean_args)
+		return (NULL);
 	i = 0;
 	while (args[i])
 	{
-		clean_args[i] = remove_outer_quotes(args[i]);
+		clean_args[i] = remove_outer_quotes(pool, args[i]);
+		if (!clean_args[i])
+			return (NULL);
 		i++;
 	}
 	clean_args[i] = NULL;
 	return (clean_args);
 }
 
-void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd)
+void	cleanup_parent(t_pool *pool, t_cmd *cmd, int *in_fd, int *fd)
 {
 	if (*in_fd != 0 && *in_fd != -1)
 	{
-		pool_close_ctx(*in_fd);
+		pool_close_ctx(pool, *in_fd);
 		*in_fd = 0;
 	}
 	if (cmd->next && fd[1] > 0)
 	{
-		pool_close_ctx(fd[1]);
+		pool_close_ctx(pool, fd[1]);
 		*in_fd = fd[0];
 	}
 	else if (fd[0] > 0 && fd[1] > 0)
 	{
-		pool_close_ctx(fd[0]);
-		pool_close_ctx(fd[1]);
+		pool_close_ctx(pool, fd[0]);
+		pool_close_ctx(pool, fd[1]);
 	}
 }
 
-void	error_exit(char **my_env, char *str)
+void	error_exit(t_pool *pool, char **my_env, const char *str)
 {
 	(void)my_env;
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(str, 2);
+	ft_putstr_fd((char *)str, 2);
 	ft_putstr_fd("\n", 2);
-	pool_cleanup_ctx();
+	if (pool)
+		pool_cleanup_ctx(pool);
 	exit(1);
 }
 
-char	*ft_strjoin_3(char *s1, char *s2, char *s3)
+char	*ft_strjoin_3(t_pool *pool, const char *s1, const char *s2,
+		const char *s3)
 {
 	char	*tmp;
 	char	*res;
 
-	tmp = pool_strjoin_ctx(s1, s2);
+	tmp = pool_strjoin_ctx(pool, s1, s2);
 	if (!tmp)
 		return (NULL);
-	res = pool_strjoin_ctx(tmp, s3);
+	res = pool_strjoin_ctx(pool, tmp, s3);
 	if (!res)
 	{
-		pool_free_ctx(tmp);
+		pool_free_ctx(pool, tmp);
 		return (NULL);
 	}
-	pool_free_ctx(tmp);
+	pool_free_ctx(pool, tmp);
 	return (res);
 }
 /*

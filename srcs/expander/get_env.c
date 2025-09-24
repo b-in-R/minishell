@@ -6,35 +6,77 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:43:15 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/12 00:30:58 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/23 00:13:44 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-* Checks if the character c is a valid character for an environment variable.
-* A valid character is alphanumeric (a-z, A-Z, 0-9) or an underscore (_).
-*/
-int	is_var_char(char c)
-{
-	return (ft_isalnum(c) || c == '_');
-}
-
-/*
 * Gère l'expansion de $? (exit status)
 */
-static int	expand_exit_status(char **result, t_expander *exp, int *i)
+static int	expand_exit_status(t_pool *pool, char **result,
+					 t_expander *exp, int *i)
 {
 	char	*value;
 
 	value = ft_itoa(exp->last_status);
 	if (!value)
 		return (0);
-	pool_track_ctx(value);
-	if (!str_append_free(result, value))
-		return (pool_free_ctx(value), 0);
-	pool_free_ctx(value);
+	if (!pool_track_ctx(pool, value))
+	{
+		free(value);
+		return (0);
+	}
+	if (!str_append_free(pool, result, value))
+		return (pool_free_ctx(pool, value), 0);
+	pool_free_ctx(pool, value);
+	(*i)++;
+	return (1);
+}
+
+static int	read_self_pid(void)
+{
+	int		fd;
+	ssize_t	len;
+	char		buf[32];
+	int		idx;
+
+	fd = open("/proc/self/stat", O_RDONLY);
+	if (fd < 0)
+		return (-1);
+	len = read(fd, buf, sizeof(buf) - 1);
+	close(fd);
+	if (len <= 0)
+		return (-1);
+	buf[len] = '\0';
+	idx = 0;
+	while (buf[idx] && buf[idx] != ' ')
+		idx++;
+	buf[idx] = '\0';
+	return (ft_atoi(buf));
+}
+
+static int	expand_pid(t_pool *pool, char **result, int *i)
+{
+	char	*value;
+	int		pid;
+
+	pid = read_self_pid();
+	if (pid < 0)
+		value = ft_strdup("0");
+	else
+		value = ft_itoa(pid);
+	if (!value)
+		return (0);
+	if (!pool_track_ctx(pool, value))
+	{
+		free(value);
+		return (0);
+	}
+	if (!str_append_free(pool, result, value))
+		return (pool_free_ctx(pool, value), 0);
+	pool_free_ctx(pool, value);
 	(*i)++;
 	return (1);
 }
@@ -42,7 +84,8 @@ static int	expand_exit_status(char **result, t_expander *exp, int *i)
 /*
 * Extrait le nom de variable après $
 */
-int	exp_variable(const char *str, int *i, char **result, t_expander *exp)
+int	exp_variable(t_pool *pool, const char *str, int *i, char **result,
+			t_expander *exp)
 {
 	char	*key;
 	char	*value;
@@ -51,16 +94,16 @@ int	exp_variable(const char *str, int *i, char **result, t_expander *exp)
 	start = *i;
 	while (is_var_char(str[*i]))
 		(*i)++;
-	key = pool_substr_ctx(str, start, *i - start);
+	key = pool_substr_ctx(pool, str, start, *i - start);
 	if (!key)
 		return (0);
 	value = get_env_value_from_exp(key, exp);
-	pool_free_ctx(key);
+	pool_free_ctx(pool, key);
 	if (!value)
 		return (0);
-	if (!str_append_free(result, value))
-		return (pool_free_ctx(value), 0);
-	pool_free_ctx(value);
+	if (!str_append_free(pool, result, value))
+		return (pool_free_ctx(exp->pool, value), 0);
+	pool_free_ctx(exp->pool, value);
 	return (1);
 }
 
@@ -79,13 +122,28 @@ int	exp_variable(const char *str, int *i, char **result, t_expander *exp)
 * Increment i as alphanumeric or underscore, extract the variable name,
 *	retrieve its value with getenv(), and append it to result.
 */
-int	handle_dollar(const char *str, int *i, char **result, t_expander *exp)
+int	handle_dollar(t_pool *pool, const char *str, int *i, char **result,
+			t_expander *exp)
 {
+	char	next;
+
 	(*i)++;
-	if (str[*i] == '?')
-		return (expand_exit_status(result, exp, i));
-	else
-		return (exp_variable(str, i, result, exp));
+	next = str[*i];
+	if (!next)
+		return (append_char(pool, result, '$'));
+	if (next == '?')
+		return (expand_exit_status(pool, result, exp, i));
+	if (next == '$')
+		return (expand_pid(pool, result, i));
+	if (!is_var_char(next))
+	{
+		if (!append_char(pool, result, '$'))
+			return (0);
+		return (1);
+	}
+	if (!exp_variable(pool, str, i, result, exp))
+		return (0);
+	return (1);
 }
 
 /*
@@ -98,9 +156,9 @@ char	*get_env_value_from_exp(const char *key, t_expander *exp)
 
 	val = get_env(exp->local_env, (char *)key);
 	if (val)
-		return (pool_strdup_ctx(val));
+		return (pool_strdup_ctx(exp->pool, val));
 	val = get_env(exp->my_env, (char *)key);
 	if (val)
-		return (pool_strdup_ctx(val));
-	return (pool_strdup_ctx(""));
+		return (pool_strdup_ctx(exp->pool, val));
+	return (pool_strdup_ctx(exp->pool, ""));
 }
