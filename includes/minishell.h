@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/19 15:46:42 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/23 00:45:35 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,19 @@ typedef struct s_token
 	char			*value;
 	t_token_type	type;
 	t_quote_type	quoted_type;
+	int				leading_space;
+	t_pool			*pool;
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_lexer_ctx
+{
+	t_token	**tokens;
+	char		*line;
+	size_t		*index;
+	int			*last_space;
+	t_pool		*pool;
+} 	t_lexer_ctx;
 
 /* Represents a complete shell command with its arguments and redirections
 *  	char	**args;    // list of arguments for the command
@@ -97,7 +108,6 @@ typedef struct s_cmd
 	int				expand_heredoc;
 	int				in_fd;
 	char			*delimiter;
-	t_pool			*pool;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -132,8 +142,8 @@ extern volatile sig_atomic_t	g_signal;
 
 /*---------------Common---------------*/
 // /utils/utils.c
-void	error_exit(char **my_env, char *str);
-void	cleanup_parent(t_cmd *cmd, int *in_fd, int *fd);
+void	error_exit(t_pool *pool, char **my_env, const char *str);
+void	cleanup_parent(t_pool *pool, t_cmd *cmd, int *in_fd, int *fd);
 
 // /utils/utils.c
 void	print_cmds(t_cmd *cmds);
@@ -142,7 +152,7 @@ void	print_detailled_cmds(t_cmd *cmds);
 /*-------------Execution--------------*/
 // /execution/execute.c
 void	execute(t_cmd *cmd, t_expander *exp);
-void	execute_command(t_cmd *cmd, char **my_env);
+void	execute_command(t_cmd *cmd, t_expander *exp);
 
 // /execution/execute_utils.c
 void	initialise_data(t_fork *data, t_cmd *cmd, t_expander *exp);
@@ -150,7 +160,7 @@ int		count_cmds(t_cmd *cmd);
 void	take_exit_code(int *i, int *j, t_fork *data);
 
 // /execution/redirection.c
-void	set_redirection(char **my_env, t_cmd *cmd, int int_fd, int pipe_fd[2]);
+void	set_redirection(t_expander *exp, t_cmd *cmd, int in_fd, int pipe_fd[2]);
 
 // /builtin/check_builtin.c
 int		is_builtin(t_cmd *cmd);
@@ -158,7 +168,7 @@ int		execute_builtin(t_cmd *cmd, t_expander *exp);
 
 // /builtin/builtin_1.c
 int		ft_echo(char **args);
-int		ft_cd(char **my_env, char **args);
+int		ft_cd(t_expander *exp, char **args);
 int		ft_pwd(char **my_env, char **args);
 
 // /builtin/builtin_2.c
@@ -167,68 +177,71 @@ int		ft_unset(t_expander *exp, char **args);
 int		ft_env(char **my_env);
 
 // /execution/path.c
-char	*find_command_path(char **my_env, const char *cmd);
+char	*find_command_path(t_expander *exp, const char *cmd);
 
 // /env/env.c
 char	**init_env(char **envp, t_pool *global);
-void	free_env(char **my_env);
+void	free_env(t_pool *pool, char **my_env);
 void	print_env(char **env);
 
 // env/env_utils.c
-char	**set_env(char **env, const char *arg);
+int		set_env(t_pool *pool, char ***env, const char *arg);
 
 // env/env_utils_2.c
 char	*get_env(char **my_env, char *str);
-void	unset_env(char **my_env, char *arg);
-int		remove_from_env(char **env, const char *key);
+void	unset_env(t_pool *pool, char **my_env, char *arg);
+int		remove_from_env(t_pool *pool, char **env, const char *key);
 int		is_valid_identifier(const char *str);
 
 /*---------------Lexer----------------*/
-t_token	*create_token(t_token_type type, char *value);
-t_token	*lexer(char *line);
+t_token	*create_token(t_pool *pool, t_token_type type, char *value);
+t_token	*lexer(char *line, t_expander *exp);
 void	add_token(t_token **list, t_token *new_token);
-void	handle_pipe(t_token **tokens, size_t *i);
-void	handle_redirection(t_token **tokens, char *line, size_t *i);
-void	handle_word(t_token **tokens, char *line, size_t *i);
-void	handle_quotes(t_token **tokens, char *line, size_t *i);
+void	handle_pipe(t_lexer_ctx *ctx);
+void	handle_redirection(t_lexer_ctx *ctx);
+void	handle_word(t_lexer_ctx *ctx);
+void	handle_quotes(t_lexer_ctx *ctx);
 
 /*--------------Parser---------------*/
-int		process_token(t_token **tokens, t_cmd **current);
-t_cmd	*parser(t_token *tokens);
-t_cmd	*create_cmd(void);
+int		process_token(t_expander *exp, t_token **tokens, t_cmd **current);
+t_cmd	*parser(t_token *tokens, t_expander *exp);
+t_cmd	*create_cmd(t_expander *exp);
 void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
-int		add_arg(char ***args, const char *value);
-void	handle_redirections(t_cmd *current, t_token *tokens);
+int		add_arg(t_pool *pool, char ***args, const char *value);
+void	handle_redirections(t_expander *exp, t_cmd *current, t_token *tokens);
 char	*expand_variables(const char *line, t_expander *exp);
 int		handle_heredocs(t_cmd *cmds, t_expander *exp);
 char	get_unclosed_quote_type(const char *line);
 int		has_unclosed_quotes(const char *line);
 int		check_syntax_errors(t_token *tokens, char *line);
-char	*remove_outer_quotes(const char *str);
+char	*remove_outer_quotes(t_pool *pool, const char *str);
 
 /*--------------Expander--------------*/
 int		expand_tokens(t_token *tokens, t_expander *exp);
-char	*expand_word(const char *word, t_expander *exp);
-char	*join_tokens(t_token *tokens);
+char	*expand_word(t_pool *pool, const char *word, t_expander *exp);
+char	*join_tokens(t_pool *pool, t_token *tokens);
 char	*get_env_value_from_exp(const char *key, t_expander *exp);
 void	update_quote_flags(char c, int *in_single, int *in_double);
-int		exp_variable(const char *str, int *i, char **result, t_expander *exp);
-int		handle_dollar(const char *word, int *i, char **result, t_expander *exp);
-int		append_char(char **str, char c);
-int		str_append_free(char **s1, const char *s2);
+int		exp_variable(t_pool *pool, const char *str, int *i, char **result,
+			t_expander *exp);
+int		handle_dollar(t_pool *pool, const char *word, int *i, char **result,
+			t_expander *exp);
+int		append_char(t_pool *pool, char **str, char c);
+int		str_append_free(t_pool *pool, char **s1, const char *s2);
 int		is_var_char(char c);
-int		add_env_variable(char ***env, const char *line);
+int		add_env_variable(t_pool *pool, char ***env, const char *line);
 int		is_simple_assignment(const char *line);
 
 /*--------------Utils---------------*/
-void	free_env(char **env);
-char	*ft_strjoin_3(char *s1, char *s2, char *s3);
-char	**create_clean_args(char **args);
+void	free_env(t_pool *pool, char **env);
+char	*ft_strjoin_3(t_pool *pool, const char *s1, const char *s2,
+		const char *s3);
+char	**create_clean_args(t_pool *pool, char **args);
 
 /*---------------Free----------------*/
-void	free_allocs(char **tofree);
-void	free_tokens(t_token *tokens);
-void	free_cmds(t_cmd *cmds);
+void	free_allocs(t_pool *pool, char **tofree);
+void	free_tokens(t_pool *pool, t_token *tokens);
+void	free_cmds(t_pool *pool, t_cmd *cmds);
 
 /*--------------Signals--------------*/
 void	setup_signals(void);

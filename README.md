@@ -20,17 +20,21 @@ with shell conventions (signals, exit codes, environment).
    - Reject syntax errors early (pipes, redirections, unmatched quotes).
 
 3. **Semantic Phases**
-   - Expand variables and special sequences (handled by the **expander**).
-   - Build a linked list of `t_cmd` structures with the **parser**.
-   - Prepare heredocs when requested, wiring temporary pipes for later use.
+   - The **expander** rewrites tokens (quotes, `$?`, `$VAR`, heredoc policy) and
+     keeps the working set inside the current `t_pool` context.
+   - The **parser** consumes the token list to build a linked list of `t_cmd`
+     nodes (arguments, redirections, heredoc descriptors, builtin metadata).
+   - Each command node carries the file descriptors that must survive until the
+     executor stage.
 
 4. **Execution**
-   - If a single builtin is present, run it in the parent process to preserve the
-     shell state.
-   - Otherwise, `execute.c` forks for each pipeline stage, sets redirections,
-     runs builtins or `execve`, collects exit codes, and restores terminal
-     signals.
-   - The shell loop resumes with the updated `last_status`.
+   - Single builtin → run in the parent, save/restore stdio, keep the original
+     process alive.
+   - Pipelines → `execute.c` forks per node, wires pipes and redirections,
+     delegates builtins or external binaries, tracks pids, and reconciles
+     statuses once every child terminates.
+   - On exit, the loop publishes the resulting `last_status` so the next prompt
+     sees `$?` aligned with Bash semantics.
 
 ## Module Breakdown
 
@@ -61,15 +65,40 @@ Key helpers include:
 This approach prevents leaks even when errors occur deep in the parsing or
 execution stages.
 
+### t_pool Playbook
+
+- Always check the return value of `pool_alloc_ctx`, `pool_track_ctx`,
+  `pool_track_fd`, and `pool_open_ctx`. On failure, free the raw pointer if it
+  is not tracked yet and bubble the error up (usually via `error_exit`).
+- Register transient buffers (readline results, ft_split tables, heredoc lines)
+  as soon as they are created so that abrupt exits cleanly release them.
+- When replacing tracked pointers, assign the new value **before** freeing the
+  old one to avoid losing references.
+- Prefer the `_ctx` helpers over naked `malloc`/`open`; they keep the tracking
+  lists consistent across forks and signal handlers.
+- Use `pool_cleanup_ctx` in every fatal branch so both FDs and allocations are
+  reclaimed before the process terminates.
+
+### DEBUG instrumentation
+
+Define `DEBUG_POOL` at build time (e.g. `make DEBUG_POOL=1`) to enable lightweight
+logging whenever a pool allocation or tracking call fails. Messages are emitted
+with `ft_putstr_fd` so they respect the 42 Norm and stay TTY-friendly.
+
 ## Error Handling & Signals
 
-- Syntax errors prevent the parser from running and set `last_status` to a
-  non-zero value.
-- Execution errors print a descriptive message and propagate the failing status
-  (`$?`).
-- Interactive signals mirror Bash behaviour: `Ctrl-C` refreshes the prompt,
-  `Ctrl-D` exits, `Ctrl-\` is ignored, and heredocs react to `SIGINT` by aborting
-  the current delimiter capture.
+- `error_exit(pool, env, msg)` centralises fatal errors: it prints a prefixed
+  message, calls `pool_cleanup_ctx`, and exits with status `1`.
+- Non-fatal errors must set `exp->last_status` appropriately so `$?` mirrors the
+  observed behaviour (127 for missing binaries, 126 on execve errors, heredoc
+  signals, etc.).
+- Syntax issues short-circuit the parser, discard partially built commands, and
+  keep the shell loop alive with a non-zero status.
+- Interactive signals mimic Bash: `SIGINT` during prompt redraws the line,
+  `SIGQUIT` is ignored in interactive mode, and heredoc children restore
+  default handlers so `Ctrl-C` aborts the delimiter capture.
+- Always close tracked descriptors via `pool_close_ctx` once they are no longer
+  needed to avoid leaking resources across forks.
 
 ## Building and Running
 

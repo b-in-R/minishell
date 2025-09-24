@@ -12,32 +12,75 @@
 
 #include "../../includes/minishell.h"
 
-// pour le cas "export NAME" (sans '=').
+static int	export_alloc_error(void)
+{
+	ft_putstr_fd("minishell: export: allocation failed\n", STDERR_FILENO);
+	return (1);
+}
+
+static int	export_promote_local(t_expander *exp, const char *name, const char *val)
+{
+	char	*pair;
+
+	pair = ft_strjoin_3(exp->pool, name, "=", val);
+	if (!pair)
+		return (export_alloc_error());
+	if (set_env(exp->pool, &exp->my_env, pair))
+	{
+		pool_free_ctx(exp->pool, pair);
+		return (export_alloc_error());
+	}
+	remove_from_env(exp->pool, exp->local_env, name);
+	pool_free_ctx(exp->pool, pair);
+	return (0);
+}
+
+static int	export_without_value(t_expander *exp, const char *name)
+{
+	char	*tmp;
+
+	tmp = pool_strjoin_ctx(exp->pool, name, "=");
+	if (!tmp)
+		return (export_alloc_error());
+	if (set_env(exp->pool, &exp->my_env, tmp))
+	{
+		pool_free_ctx(exp->pool, tmp);
+		return (export_alloc_error());
+	}
+	pool_free_ctx(exp->pool, tmp);
+	return (0);
+}
+
 // Promotes NAME from local env to export when no value is provided.
 static int	export_name_only(t_expander *exp, const char *name)
 {
 	char	*val;
-	char	*pair;
-	char	*tmp;
 
 	val = get_env(exp->local_env, (char *)name);
 	if (val)
+		return (export_promote_local(exp, name, val));
+	if (get_env(exp->my_env, (char *)name))
+		return (0);
+	return (export_without_value(exp, name));
+}
+
+static int	export_handle_arg(t_expander *exp, const char *arg)
+{
+	if (!is_valid_identifier(arg))
 	{
-		pair = ft_strjoin_3((char *)name, "=", val);
-		if (!pair)
-			return (1);
-		exp->my_env = set_env(exp->my_env, pair);
-		remove_from_env(exp->local_env, name);
-		pool_free_ctx(pair);
-		return (0);
-	}
-	if (get_env(exp->my_env, (char *) name))
-		return (0);
-	tmp = pool_strjoin_ctx(name, "=");
-	if (!tmp)
+		ft_putstr_fd("minishell: export: '", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 		return (1);
-	exp->my_env = set_env(exp->my_env, tmp);
-	pool_free_ctx(tmp);
+	}
+	if (!ft_strchr(arg, '='))
+		return (export_name_only(exp, arg));
+	if (set_env(exp->pool, &exp->my_env, arg))
+	{
+		export_alloc_error();
+		return (1);
+	}
+	remove_from_env(exp->pool, exp->local_env, arg);
 	return (0);
 }
 
@@ -54,19 +97,8 @@ int	ft_export(t_expander *exp, char **args)
 		return (print_env(exp->my_env), 0);
 	while (args[i])
 	{
-		if (!is_valid_identifier(args[i]))
-		{
-			ret = (ft_putstr_fd("export: not a valid identifier\n", 2), 1);
-			i++;
-			continue ;
-		}
-		if (!ft_strchr(args[i], '='))
-			ret |= export_name_only(exp, args[i]);
-		else
-		{
-			remove_from_env(exp->local_env, args[i]);
-			exp->my_env = set_env(exp->my_env, args[i]);
-		}
+		if (export_handle_arg(exp, args[i]))
+			ret = 1;
 		i++;
 	}
 	return (ret);
@@ -84,15 +116,15 @@ int	ft_unset(t_expander *exp, char **args)
 	{
 		if (!is_valid_identifier(args[i]))
 		{
-			ft_putstr_fd("unset: `", 2);
-			ft_putstr_fd(args[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
+			ft_putstr_fd("minishell: unset: '", STDERR_FILENO);
+			ft_putstr_fd(args[i], STDERR_FILENO);
+			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 			ret = 1;
 		}
 		else
 		{
-			remove_from_env(exp->my_env, args[i]);
-			remove_from_env(exp->local_env, args[i]);
+			remove_from_env(exp->pool, exp->my_env, args[i]);
+			remove_from_env(exp->pool, exp->local_env, args[i]);
 		}
 		i++;
 	}

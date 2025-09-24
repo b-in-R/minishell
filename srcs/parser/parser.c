@@ -6,11 +6,37 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/20 00:29:22 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/23 00:19:08 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	append_to_last_arg(t_pool *pool, t_cmd *cmd, const char *value)
+{
+	char	**args;
+	int		last;
+	char	*joined;
+	size_t	len_prev;
+	size_t	len_new;
+
+	if (!cmd || !cmd->args || !cmd->args[0] || !value)
+		return (0);
+	args = cmd->args;
+	last = 0;
+	while (args[last + 1])
+		last++;
+	len_prev = ft_strlen(args[last]);
+	len_new = ft_strlen(value);
+	joined = pool_alloc_ctx(pool, len_prev + len_new + 1);
+	if (!joined)
+		return (0);
+	ft_memcpy(joined, args[last], len_prev);
+	ft_memcpy(joined + len_prev, value, len_new + 1);
+	pool_free_ctx(pool, args[last]);
+	args[last] = joined;
+	return (1);
+}
 
 /*
 * Parser and process_token:
@@ -35,15 +61,18 @@
 * 		- command 2: args = {"grep", "test"} → infile = "file.txt"
 *
 */
-int	process_token(t_token **tokens, t_cmd **current)
+int	process_token(t_expander *exp, t_token **tokens, t_cmd **current)
 {
 	if ((*tokens)->type == WORD)
 	{
-  // modif rabiner:
-		clean = remove_outer_quotes((*tokens)->value);
-		add_arg(&(*current)->args, clean);
-		pool_free_ctx(clean);
-  //add_arg(&(*current)->args, (*tokens)->value); (remplace)
+		if ((*tokens)->leading_space == 0 && (*current)->args
+			&& (*current)->args[0])
+		{
+			if (!append_to_last_arg(exp->pool, *current, (*tokens)->value))
+				return (0);
+		}
+		else if (!add_arg(exp->pool, &(*current)->args, (*tokens)->value))
+			return (0);
 		*tokens = (*tokens)->next;
 	}
 	else if ((*tokens)->type == REDIR_IN || (*tokens)->type == REDIR_OUT
@@ -51,7 +80,7 @@ int	process_token(t_token **tokens, t_cmd **current)
 	{
 		if ((*tokens)->next == NULL || (*tokens)->next->type != WORD)
 			return (printf("Syntax error:no filename after redirection\n"), 0);
-		handle_redirections(*current, *tokens);
+		handle_redirections(exp, *current, *tokens);
 		*tokens = (*tokens)->next->next;
 	}
 	else if ((*tokens)->type == PIPE)
@@ -64,7 +93,7 @@ int	process_token(t_token **tokens, t_cmd **current)
 	return (1);
 }
 
-t_cmd	*parser(t_token *tokens)
+t_cmd	*parser(t_token *tokens, t_expander *exp)
 {
 	t_cmd	*cmds;
 	t_cmd	*current;
@@ -75,11 +104,19 @@ t_cmd	*parser(t_token *tokens)
 	{
 		if (current == NULL)
 		{
-			current = create_cmd();
+			current = create_cmd(exp);
+			if (!current)
+			{
+				free_cmds(exp->pool, cmds);
+				return (NULL);
+			}
 			add_cmd(&cmds, current);
 		}
-		if (!process_token(&tokens, &current))
-			return (free_cmds(cmds), NULL);
+		if (!process_token(exp, &tokens, &current))
+		{
+			free_cmds(exp->pool, cmds);
+			return (NULL);
+		}
 	}
 	return (cmds);
 }
@@ -87,7 +124,7 @@ t_cmd	*parser(t_token *tokens)
 /*
 *	res = ft_substr(str, 1, len - 2); // supprime les quotes autour
 */
-char	*remove_outer_quotes(const char *str)
+char	*remove_outer_quotes(t_pool *pool, const char *str)
 {
 	size_t	len;
 	char	*res;
@@ -96,21 +133,21 @@ char	*remove_outer_quotes(const char *str)
 		return (NULL);
 	len = ft_strlen(str);
 	if (len < 2)
-		return (pool_strdup_ctx(str));
+		return (pool_strdup_ctx(pool, str));
 	if ((str[0] == '\'' && str[len - 1] == '\'')
 		|| (str[0] == '"' && str[len - 1] == '"'))
 	{
-		res = pool_substr_ctx(str, 1, len - 2);
+		res = pool_substr_ctx(pool, str, 1, len - 2);
 	}
 	else
-		res = pool_strdup_ctx(str);
+		res = pool_strdup_ctx(pool, str);
 	return (res);
 }
 
 /*
 *	Updates the current command's redirection fields based on the token type.
 */
-void	handle_redirections(t_cmd *current, t_token *tokens)
+void	handle_redirections(t_expander *exp, t_cmd *current, t_token *tokens)
 {
 	char	*value;
 
@@ -118,28 +155,32 @@ void	handle_redirections(t_cmd *current, t_token *tokens)
 	if (tokens->type == REDIR_IN)
 	{
 		if (current->infile)
-			pool_free_ctx(current->infile);
-		current->infile = pool_strdup_ctx(value);
+			pool_free_ctx(exp->pool, current->infile);
+		current->infile = pool_strdup_ctx(exp->pool, value);
 	}
 	else if (tokens->type == REDIR_OUT)
 	{
 		if (current->outfile)
-			pool_free_ctx(current->outfile);
-		current->outfile = pool_strdup_ctx(value);
+			pool_free_ctx(exp->pool, current->outfile);
+		current->outfile = pool_strdup_ctx(exp->pool, value);
 		current->append = 0;
 	}
 	else if (tokens->type == REDIR_APPEND)
 	{
 		if (current->outfile)
-			pool_free_ctx(current->outfile);
-		current->outfile = pool_strdup_ctx(value);
+			pool_free_ctx(exp->pool, current->outfile);
+		current->outfile = pool_strdup_ctx(exp->pool, value);
 		current->append = 1;
 	}
 	else if (tokens->type == HEREDOC)
 	{
 		if (current->delimiter)
-			pool_free_ctx(current->delimiter);
+			pool_free_ctx(exp->pool, current->delimiter);
 		current->heredoc = 1;
-		current->delimiter = remove_outer_quotes(value);
+		current->delimiter = remove_outer_quotes(exp->pool, value);
+		if (tokens->next->quoted_type != NO_QUOTE)
+			current->expand_heredoc = 0;
+		else
+			current->expand_heredoc = 1;
 	}
 }

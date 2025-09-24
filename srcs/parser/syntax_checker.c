@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:51:19 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/08 16:17:17 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/23 00:17:51 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,62 +15,34 @@
 /*
  * Returns the type of unclosed quote if any, otherwise 0
  */
-
-//------------------------------------------------------------------------
-// Version alberto
-
-/*
-char	get_unclosed_quote_type(const char *line)
+static int	is_escaped(const char *line, int index)
 {
-	int		i;
-	char	in_quote;
+	int	backslashes;
 
-	i = 0;
-	in_quote = 0;
-	while (line[i])
-	{
-		if (!in_quote && (line[i] == '\'' || line[i] == '"'))
-			in_quote = line[i];
-		else if (in_quote && line[i] == in_quote)
-			in_quote = 0;
-		i++;
-	}
-	return (in_quote);
+	backslashes = 0;
+	while (index > 0 && line[--index] == '\\')
+		backslashes++;
+	return (backslashes % 2 != 0);
 }
-/*
-/*
- * Verify if there are unclosed quotes in the input line
- */
- /*
-int	has_unclosed_quotes(const char *line)
-{
-	return (get_unclosed_quote_type(line) != 0);
-}
-*/
-
-//--------------------------------------------------------------------------------
-// version rabiner
 
 int	has_unclosed_quotes(const char *line)
 {
-	int		i;
-	int		single_quote;
-	int		double_quote;
+	int	in_single;
+	int	in_double;
+	int	i;
 
+	in_single = 0;
+	in_double = 0;
 	i = 0;
-	single_quote = 0;
-	double_quote = 0;
-	while (line[i])
+	while (line && line[i])
 	{
-		if (line[i] == '\'')
-			single_quote++;
-		else if (line[i] == '\"')
-			double_quote++;
+		if (line[i] == '\'' && !in_double && !is_escaped(line, i))
+			in_single = !in_single;
+		else if (line[i] == '\"' && !in_single && !is_escaped(line, i))
+			in_double = !in_double;
 		i++;
 	}
-	if ((single_quote % 2 != 0) || (double_quote % 2 != 0))
-		return (1);
-	return (0);
+	return (in_single || in_double);
 }
 
 /*

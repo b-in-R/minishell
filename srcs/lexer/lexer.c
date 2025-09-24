@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:25 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/12 00:29:33 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/23 00:11:39 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,27 +32,40 @@
 * ├─ ">>"       → REDIR_APPEND
 * └─ "output"   → WORD
 */
-t_token	*lexer(char *line)
+t_token	*lexer(char *line, t_expander *exp)
 {
 	t_token		*tokens;
 	size_t		i;
+	int			last_space;
+	t_lexer_ctx	ctx;
 
 	tokens = NULL;
 	i = 0;
+	last_space = 1;
 	if (!line || *line == '\0')
 		return (NULL);
+	ctx.tokens = &tokens;
+	ctx.line = line;
+	ctx.index = &i;
+	ctx.last_space = &last_space;
+	ctx.pool = exp->pool;
 	while (line[i])
 	{
-		if (line[i] == ' ')
-			i++;
+		if (line[i] == ' ' || (line[i] >= '\t' && line[i] <= '\r'))
+		{
+			while (line[i] == ' ' || (line[i] >= '\t' && line[i] <= '\r'))
+				i++;
+			last_space = 1;
+			continue ;
+		}
 		else if (line[i] == '|')
-			handle_pipe(&tokens, &i);// -> malloc
+			handle_pipe(&ctx);
 		else if (line[i] == '<' || line[i] == '>')
-			handle_redirection(&tokens, line, &i);// -> malloc
+			handle_redirection(&ctx);
 		else if (line[i] == '\'' || line[i] == '"' )
-			handle_quotes(&tokens, line, &i);// --> malloc
+			handle_quotes(&ctx);
 		else
-			handle_word(&tokens, line, &i);// -->malloc
+			handle_word(&ctx);
 	}
 	return (tokens);
 }

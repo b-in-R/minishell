@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 17:15:10 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/22 22:53:30 by rabiner          ###   ########.fr       */
+/*   Created: 2025/09/23 00:13:10 by rabiner           #+#    #+#             */
+/*   Updated: 2025/09/23 00:16:14 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../libft/libft.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+/*
+* Checks if the character c is a valid character for an environment variable.
+* A valid character is alphanumeric (a-z, A-Z, 0-9) or an underscore (_).
+*/
+int	is_var_char(char c)
 {
-	while (*s1 && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-	}
-	return ((unsigned char)*s1 - (unsigned char)*s2);
+	return (ft_isalnum(c) || c == '_');
 }

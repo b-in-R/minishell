@@ -21,11 +21,11 @@
 *	et mettre a jour les champs en fonction de ce quil voit.
 *	Alloue la memoire dans cmd de taille t_cmd et returne cmd
 */
-t_cmd	*create_cmd(void)
+t_cmd	*create_cmd(t_expander *exp)
 {
 	t_cmd	*cmd;
 
-	cmd = pool_alloc_ctx(sizeof(t_cmd));
+	cmd = pool_alloc_ctx(exp->pool, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
@@ -33,9 +33,9 @@ t_cmd	*create_cmd(void)
 	cmd->outfile = NULL;
 	cmd->append = 0;
 	cmd->heredoc = 0;
+	cmd->expand_heredoc = 1;
 	cmd->in_fd = -1;
 	cmd->delimiter = NULL;
-	cmd->pool = pool_get_context();
 	cmd->next = NULL;
 	return (cmd);
 }
@@ -87,7 +87,7 @@ void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
 * count → nombre mots dans le tableau;
 * +1 → pour le nouveau qu'on rajoute ; +1 pour NULL;
 */
-int	add_arg(char ***args, const char *value)
+int	add_arg(t_pool *pool, char ***args, const char *value)
 {
 	char	**new_args;
 	char	**old_args;
@@ -101,7 +101,7 @@ int	add_arg(char ***args, const char *value)
 		while (old_args[count])
 			count++;
 	}
-	new_args = pool_alloc_ctx(sizeof(char *) * (count + 2));
+	new_args = pool_alloc_ctx(pool, sizeof(char *) * (count + 2));
 	if (!new_args)
 		return (0);
 	i = 0;
@@ -110,15 +110,15 @@ int	add_arg(char ***args, const char *value)
 		new_args[i] = old_args[i];
 		i++;
 	}
-	new_args[i] = pool_strdup_sys(pool_get_context(), value);
+	new_args[i] = pool_strdup_sys(pool, value);
 	if (!new_args[i])
 	{
-		pool_free_ctx(new_args);
+		pool_free_ctx(pool, new_args);
 		return (0);
 	}
 	new_args[i + 1] = NULL;
 	*args = new_args;
 	if (old_args)
-		pool_free_ctx(old_args);
+		pool_free_ctx(pool, old_args);
 	return (1);
 }

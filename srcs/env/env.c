@@ -87,9 +87,10 @@ char	**init_env(char **envp, t_pool *global)
 	copy[n] = NULL;
 	return (copy);
 }
+
 // Normalement plus besoin
 // Frees every string tracked in the current context environment.
-void	free_env(char **my_env)// 
+void	free_env(t_pool *pool, char **my_env)
 {
 	int	i;
 
@@ -98,11 +99,11 @@ void	free_env(char **my_env)//
 	i = 0;
 	while (my_env[i])
 	{
-		pool_free_ctx(my_env[i]);
+		pool_free_ctx(pool, my_env[i]);
 		my_env[i] = NULL;
 		i++;
 	}
-	pool_free_ctx(my_env);
+	pool_free_ctx(pool, my_env);
 }
 
 // Prints each environment entry on its own line.

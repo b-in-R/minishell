@@ -18,16 +18,18 @@ pour stocker la structure de chaque token
 * et initialise les variables du token value,
 type et le pointeur vers le prochain token.
 */
-t_token	*create_token(t_token_type type, char *value)
+t_token	*create_token(t_pool *pool, t_token_type type, char *value)
 {
 	t_token	*token;
 
-	token = pool_alloc_ctx(sizeof(t_token));
+	token = pool_alloc_ctx(pool, sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = value;
 	token->type = type;
 	token->quoted_type = NO_QUOTE;
+	token->leading_space = 1;
+	token->pool = pool;
 	token->next = NULL;
 	return (token);
 }

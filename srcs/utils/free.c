@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void	free_tokens(t_token *tokens)
+void	free_tokens(t_pool *pool, t_token *tokens)
 {
 	t_token	*tmp;
 
@@ -21,13 +21,12 @@ void	free_tokens(t_token *tokens)
 		tmp = tokens;
 		tokens = tokens->next;
 		if (tmp->value)
-			pool_free_ctx(tmp->value);
-		if (tmp)
-			pool_free_ctx(tmp);
+			pool_free_ctx(pool, tmp->value);
+		pool_free_ctx(pool, tmp);
 	}
 }
 
-void	free_cmds(t_cmd *cmds)
+void	free_cmds(t_pool *pool, t_cmd *cmds)
 {
 	t_cmd	*tmp;
 	int		i;
@@ -40,20 +39,20 @@ void	free_cmds(t_cmd *cmds)
 		{
 			i = 0;
 			while (tmp->args[i])
-				pool_free_ctx(tmp->args[i++]);
-			pool_free_ctx(tmp->args);
+				pool_free_ctx(pool, tmp->args[i++]);
+			pool_free_ctx(pool, tmp->args);
 		}
 		if (tmp->infile)
-			pool_free_ctx(tmp->infile);
+			pool_free_ctx(pool, tmp->infile);
 		if (tmp->outfile)
-			pool_free_ctx(tmp->outfile);
+			pool_free_ctx(pool, tmp->outfile);
 		if (tmp->delimiter)
-			pool_free_ctx(tmp->delimiter);
-		pool_free_ctx(tmp);
+			pool_free_ctx(pool, tmp->delimiter);
+		pool_free_ctx(pool, tmp);
 	}
 }
 
-void	free_allocs(char **tofree)
+void	free_allocs(t_pool *pool, char **tofree)
 {
 	int	i;
 
@@ -64,10 +63,10 @@ void	free_allocs(char **tofree)
 		{
 			while (tofree[i])
 			{
-				pool_free_ctx(tofree[i]);
+				pool_free_ctx(pool, tofree[i]);
 				i++;
 			}
 		}
-		pool_free_ctx(tofree);
+		pool_free_ctx(pool, tofree);
 	}
 }

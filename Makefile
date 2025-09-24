@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/09/20 08:06:49 by rabiner          ###   ########.fr        #
+#    Updated: 2025/09/23 00:14:45 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ EXEC =  execute.c \
 MEM_DIR = mem_manager
 MEM =	fd_manager.c \
 		mem_manager.c \
-		pool_context.c \
+		mem_manager_utils.c \
 		pool_strings.c \
 
 ENV_DIR = env
@@ -62,6 +62,7 @@ BUILT = builtin_1.c \
 
 EXPAND_DIR = expander
 EXPAND = expand_tokens.c \
+		expand_utils.c \
 		get_env.c \
 		var.c \
 
