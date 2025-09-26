@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pool_strings.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 16:55:02 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/20 08:08:17 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/25 16:49:33 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "../../includes/mem_manager.h"
 
 // Creates a substring using pool-managed memory.
-char	*pool_substr_sys(t_pool *p, const char *s, unsigned int start, \
+char	*pool_substr_sys(t_pool *p, const char *s, unsigned int start,\
 		size_t len)
 {
 	size_t	size;

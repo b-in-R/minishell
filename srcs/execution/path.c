@@ -3,56 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/05 17:02:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/01 15:46:14 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/26 12:39:42 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static char	*join_path(t_pool *pool, const char *dir, const char *cmd)
-{
-	char	*path;
-	char	*tmp;
-
-	tmp = pool_strjoin_ctx(pool, dir, "/");
-	if (!tmp)
-		return (NULL);
-	path = pool_strjoin_ctx(pool, tmp, cmd);
-	if (!path)
-	{
-		pool_free_ctx(pool, tmp);
-		return (NULL);
-	}
-	pool_free_ctx(pool, tmp);
-	return (path);
-}
-
-static void	free_split_raw(char **tab, int start)
-{
-	int	idx;
-
-	idx = start;
-	while (tab && tab[idx])
-	{
-		free(tab[idx]);
-		idx++;
-	}
-}
-
-static void	release_tracked_entries(t_pool *pool, char **tab, int count)
-{
-	int	idx;
-
-	idx = count;
-	while (idx > 0)
-	{
-		idx--;
-		pool_free_ctx(pool, tab[idx]);
-	}
-}
 
 // Adds every element of a split PATH array to the pool tracking.
 static int	track_split(t_pool *pool, char **tab)

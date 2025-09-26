@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/23 00:09:19 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/25 17:24:28 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ void	handle_pipe(t_lexer_ctx *ctx)
 void	handle_redirection(t_lexer_ctx *ctx)
 {
 	t_token_type	type;
-	t_token		*token;
-	const char	*symbol;
-	size_t		step;
+	t_token			*token;
+	const char		*symbol;
+	size_t			step;
 
 	type = WORD;
 	symbol = resolve_redir(ctx->line, *ctx->index, &type, &step);
@@ -117,7 +117,7 @@ void	handle_word(t_lexer_ctx *ctx)
 * et cree un token de type WORD avec valeur word
 */
 
-// rabiner: ' " ne fais pas le retour a la ligne avec > 
+// rabiner: ' " ne fais pas le retour a la ligne avec >
 
 void	handle_quotes(t_lexer_ctx *ctx)
 {

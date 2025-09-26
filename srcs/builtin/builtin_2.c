@@ -3,53 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:50:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/02 17:51:53 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/26 12:45:22 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static int	export_alloc_error(void)
-{
-	ft_putstr_fd("minishell: export: allocation failed\n", STDERR_FILENO);
-	return (1);
-}
-
-static int	export_promote_local(t_expander *exp, const char *name, const char *val)
-{
-	char	*pair;
-
-	pair = ft_strjoin_3(exp->pool, name, "=", val);
-	if (!pair)
-		return (export_alloc_error());
-	if (set_env(exp->pool, &exp->my_env, pair))
-	{
-		pool_free_ctx(exp->pool, pair);
-		return (export_alloc_error());
-	}
-	remove_from_env(exp->pool, exp->local_env, name);
-	pool_free_ctx(exp->pool, pair);
-	return (0);
-}
-
-static int	export_without_value(t_expander *exp, const char *name)
-{
-	char	*tmp;
-
-	tmp = pool_strjoin_ctx(exp->pool, name, "=");
-	if (!tmp)
-		return (export_alloc_error());
-	if (set_env(exp->pool, &exp->my_env, tmp))
-	{
-		pool_free_ctx(exp->pool, tmp);
-		return (export_alloc_error());
-	}
-	pool_free_ctx(exp->pool, tmp);
-	return (0);
-}
 
 // Promotes NAME from local env to export when no value is provided.
 static int	export_name_only(t_expander *exp, const char *name)

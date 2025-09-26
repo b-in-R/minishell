@@ -3,48 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/22 22:56:32 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/26 12:36:49 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <errno.h>
-
-static void	command_not_found_exit(t_expander *exp, char *cmd)
-{
-	ft_putstr_fd("minishell: command not found: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd("\n", 2);
-	pool_cleanup_ctx(exp->pool);
-	exit(127);
-}
-
-static void	exec_failure_exit(t_expander *exp, char *cmd)
-{
-	if (errno == EACCES)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": Permission denied\n", 2);
-	}
-	else if (errno == EISDIR)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": Is a directory\n", 2);
-	}
-	else
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": execve failed\n", 2);
-	}
-	pool_cleanup_ctx(exp->pool);
-	exit(126);
-}
 
 // Resolves the executable path then calls execve or exits on failure.
 void	execute_command(t_cmd *cmd, t_expander *exp)

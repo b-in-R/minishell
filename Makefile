@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
+#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/09/23 00:14:45 by rabiner          ###   ########.fr        #
+#    Updated: 2025/09/26 12:57:22 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ EXEC =  execute.c \
 		execute_utils.c \
 		redirection.c \
 		path.c \
+		psth_utils.c \
 
 MEM_DIR = mem_manager
 MEM =	fd_manager.c \
@@ -57,13 +58,16 @@ ENV = env.c \
 
 BUILT_DIR = builtin
 BUILT = builtin_1.c \
+		builtin_1_utils.c \
 		builtin_2.c \
+		builtin_2_utils.c \
 		check_builtin.c \
 
 EXPAND_DIR = expander
 EXPAND = expand_tokens.c \
 		expand_utils.c \
 		get_env.c \
+		get_env_utils.c \
 		var.c \
 
 LEXER_DIR = lexer
@@ -73,9 +77,11 @@ LEXER = create_token.c \
 
 PARSER_DIR = parser
 PARSER = create_cmd.c \
+		parser_utils.c \
 		parser.c \
 		syntax_checker.c \
 		heredoc.c \
+		heredoc_utils.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \
@@ -83,6 +89,8 @@ SIGNAL = signal.c \
 UTILS_DIR = utils
 UTILS = utils.c \
 		free.c \
+		main_utils.c \
+		main_utils_2.c \
 
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
