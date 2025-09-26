@@ -6,7 +6,7 @@
 #    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/09/26 12:57:22 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/09/26 13:28:31 by albertooutu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ EXEC =  execute.c \
 		execute_utils.c \
 		redirection.c \
 		path.c \
-		psth_utils.c \
+		path_utils.c \
 
 MEM_DIR = mem_manager
 MEM =	fd_manager.c \
@@ -90,7 +90,7 @@ UTILS_DIR = utils
 UTILS = utils.c \
 		free.c \
 		main_utils.c \
-		main_utils_2.c \
+		main_utils2.c \
 
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
