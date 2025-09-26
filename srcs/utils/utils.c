@@ -6,7 +6,7 @@
 /*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/20 00:08:11 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/25 16:17:47 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
  *
  * Returns: A newly allocated array with cleaned arguments.
 */
-char	**create_clean_args(t_pool *pool, char **args)
+/*char	**create_clean_args(t_pool *pool, char **args)
 {
 	char	**clean_args;
 	int		i;
@@ -52,6 +52,34 @@ char	**create_clean_args(t_pool *pool, char **args)
 		i++;
 	}
 	clean_args[i] = NULL;
+	return (clean_args);
+}*/
+char	**create_clean_args(t_pool *pool, char **args)
+{
+	char	**clean_args;
+	int		i;
+
+	if (!args || !args[0])
+	{
+		clean_args = pool_alloc_ctx(pool, sizeof(char *));
+		if (!clean_args)
+			return (NULL);
+		clean_args[0] = NULL;
+		return (clean_args);
+	}
+	i = 0;
+	while (args[i])
+		i++;
+	clean_args = pool_alloc_ctx(pool, sizeof(char *) * (i + 1));
+	if (!clean_args)
+		return (NULL);
+	clean_args[i] = NULL;
+	while (i--)
+	{
+		clean_args[i] = remove_outer_quotes(pool, args[i]);
+		if (!clean_args[i])
+			return (NULL);
+	}
 	return (clean_args);
 }
 
@@ -143,7 +171,7 @@ void print_cmds(t_cmd *cmds)
 		if (cmds->infile)
 			printf("Infile: %s\n", cmds->infile);
 		if (cmds->outfile)
-			printf("Outfile: %s (%s)\n", cmds->outfile, \
+			printf("Outfile: %s (%s)\n", cmds->outfile,
 			cmds->append ? "append" : "truncate");
 		if (cmds->heredoc)
 			printf("Heredoc delimiter: %s\n", cmds->delimiter);

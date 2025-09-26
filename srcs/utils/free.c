@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:16:21 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/20 00:07:27 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/26 12:50:48 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,30 @@ void	free_allocs(t_pool *pool, char **tofree)
 		}
 		pool_free_ctx(pool, tofree);
 	}
+}
+
+int	assignments_only(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type != WORD || !is_simple_assignment(tokens->value))
+			return (0);
+		tokens = tokens->next;
+	}
+	return (1);
+}
+
+t_token	*discard_assignment_prefix(t_token *tokens, t_pool *pool)
+{
+	t_token	*next;
+
+	while (tokens && tokens->type == WORD
+		&& is_simple_assignment(tokens->value))
+	{
+		next = tokens->next;
+		pool_free_ctx(pool, tokens->value);
+		pool_free_ctx(pool, tokens);
+		tokens = next;
+	}
+	return (tokens);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:06:32 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/09 13:57:41 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/26 12:32:16 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
 * count → nombre mots dans le tableau;
 * +1 → pour le nouveau qu'on rajoute ; +1 pour NULL;
 */
-int	add_arg(t_pool *pool, char ***args, const char *value)
+/*int	add_arg(t_pool *pool, char ***args, const char *value)
 {
 	char	**new_args;
 	char	**old_args;
@@ -116,6 +116,32 @@ int	add_arg(t_pool *pool, char ***args, const char *value)
 		pool_free_ctx(pool, new_args);
 		return (0);
 	}
+	new_args[i + 1] = NULL;
+	*args = new_args;
+	if (old_args)
+		pool_free_ctx(pool, old_args);
+	return (1);
+}*/
+int	add_arg(t_pool *pool, char ***args, const char *value)
+{
+	char	**new_args;
+	char	**old_args;
+	int		count;
+	int		i;
+
+	count = 0;
+	old_args = *args;
+	while (old_args && old_args[count])
+		count++;
+	new_args = pool_alloc_ctx(pool, sizeof(char *) * (count + 2));
+	if (!new_args)
+		return (0);
+	i = -1;
+	while (++i < count)
+		new_args[i] = old_args[i];
+	new_args[i] = pool_strdup_sys(pool, value);
+	if (!new_args[i])
+		return (pool_free_ctx(pool, new_args), 0);
 	new_args[i + 1] = NULL;
 	*args = new_args;
 	if (old_args)

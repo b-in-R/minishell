@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expand_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:50 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/12 00:30:21 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/25 17:26:25 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 int	handle_dollar(t_pool *pool, const char *word, int *i, char **result,
-			 t_expander *exp);
+		t_expander *exp);
 int	append_char(t_pool *pool, char **str, char c);
 
 /*

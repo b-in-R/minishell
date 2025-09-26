@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/23 00:45:35 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/26 13:02:06 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ typedef struct s_token
 
 typedef struct s_lexer_ctx
 {
-	t_token	**tokens;
+	t_token		**tokens;
 	char		*line;
 	size_t		*index;
 	int			*last_space;
 	t_pool		*pool;
-} 	t_lexer_ctx;
+}	t_lexer_ctx;
 
 /* Represents a complete shell command with its arguments and redirections
 *  	char	**args;    // list of arguments for the command
@@ -139,7 +139,6 @@ typedef struct s_fork
 extern volatile sig_atomic_t	g_signal;
 
 /*------------------Prototypes------------------*/
-
 /*---------------Common---------------*/
 // /utils/utils.c
 void	error_exit(t_pool *pool, char **my_env, const char *str);
@@ -158,9 +157,12 @@ void	execute_command(t_cmd *cmd, t_expander *exp);
 void	initialise_data(t_fork *data, t_cmd *cmd, t_expander *exp);
 int		count_cmds(t_cmd *cmd);
 void	take_exit_code(int *i, int *j, t_fork *data);
+void	command_not_found_exit(t_expander *exp, char *cmd);
+void	exec_failure_exit(t_expander *exp, char *cmd);
 
 // /execution/redirection.c
-void	set_redirection(t_expander *exp, t_cmd *cmd, int in_fd, int pipe_fd[2]);
+void	set_redirection(t_expander *exp, t_cmd *cmd, int in_fd,
+			int pipe_fd[2]);
 
 // /builtin/check_builtin.c
 int		is_builtin(t_cmd *cmd);
@@ -170,14 +172,27 @@ int		execute_builtin(t_cmd *cmd, t_expander *exp);
 int		ft_echo(char **args);
 int		ft_cd(t_expander *exp, char **args);
 int		ft_pwd(char **my_env, char **args);
+int		has_only_n(char *arg);
+int		skip_n_flags(char **args);
+int		cd_error(const char *msg, const char *detail);
+int		cd_errno(const char *path);
+int		cd_set_env(t_expander *exp, const char *key, const char *value);
 
 // /builtin/builtin_2.c
 int		ft_export(t_expander *exp, char **args);
 int		ft_unset(t_expander *exp, char **args);
 int		ft_env(char **my_env);
+void	capture_oldpwd(t_expander *exp, char *buf);
+int		export_alloc_error(void);
+int		export_promote_local(t_expander *exp, const char *name,
+			const char *val);
+int		export_without_value(t_expander *exp, const char *name);
 
 // /execution/path.c
 char	*find_command_path(t_expander *exp, const char *cmd);
+char	*join_path(t_pool *pool, const char *dir, const char *cmd);
+void	free_split_raw(char **tab, int start);
+void	release_tracked_entries(t_pool *pool, char **tab, int count);
 
 // /env/env.c
 char	**init_env(char **envp, t_pool *global);
@@ -212,9 +227,17 @@ void	handle_redirections(t_expander *exp, t_cmd *current, t_token *tokens);
 char	*expand_variables(const char *line, t_expander *exp);
 int		handle_heredocs(t_cmd *cmds, t_expander *exp);
 char	get_unclosed_quote_type(const char *line);
+void	handle_redir_in(t_expander *exp, t_cmd *cmd, char *value);
+void	handle_redir_out(t_expander *exp, t_cmd *cmd, char *value, int type);
+void	handle_heredoc(t_expander *exp, t_cmd *cmd, t_token *tok);
 int		has_unclosed_quotes(const char *line);
 int		check_syntax_errors(t_token *tokens, char *line);
 char	*remove_outer_quotes(t_pool *pool, const char *str);
+int		push_line(int write_fd, char *line, t_expander *exp, t_cmd *cmd);
+void	handle_pool_track_failure(char *line, t_expander *exp, int write_fd);
+char	*expand_heredoc_line(const char *line, t_expander *exp);
+int		write_all(int fd, const char *buf, size_t len);
+void	heredoc_child_exit(t_expander *exp, int write_fd, int status);
 
 /*--------------Expander--------------*/
 int		expand_tokens(t_token *tokens, t_expander *exp);
@@ -231,12 +254,28 @@ int		str_append_free(t_pool *pool, char **s1, const char *s2);
 int		is_var_char(char c);
 int		add_env_variable(t_pool *pool, char ***env, const char *line);
 int		is_simple_assignment(const char *line);
+int		expand_exit_status(t_pool *pool, char **result,
+			t_expander *exp, int *i);
+int		read_self_pid(void);
+int		expand_pid(t_pool *pool, char **result, int *i);
 
 /*--------------Utils---------------*/
 void	free_env(t_pool *pool, char **env);
 char	*ft_strjoin_3(t_pool *pool, const char *s1, const char *s2,
-		const char *s3);
+			const char *s3);
 char	**create_clean_args(t_pool *pool, char **args);
+int		assignments_only(t_token *tokens);
+t_token	*discard_assignment_prefix(t_token *tokens, t_pool *pool);
+int		store_only_assignments(t_token *tokens, t_expander *exp);
+int		handle_assignments(t_token **tokens, t_expander *exp);
+void	run_pipeline(t_token *tokens, char *line, t_expander *exp);
+int		process_tokens(char *line, t_expander *exp);
+int		process_segment(char *line, size_t start, size_t len,
+			t_expander *exp);
+int		process_multiline(char *line, t_expander *exp);
+int		handle_interrupted_read(t_expander *exp);
+void	track_line_or_exit(char *line, t_expander *exp);
+void	process_non_empty(char *line, t_expander *exp);
 
 /*---------------Free----------------*/
 void	free_allocs(t_pool *pool, char **tofree);
