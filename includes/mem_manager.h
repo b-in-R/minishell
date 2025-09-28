@@ -6,15 +6,14 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 22:39:40 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/27 18:31:51 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:00:59 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MEM_MANAGER_H
 # define MEM_MANAGER_H
 
-# include <stddef.h>// c'est  pour quoi
-# include <sys/types.h>// c'est pour quoi
+# include "includes.h"
 
 // Struct suivi d'allocations
 typedef struct s_memnode

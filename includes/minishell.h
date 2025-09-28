@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 18:33:52 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:01:20 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,9 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include "includes.h"
 # include "mem_manager.h"
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <fcntl.h>
-# include <sys/wait.h>// a voir si obligatoire
-# include <errno.h>// a voir si obligatoire
-# include <limits.h> //
+
 
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
