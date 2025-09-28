@@ -19,7 +19,7 @@ static int	track_split(t_pool *pool, char **tab)
 
 	if (!tab)
 		return (1);
-	if (!pool_track_ctx(pool, tab))
+	if (!pool_track(pool, tab))
 	{
 		free_split_raw(tab, 0);
 		free(tab);
@@ -28,11 +28,11 @@ static int	track_split(t_pool *pool, char **tab)
 	i = 0;
 	while (tab[i])
 	{
-		if (!pool_track_ctx(pool, tab[i]))
+		if (!pool_track(pool, tab[i]))
 		{
 			free_split_raw(tab, i);
 			release_tracked_entries(pool, tab, i);
-			pool_free_ctx(pool, tab);
+			pool_free_one(pool, tab);
 			return (0);
 		}
 		i++;
@@ -51,10 +51,10 @@ static void	free_split_except(t_pool *pool, char **tab, char *keep)
 	while (tab[i])
 	{
 		if (tab[i] != keep)
-			pool_free_ctx(pool, tab[i]);
+			pool_free_one(pool, tab[i]);
 		i++;
 	}
-	pool_free_ctx(pool, tab);
+	pool_free_one(pool, tab);
 }
 
 static char	*cleanup_and_return(t_pool *pool, char **paths, char *keep,
@@ -84,7 +84,7 @@ static char	*find_command_path_2(t_pool *pool, const char *cmd,
 		if (!candidate && access(path, F_OK) == 0)
 			candidate = path;
 		else
-			pool_free_ctx(pool, path);
+			pool_free_one(pool, path);
 		i++;
 	}
 	if (candidate)
@@ -101,7 +101,7 @@ char	*find_command_path(t_expander *exp, const char *cmd)
 	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, F_OK) == 0)
-			return (pool_strdup_ctx(exp->pool, cmd));
+			return (pool_strdup(exp->pool, cmd));
 		return (NULL);
 	}
 	path_var = get_env(exp->my_env, "PATH");

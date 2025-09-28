@@ -44,11 +44,11 @@ int	export_promote_local(t_expander *exp, const char *name,
 		return (export_alloc_error());
 	if (set_env(exp->pool, &exp->my_env, pair))
 	{
-		pool_free_ctx(exp->pool, pair);
+		pool_free_one(exp->pool, pair);
 		return (export_alloc_error());
 	}
 	remove_from_env(exp->pool, exp->local_env, name);
-	pool_free_ctx(exp->pool, pair);
+	pool_free_one(exp->pool, pair);
 	return (0);
 }
 
@@ -56,14 +56,14 @@ int	export_without_value(t_expander *exp, const char *name)
 {
 	char	*tmp;
 
-	tmp = pool_strjoin_ctx(exp->pool, name, "=");
+	tmp = pool_strjoin(exp->pool, name, "=");
 	if (!tmp)
 		return (export_alloc_error());
 	if (set_env(exp->pool, &exp->my_env, tmp))
 	{
-		pool_free_ctx(exp->pool, tmp);
+		pool_free_one(exp->pool, tmp);
 		return (export_alloc_error());
 	}
-	pool_free_ctx(exp->pool, tmp);
+	pool_free_one(exp->pool, tmp);
 	return (0);
 }

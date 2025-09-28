@@ -25,7 +25,7 @@ t_cmd	*create_cmd(t_expander *exp)
 {
 	t_cmd	*cmd;
 
-	cmd = pool_alloc_ctx(exp->pool, sizeof(t_cmd));
+	cmd = pool_alloc(exp->pool, sizeof(t_cmd));
 	if (!cmd)
 		return (NULL);
 	cmd->args = NULL;
@@ -101,7 +101,7 @@ void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
 		while (old_args[count])
 			count++;
 	}
-	new_args = pool_alloc_ctx(pool, sizeof(char *) * (count + 2));
+	new_args = pool_alloc(pool, sizeof(char *) * (count + 2));
 	if (!new_args)
 		return (0);
 	i = 0;
@@ -110,16 +110,16 @@ void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
 		new_args[i] = old_args[i];
 		i++;
 	}
-	new_args[i] = pool_strdup_sys(pool, value);
+	new_args[i] = pool_strdup(pool, value);
 	if (!new_args[i])
 	{
-		pool_free_ctx(pool, new_args);
+		pool_free_one(pool, new_args);
 		return (0);
 	}
 	new_args[i + 1] = NULL;
 	*args = new_args;
 	if (old_args)
-		pool_free_ctx(pool, old_args);
+		pool_free_one(pool, old_args);
 	return (1);
 }*/
 int	add_arg(t_pool *pool, char ***args, const char *value)
@@ -133,18 +133,18 @@ int	add_arg(t_pool *pool, char ***args, const char *value)
 	old_args = *args;
 	while (old_args && old_args[count])
 		count++;
-	new_args = pool_alloc_ctx(pool, sizeof(char *) * (count + 2));
+	new_args = pool_alloc(pool, sizeof(char *) * (count + 2));
 	if (!new_args)
 		return (0);
 	i = -1;
 	while (++i < count)
 		new_args[i] = old_args[i];
-	new_args[i] = pool_strdup_sys(pool, value);
+	new_args[i] = pool_strdup(pool, value);
 	if (!new_args[i])
-		return (pool_free_ctx(pool, new_args), 0);
+		return (pool_free_one(pool, new_args), 0);
 	new_args[i + 1] = NULL;
 	*args = new_args;
 	if (old_args)
-		pool_free_ctx(pool, old_args);
+		pool_free_one(pool, old_args);
 	return (1);
 }

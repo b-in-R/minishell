@@ -40,7 +40,7 @@ static int	shell_loop(t_expander *exp)
 		track_line_or_exit(line, exp);
 		if (line[0])
 			process_non_empty(line, exp);
-		pool_free_ctx(exp->pool, line);
+		pool_free_one(exp->pool, line);
 	}
 	return (0);
 }

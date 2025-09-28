@@ -45,7 +45,7 @@ int	handle_interrupted_read(t_expander *exp)
 
 void	track_line_or_exit(char *line, t_expander *exp)
 {
-	if (pool_track_ctx(exp->pool, line))
+	if (pool_track(exp->pool, line))
 		return ;
 	free(line);
 	error_exit(exp->pool, exp->my_env, "shell_loop: track line");

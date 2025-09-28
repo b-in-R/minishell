@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:37:51 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/19 22:44:56 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 15:24:52 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	unset_env(t_pool *pool, char **my_env, char *arg)
 	{
 		if (!ft_strncmp(my_env[i], arg, len) && my_env[i][len] == '=')
 		{
-			pool_free_ctx(pool, my_env[i]);
+			pool_free_one(pool, my_env[i]);
 			j = i;
 			while (my_env[j + 1])
 			{
@@ -82,7 +82,7 @@ int	remove_from_env(t_pool *pool, char **env, const char *key)
 		if (ft_strncmp(env[i], key, var_name_len) == 0
 			&& env[i][var_name_len] == '=')
 		{
-			pool_free_ctx(pool, env[i]);
+			pool_free_one(pool, env[i]);
 			j = i;
 			while (env[j])
 			{
@@ -120,4 +120,28 @@ int	is_valid_identifier(const char *str)
 		i++;
 	}
 	return (1);
+}
+
+int	env_replace(t_pool *pool, char **env, const char *key, const char *arg)
+{
+	char	*dup;
+	size_t	len;
+	int		i;
+
+	len = ft_strlen(key);
+	i = 0;
+	while (env[i])
+	{
+		if (!ft_strncmp(env[i], key, len) && env[i][len] == '=')
+		{
+			dup = pool_strdup(pool, arg);
+			if (!dup)
+				return (1);
+			pool_free_one(pool, env[i]);
+			env[i] = dup;
+			return (0);
+		}
+		i++;
+	}
+	return (-1);
 }

@@ -4,6 +4,17 @@
 Utilisation
 -----------
     ./ctrl_fns_autorisees.py [--root chemin]
+    
+    
+    
+Modifs a apporter
+-----------------
+	utilisable partout
+    recherche dans le dossier et  sous dossiers actuels
+    selon liste des fonctions autorisees en .txt
+
+    
+
 
 La liste des fonctions autorisées est lue dans ``list_fns_py.txt`` (copier/coller
 direct du sujet, séparateurs virgules ou retours à la ligne acceptés).

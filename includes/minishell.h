@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/26 13:02:06 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/28 16:57:33 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <fcntl.h>
-# include <sys/wait.h>
+# include <sys/wait.h>// a voir si obligatoire
+# include <errno.h>// a voir si obligatoire
 
 /*-------------Structures--------------*/
 /* Token types recognized in the input line
@@ -207,6 +208,8 @@ char	*get_env(char **my_env, char *str);
 void	unset_env(t_pool *pool, char **my_env, char *arg);
 int		remove_from_env(t_pool *pool, char **env, const char *key);
 int		is_valid_identifier(const char *str);
+int		env_replace(t_pool *pool, char **env, const char *key,
+			const char *arg);
 
 /*---------------Lexer----------------*/
 t_token	*create_token(t_pool *pool, t_token_type type, char *value);
@@ -238,6 +241,21 @@ void	handle_pool_track_failure(char *line, t_expander *exp, int write_fd);
 char	*expand_heredoc_line(const char *line, t_expander *exp);
 int		write_all(int fd, const char *buf, size_t len);
 void	heredoc_child_exit(t_expander *exp, int write_fd, int status);
+int		heredoc_wait_rc(t_cmd *cmd, t_expander *exp, int pipe_fd[2]);
+int		heredoc_wifsignaled(t_cmd *cmd, t_expander *exp, int pipe_fd[2],
+			int status);
+int		heredoc_wifexited(t_cmd *cmd, t_expander *exp, int pipe_fd[2]);
+int		heredoc_exit(t_cmd *cmd, t_expander *exp, int pipe_fd[2], int status);
+int		track_heredoc_fds(t_expander *exp, int pipe_fd[2]);
+int		heredoc_fork_error(t_expander *exp, int pipe_fd[2]);
+int		init_heredoc_pipe(t_cmd *cmd, t_expander *exp, int pipe_fd[2]);
+
+typedef struct s_expand
+{
+	t_pool		*pool;
+	t_expander	*exp;
+	char		**result;
+}			t_expand;
 
 /*--------------Expander--------------*/
 int		expand_tokens(t_token *tokens, t_expander *exp);
@@ -245,10 +263,8 @@ char	*expand_word(t_pool *pool, const char *word, t_expander *exp);
 char	*join_tokens(t_pool *pool, t_token *tokens);
 char	*get_env_value_from_exp(const char *key, t_expander *exp);
 void	update_quote_flags(char c, int *in_single, int *in_double);
-int		exp_variable(t_pool *pool, const char *str, int *i, char **result,
-			t_expander *exp);
-int		handle_dollar(t_pool *pool, const char *word, int *i, char **result,
-			t_expander *exp);
+int		exp_variable(t_expand *expand, const char *str, int *i);
+int		handle_dollar(t_expand *expand, const char *word, int *i);
 int		append_char(t_pool *pool, char **str, char c);
 int		str_append_free(t_pool *pool, char **s1, const char *s2);
 int		is_var_char(char c);

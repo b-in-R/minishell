@@ -17,16 +17,16 @@ char	*join_path(t_pool *pool, const char *dir, const char *cmd)
 	char	*path;
 	char	*tmp;
 
-	tmp = pool_strjoin_ctx(pool, dir, "/");
+	tmp = pool_strjoin(pool, dir, "/");
 	if (!tmp)
 		return (NULL);
-	path = pool_strjoin_ctx(pool, tmp, cmd);
+	path = pool_strjoin(pool, tmp, cmd);
 	if (!path)
 	{
-		pool_free_ctx(pool, tmp);
+		pool_free_one(pool, tmp);
 		return (NULL);
 	}
-	pool_free_ctx(pool, tmp);
+	pool_free_one(pool, tmp);
 	return (path);
 }
 
@@ -50,6 +50,6 @@ void	release_tracked_entries(t_pool *pool, char **tab, int count)
 	while (idx > 0)
 	{
 		idx--;
-		pool_free_ctx(pool, tab[idx]);
+		pool_free_one(pool, tab[idx]);
 	}
 }

@@ -22,7 +22,7 @@ t_token	*create_token(t_pool *pool, t_token_type type, char *value)
 {
 	t_token	*token;
 
-	token = pool_alloc_ctx(pool, sizeof(t_token));
+	token = pool_alloc(pool, sizeof(t_token));
 	if (!token)
 		return (NULL);
 	token->value = value;

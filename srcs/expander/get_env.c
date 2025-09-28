@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:43:15 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/26 12:33:37 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/27 20:45:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 /*
 * Extrait le nom de variable après $
 */
-int	exp_variable(t_pool *pool, const char *str, int *i, char **result,
-			t_expander *exp)
+int	exp_variable(t_expand *expand, const char *str, int *i)
 {
 	char	*key;
 	char	*value;
@@ -25,16 +24,16 @@ int	exp_variable(t_pool *pool, const char *str, int *i, char **result,
 	start = *i;
 	while (is_var_char(str[*i]))
 		(*i)++;
-	key = pool_substr_ctx(pool, str, start, *i - start);
+	key = pool_substr(expand->pool, str, start, *i - start);
 	if (!key)
 		return (0);
-	value = get_env_value_from_exp(key, exp);
-	pool_free_ctx(pool, key);
+	value = get_env_value_from_exp(key, expand->exp);
+	pool_free_one(expand->pool, key);
 	if (!value)
 		return (0);
-	if (!str_append_free(pool, result, value))
-		return (pool_free_ctx(exp->pool, value), 0);
-	pool_free_ctx(exp->pool, value);
+	if (!str_append_free(expand->pool, expand->result, value))
+		return (pool_free_one(expand->exp->pool, value), 0);
+	pool_free_one(expand->exp->pool, value);
 	return (1);
 }
 
@@ -53,26 +52,26 @@ int	exp_variable(t_pool *pool, const char *str, int *i, char **result,
 * Increment i as alphanumeric or underscore, extract the variable name,
 *	retrieve its value with getenv(), and append it to result.
 */
-int	handle_dollar(t_pool *pool, const char *str, int *i, char **result,
-			t_expander *exp)
+int	handle_dollar(t_expand *expand, const char *str, int *i)
 {
 	char	next;
 
 	(*i)++;
 	next = str[*i];
 	if (!next)
-		return (append_char(pool, result, '$'));
+		return (append_char(expand->pool, expand->result, '$'));
 	if (next == '?')
-		return (expand_exit_status(pool, result, exp, i));
+		return (expand_exit_status(expand->pool, expand->result,
+				expand->exp, i));
 	if (next == '$')
-		return (expand_pid(pool, result, i));
+		return (expand_pid(expand->pool, expand->result, i));
 	if (!is_var_char(next))
 	{
-		if (!append_char(pool, result, '$'))
+		if (!append_char(expand->pool, expand->result, '$'))
 			return (0);
 		return (1);
 	}
-	if (!exp_variable(pool, str, i, result, exp))
+	if (!exp_variable(expand, str, i))
 		return (0);
 	return (1);
 }
@@ -87,9 +86,9 @@ char	*get_env_value_from_exp(const char *key, t_expander *exp)
 
 	val = get_env(exp->local_env, (char *)key);
 	if (val)
-		return (pool_strdup_ctx(exp->pool, val));
+		return (pool_strdup(exp->pool, val));
 	val = get_env(exp->my_env, (char *)key);
 	if (val)
-		return (pool_strdup_ctx(exp->pool, val));
-	return (pool_strdup_ctx(exp->pool, ""));
+		return (pool_strdup(exp->pool, val));
+	return (pool_strdup(exp->pool, ""));
 }

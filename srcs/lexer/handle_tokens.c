@@ -48,7 +48,7 @@ void	handle_pipe(t_lexer_ctx *ctx)
 {
 	t_token	*token;
 
-	token = create_token(ctx->pool, PIPE, pool_strdup_ctx(ctx->pool, "|"));
+	token = create_token(ctx->pool, PIPE, pool_strdup(ctx->pool, "|"));
 	if (!token)
 		return ;
 	token->leading_space = *ctx->last_space;
@@ -72,7 +72,7 @@ void	handle_redirection(t_lexer_ctx *ctx)
 	symbol = resolve_redir(ctx->line, *ctx->index, &type, &step);
 	if (!symbol)
 		return ;
-	token = create_token(ctx->pool, type, pool_strdup_ctx(ctx->pool, symbol));
+	token = create_token(ctx->pool, type, pool_strdup(ctx->pool, symbol));
 	if (!token)
 		return ;
 	token->leading_space = *ctx->last_space;
@@ -100,7 +100,7 @@ void	handle_word(t_lexer_ctx *ctx)
 	{
 		(*ctx->index)++;
 	}
-	word = pool_substr_ctx(ctx->pool, ctx->line, start, *ctx->index - start);
+	word = pool_substr(ctx->pool, ctx->line, start, *ctx->index - start);
 	if (!word)
 		return ;
 	token = create_token(ctx->pool, WORD, word);
@@ -130,7 +130,7 @@ void	handle_quotes(t_lexer_ctx *ctx)
 	start = ++(*ctx->index);
 	while (ctx->line[*ctx->index] && ctx->line[*ctx->index] != type_quote)
 		(*ctx->index)++;
-	word = pool_substr_ctx(ctx->pool, ctx->line, start,
+	word = pool_substr(ctx->pool, ctx->line, start,
 			*ctx->index - start);
 	if (!word)
 		return ;

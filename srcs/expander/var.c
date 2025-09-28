@@ -79,13 +79,13 @@ int	str_append_free(t_pool *pool, char **s1, const char *s2)
 	if (!s1 || !s2)
 		return (0);
 	if (!*s1)
-		tmp = pool_strdup_ctx(pool, s2);
+		tmp = pool_strdup(pool, s2);
 	else
-		tmp = pool_strjoin_ctx(pool, *s1, s2);
+		tmp = pool_strjoin(pool, *s1, s2);
 	if (!tmp)
 		return (0);
 	if (*s1)
-		pool_free_ctx(pool, *s1);
+		pool_free_one(pool, *s1);
 	*s1 = tmp;
 	return (1);
 }

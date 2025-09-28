@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 09:55:28 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/25 17:18:51 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/27 20:41:40 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 */
 void	heredoc_child_exit(t_expander *exp, int write_fd, int status)
 {
-	pool_close_ctx(exp->pool, write_fd);
-	pool_cleanup_ctx(exp->pool);
+	pool_close_one(exp->pool, write_fd);
+	pool_cleanup(exp->pool);
 	exit(status);
 }
 
@@ -51,22 +51,26 @@ int	write_all(int fd, const char *buf, size_t len)
 */
 char	*expand_heredoc_line(const char *line, t_expander *exp)
 {
-	char	*expanded;
-	int		i;
+	char		*expanded;
+	int			i;
+	t_expand	expand;
 
 	i = 0;
-	expanded = pool_strdup_ctx(exp->pool, "");
+	expanded = pool_strdup(exp->pool, "");
 	if (!expanded)
 		return (NULL);
+	expand.pool = exp->pool;
+	expand.exp = exp;
+	expand.result = &expanded;
 	while (line[i])
 	{
 		if (line[i] == '$')
 		{
-			if (!handle_dollar(exp->pool, line, &i, &expanded, exp))
-				return (pool_free_ctx(exp->pool, expanded), NULL);
+			if (!handle_dollar(&expand, line, &i))
+				return (pool_free_one(exp->pool, expanded), NULL);
 		}
 		else if (!append_char(exp->pool, &expanded, line[i++]))
-			return (pool_free_ctx(exp->pool, expanded), NULL);
+			return (pool_free_one(exp->pool, expanded), NULL);
 	}
 	return (expanded);
 }
@@ -94,7 +98,7 @@ int	push_line(int write_fd, char *line, t_expander *exp, t_cmd *cmd)
 	if (cmd->expand_heredoc)
 		expanded = expand_heredoc_line(line, exp);
 	else
-		expanded = pool_strdup_ctx(exp->pool, line);
+		expanded = pool_strdup(exp->pool, line);
 	if (!expanded)
 	{
 		ft_putstr_fd("minishell: heredoc: allocation failed\n", 2);
@@ -106,6 +110,6 @@ int	push_line(int write_fd, char *line, t_expander *exp, t_cmd *cmd)
 		perror("minishell: heredoc write");
 		ok = 0;
 	}
-	pool_free_ctx(exp->pool, expanded);
+	pool_free_one(exp->pool, expanded);
 	return (ok);
 }

@@ -79,7 +79,7 @@ char	**init_env(char **envp, t_pool *global)
 		return (NULL);
 	while (i < n)
 	{
-		copy[i] = pool_strdup_sys(global, envp[i]);
+		copy[i] = pool_strdup(global, envp[i]);
 		if (copy[i] == NULL)
 			return (env_rollback(copy, i, global));
 		i++;
@@ -99,11 +99,11 @@ void	free_env(t_pool *pool, char **my_env)
 	i = 0;
 	while (my_env[i])
 	{
-		pool_free_ctx(pool, my_env[i]);
+		pool_free_one(pool, my_env[i]);
 		my_env[i] = NULL;
 		i++;
 	}
-	pool_free_ctx(pool, my_env);
+	pool_free_one(pool, my_env);
 }
 
 // Prints each environment entry on its own line.

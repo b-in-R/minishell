@@ -28,12 +28,12 @@ static int	append_to_last_arg(t_pool *pool, t_cmd *cmd, const char *value)
 		last++;
 	len_prev = ft_strlen(args[last]);
 	len_new = ft_strlen(value);
-	joined = pool_alloc_ctx(pool, len_prev + len_new + 1);
+	joined = pool_alloc(pool, len_prev + len_new + 1);
 	if (!joined)
 		return (0);
 	ft_memcpy(joined, args[last], len_prev);
 	ft_memcpy(joined + len_prev, value, len_new + 1);
-	pool_free_ctx(pool, args[last]);
+	pool_free_one(pool, args[last]);
 	args[last] = joined;
 	return (1);
 }
@@ -160,14 +160,14 @@ char	*remove_outer_quotes(t_pool *pool, const char *str)
 		return (NULL);
 	len = ft_strlen(str);
 	if (len < 2)
-		return (pool_strdup_ctx(pool, str));
+		return (pool_strdup(pool, str));
 	if ((str[0] == '\'' && str[len - 1] == '\'')
 		|| (str[0] == '"' && str[len - 1] == '"'))
 	{
-		res = pool_substr_ctx(pool, str, 1, len - 2);
+		res = pool_substr(pool, str, 1, len - 2);
 	}
 	else
-		res = pool_strdup_ctx(pool, str);
+		res = pool_strdup(pool, str);
 	return (res);
 }
 
@@ -182,27 +182,27 @@ char	*remove_outer_quotes(t_pool *pool, const char *str)
 	if (tokens->type == REDIR_IN)
 	{
 		if (current->infile)
-			pool_free_ctx(exp->pool, current->infile);
-		current->infile = pool_strdup_ctx(exp->pool, value);
+			pool_free_one(exp->pool, current->infile);
+		current->infile = pool_strdup(exp->pool, value);
 	}
 	else if (tokens->type == REDIR_OUT)
 	{
 		if (current->outfile)
-			pool_free_ctx(exp->pool, current->outfile);
-		current->outfile = pool_strdup_ctx(exp->pool, value);
+			pool_free_one(exp->pool, current->outfile);
+		current->outfile = pool_strdup(exp->pool, value);
 		current->append = 0;
 	}
 	else if (tokens->type == REDIR_APPEND)
 	{
 		if (current->outfile)
-			pool_free_ctx(exp->pool, current->outfile);
-		current->outfile = pool_strdup_ctx(exp->pool, value);
+			pool_free_one(exp->pool, current->outfile);
+		current->outfile = pool_strdup(exp->pool, value);
 		current->append = 1;
 	}
 	else if (tokens->type == HEREDOC)
 	{
 		if (current->delimiter)
-			pool_free_ctx(exp->pool, current->delimiter);
+			pool_free_one(exp->pool, current->delimiter);
 		current->heredoc = 1;
 		current->delimiter = remove_outer_quotes(exp->pool, value);
 		if (tokens->next->quoted_type != NO_QUOTE)

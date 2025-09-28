@@ -72,10 +72,10 @@ int	cd_set_env(t_expander *exp, const char *key, const char *value)
 		return (cd_error("allocation failed", NULL));
 	if (set_env(exp->pool, &exp->my_env, pair))
 	{
-		pool_free_ctx(exp->pool, pair);
+		pool_free_one(exp->pool, pair);
 		return (cd_error("allocation failed", NULL));
 	}
 	remove_from_env(exp->pool, exp->local_env, key);
-	pool_free_ctx(exp->pool, pair);
+	pool_free_one(exp->pool, pair);
 	return (0);
 }

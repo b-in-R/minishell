@@ -30,7 +30,7 @@ int	execute_builtin(t_cmd *cmd, t_expander *exp)
 		return (ft_env(exp->my_env));
 	if (!ft_strcmp(cmd->args[0], "exit"))
 	{
-		pool_cleanup_ctx(exp->pool);
+		pool_cleanup(exp->pool);
 		exit(0);
 	}
 	return (1);

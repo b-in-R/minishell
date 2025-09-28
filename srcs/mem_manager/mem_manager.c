@@ -106,7 +106,7 @@ void	pool_clear(t_pool *p)
 }
 
 // Duplicates a C-string while recording it in the given pool.
-char	*pool_strdup_sys(t_pool *p, const char *s)
+char	*pool_strdup(t_pool *p, const char *s)
 {
 	size_t	len;
 	char	*dup;

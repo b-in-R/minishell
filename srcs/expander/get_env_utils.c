@@ -23,14 +23,14 @@ int	expand_exit_status(t_pool *pool, char **result,
 	value = ft_itoa(exp->last_status);
 	if (!value)
 		return (0);
-	if (!pool_track_ctx(pool, value))
+	if (!pool_track(pool, value))
 	{
 		free(value);
 		return (0);
 	}
 	if (!str_append_free(pool, result, value))
-		return (pool_free_ctx(pool, value), 0);
-	pool_free_ctx(pool, value);
+		return (pool_free_one(pool, value), 0);
+	pool_free_one(pool, value);
 	(*i)++;
 	return (1);
 }
@@ -69,14 +69,14 @@ int	expand_pid(t_pool *pool, char **result, int *i)
 		value = ft_itoa(pid);
 	if (!value)
 		return (0);
-	if (!pool_track_ctx(pool, value))
+	if (!pool_track(pool, value))
 	{
 		free(value);
 		return (0);
 	}
 	if (!str_append_free(pool, result, value))
-		return (pool_free_ctx(pool, value), 0);
-	pool_free_ctx(pool, value);
+		return (pool_free_one(pool, value), 0);
+	pool_free_one(pool, value);
 	(*i)++;
 	return (1);
 }

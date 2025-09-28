@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/17 17:24:57 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/26 13:29:45 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/27 15:11:40 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -33,7 +33,7 @@ void	initialise_data(t_fork *data, t_cmd *cmd, t_expander *exp)
 	data->fd[0] = -1;
 	data->fd[1] = -1;
 	data->in_fd = 0;
-	data->pid = pool_alloc_ctx(exp->pool, sizeof(pid_t) * count_cmds(cmd));
+	data->pid = pool_alloc(exp->pool, sizeof(pid_t) * count_cmds(cmd));
 	if (!data->pid)
 		error_exit(exp->pool, exp->my_env, "execute: malloc data->pid fail");
 	data->status = 0;
@@ -74,7 +74,7 @@ void	command_not_found_exit(t_expander *exp, char *cmd)
 	ft_putstr_fd("minishell: command not found: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd("\n", 2);
-	pool_cleanup_ctx(exp->pool);
+	pool_cleanup(exp->pool);
 	exit(127);
 }
 
@@ -98,6 +98,6 @@ void	exec_failure_exit(t_expander *exp, char *cmd)
 		ft_putstr_fd(cmd, 2);
 		ft_putstr_fd(": execve failed\n", 2);
 	}
-	pool_cleanup_ctx(exp->pool);
+	pool_cleanup(exp->pool);
 	exit(126);
 }

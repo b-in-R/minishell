@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+         #
+#    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/09/26 13:28:31 by albertooutu      ###   ########.fr        #
+#    Updated: 2025/09/28 16:58:11 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,6 +82,8 @@ PARSER = create_cmd.c \
 		syntax_checker.c \
 		heredoc.c \
 		heredoc_utils.c \
+		heredoc_utils2.c \
+		heredoc_p_process_ifs.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \
@@ -110,41 +112,46 @@ OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
 
 INCLUDES = -I. -I$(LIBFT_DIR)
 
-all: $(OBJS_DIR) $(NAME)
+all: start_banner  $(OBJS_DIR) $(NAME)
+	@printf "$(GREEN)[    ok     ]\n$(RST)"
+
+start_banner:
+	@printf  "$(BLUE)[compilation]\n$(RST)"
 
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
+
+# ">/dev/null" mode silencieux
 $(LIBFT_A):
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) >/dev/null
 
 $(NAME): $(OBJS) $(LIBFT_A)
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME)
-	@{ \
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME); \
-	}	2> .build_err && \
-		(printf "$(GREEN)[compilation ok]$(RST)\n"; rm -f .build_err) || \
-		(cat .build_err; rm -f .build_err; false)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME) \
+		2> .build_err && rm -f .build_err \
+		|| (cat .build_err; rm -f .build_err; false)
 
+
+# suppr "2> .build_err" mode silencieux
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
 		|| (cat .build_err && rm -f .build_err && false)
 
 
+# suppr "2> .build_err" mode silencieux
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
 		|| (cat .build_err && rm -f .build_err && false)
 
 clean:
 	@$(RM) $(OBJS)
-	@$(MAKE) -C $(LIBFT_DIR) clean
-	@printf "$(BLUE)[srcs clean]$(RST)\n"
+	@$(MAKE) -C $(LIBFT_DIR) clean >/dev/null
 
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RMDIR) $(OBJS_DIR)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(LIBFT_DIR) fclean >/dev/null
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re start_banner

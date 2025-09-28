@@ -100,10 +100,10 @@ int	process_segment(char *line, size_t start, size_t len,
 
 	if (len == 0)
 		return (1);
-	slice = pool_substr_ctx(exp->pool, line, start, len);
+	slice = pool_substr(exp->pool, line, start, len);
 	if (!slice)
 		return (0);
 	process_tokens(slice, exp);
-	pool_free_ctx(exp->pool, slice);
+	pool_free_one(exp->pool, slice);
 	return (1);
 }

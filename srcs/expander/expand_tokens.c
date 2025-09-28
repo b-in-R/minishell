@@ -3,18 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   expand_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:50 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/25 17:26:25 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/27 20:39:27 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	handle_dollar(t_pool *pool, const char *word, int *i, char **result,
-		t_expander *exp);
+int	handle_dollar(t_expand *expand, const char *word, int *i);
 int	append_char(t_pool *pool, char **str, char c);
+
+static int	init_expand_state(t_pool *pool, t_expander *exp,
+		char **result, t_expand *expand)
+{
+	*result = pool_strdup(pool, "");
+	if (!(*result))
+		return (0);
+	expand->pool = pool;
+	expand->exp = exp;
+	expand->result = result;
+	return (1);
+}
 
 /*
 * Used to track whether you're inside single quotes (')
@@ -47,7 +58,7 @@ int	expand_tokens(t_token *tokens, t_expander *exp)
 			new_value = expand_word(exp->pool, tokens->value, exp);
 			if (!new_value)
 				return (0);
-			pool_free_ctx(tokens->pool, tokens->value);
+			pool_free_one(tokens->pool, tokens->value);
 			tokens->value = new_value;
 		}
 		tokens = tokens->next;
@@ -63,27 +74,27 @@ int	expand_tokens(t_token *tokens, t_expander *exp)
 */
 char	*expand_word(t_pool *pool, const char *word, t_expander *exp)
 {
-	int		i;
-	int		in_single;
-	int		in_double;
-	char	*result;
+	int			i;
+	int			in_single;
+	int			in_double;
+	char		*result;
+	t_expand	expand;
 
+	if (!init_expand_state(pool, exp, &result, &expand))
+		return (NULL);
 	i = 0;
 	in_single = 0;
 	in_double = 0;
-	result = pool_strdup_ctx(pool, "");
-	if (!result)
-		return (NULL);
 	while (word[i])
 	{
 		update_quote_flags(word[i], &in_single, &in_double);
 		if (word[i] == '$')
 		{
-			if (!handle_dollar(pool, word, &i, &result, exp))
-				return (pool_free_ctx(pool, result), NULL);
+			if (!handle_dollar(&expand, word, &i))
+				return (pool_free_one(pool, result), NULL);
 		}
 		else if (!append_char(pool, &result, word[i++]))
-			return (pool_free_ctx(pool, result), NULL);
+			return (pool_free_one(pool, result), NULL);
 	}
 	return (result);
 }
@@ -96,18 +107,18 @@ char	*join_tokens(t_pool *pool, t_token *tokens)
 	char	*result;
 	t_token	*curr;
 
-	result = pool_strdup_ctx(pool, "");
+	result = pool_strdup(pool, "");
 	if (!result)
 		return (NULL);
 	curr = tokens;
 	while (curr)
 	{
 		if (!str_append_free(pool, &result, curr->value))
-			return (pool_free_ctx(pool, result), NULL);
+			return (pool_free_one(pool, result), NULL);
 		if (curr->next)
 		{
 			if (!str_append_free(pool, &result, " "))
-				return (pool_free_ctx(pool, result), NULL);
+				return (pool_free_one(pool, result), NULL);
 		}
 		curr = curr->next;
 	}
