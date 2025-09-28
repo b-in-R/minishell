@@ -6,14 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:50 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/27 20:39:27 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 20:01:53 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	handle_dollar(t_expand *expand, const char *word, int *i);
-int	append_char(t_pool *pool, char **str, char c);
 
 static int	init_expand_state(t_pool *pool, t_expander *exp,
 		char **result, t_expand *expand)

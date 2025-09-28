@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 22:39:40 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:00:59 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:56:11 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MEM_MANAGER_H
 
 # include "includes.h"
+# include "../libft/libft.h"
 
 // Struct suivi d'allocations
 typedef struct s_memnode

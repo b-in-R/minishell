@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:34:07 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 22:43:15 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "mem_manager.h"
 
 /*-------------Structures--------------*/
+
 /* Token types recognized in the input line
 * 	WORD,         // A simple word (ex: ls, echo, etc. command or argument)
 	PIPE,         // Pipe symbol '|' to chain commands
@@ -71,14 +72,15 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_lexer_ctx
+// Struct for calls in lexer
+typedef struct s_lexer
 {
 	t_token		**tokens;
 	char		*line;
 	size_t		*index;
 	int			*last_space;
 	t_pool		*pool;
-}	t_lexer_ctx;
+}	t_lexer;
 
 /* Represents a complete shell command with its arguments and redirections
 *  	char	**args;    // list of arguments for the command
@@ -104,6 +106,7 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+// Struct for calls in expander
 typedef struct s_expand
 {
 	t_pool		*pool;
@@ -111,9 +114,7 @@ typedef struct s_expand
 	char		**result;
 }	t_expand;
 
-/*
-*	Struct for execute.c
-*/
+//	Struct for execute.c
 typedef struct s_fork
 {
 	int		fd[2];
@@ -143,8 +144,6 @@ extern volatile sig_atomic_t	g_signal;
 // /utils/utils.c
 void	error_exit(t_pool *pool, char **my_env, const char *str);
 void	cleanup_parent(t_pool *pool, t_cmd *cmd, int *in_fd, int *fd);
-
-// /utils/utils.c
 //void	print_cmds(t_cmd *cmds);
 //void	print_detailled_cmds(t_cmd *cmds);
 
@@ -220,10 +219,10 @@ int		env_replace(t_pool *pool, char **env, const char *key,
 t_token	*create_token(t_pool *pool, t_token_type type, char *value);
 t_token	*lexer(char *line, t_expander *exp);
 void	add_token(t_token **list, t_token *new_token);
-void	handle_pipe(t_lexer_ctx *ctx);
-void	handle_redirection(t_lexer_ctx *ctx);
-void	handle_word(t_lexer_ctx *ctx);
-void	handle_quotes(t_lexer_ctx *ctx);
+void	handle_pipe(t_lexer *lex);
+void	handle_redirection(t_lexer *lex);
+void	handle_word(t_lexer *lex);
+void	handle_quotes(t_lexer *lex);
 
 /*--------------Parser---------------*/
 int		process_token(t_expander *exp, t_token **tokens, t_cmd **current);
