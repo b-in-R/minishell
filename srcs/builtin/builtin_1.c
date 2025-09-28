@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/26 12:45:08 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/28 19:05:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <errno.h>
-#include <limits.h>
-#include <string.h>
 
 static int	resolve_target(t_expander *exp, char **args,
 		char **target, int *print_new)

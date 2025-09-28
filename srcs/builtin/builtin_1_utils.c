@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/26 12:47:33 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/28 19:05:33 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <errno.h>
-#include <limits.h>
-#include <string.h>
 
 // Prints arguments separated by spaces, handling the optional -n flag.
 int	has_only_n(char *arg)

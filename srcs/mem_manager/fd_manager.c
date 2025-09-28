@@ -6,18 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 21:01:50 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/20 08:16:37 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:27:36 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
 #include "../../includes/mem_manager.h"
-
-#ifndef O_CLOEXEC
-# define O_CLOEXEC 0
-#endif
 
 // Registers an already opened file descriptor for later cleanup.
 int	pool_track_fd(t_pool *p, int fd)

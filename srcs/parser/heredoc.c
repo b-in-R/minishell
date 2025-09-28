@@ -6,15 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 09:55:28 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/28 16:56:21 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:29:23 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <errno.h>
-
-int	append_char(t_pool *pool, char **str, char c);
-int	handle_dollar(t_expand *expand, const char *str, int *i);
 
 static void	process_heredoc_line(int pipe_fd[2], t_cmd *cmd,
 				t_expander *exp, char *line)

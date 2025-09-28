@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:47:55 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/23 00:16:47 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:26:08 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	is_simple_assignment(const char *line)
 }
 
 /*
-** Ajoute/maj dans local_env UNIQUEMENT (pas d'export).
-** *env peut être NULL -> set_env gère la création du tableau.
-** Retour: 0 ok, 1 erreur (alloc ou identifiant invalide).
+* Ajoute/maj dans local_env UNIQUEMENT (pas d'export).
+* (*env) peut être NULL -> set_env gère la création du tableau.
+* Retour: 0 ok, 1 erreur (alloc ou identifiant invalide).
 */
 int	add_env_variable(t_pool *pool, char ***env, const char *line)
 {

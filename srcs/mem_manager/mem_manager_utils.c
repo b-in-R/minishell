@@ -6,12 +6,10 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/20 08:01:45 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/20 08:05:16 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:27:54 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "../../libft/libft.h"
 #include "../../includes/mem_manager.h"
 
 // Initialises the allocation/FD tracking lists inside the pool.

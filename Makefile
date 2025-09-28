@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/09/28 18:34:28 by rabiner          ###   ########.fr        #
+#    Updated: 2025/09/28 19:12:52 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,6 @@ BUILT = builtin_1.c \
 
 EXPAND_DIR = expander
 EXPAND = expand_tokens.c \
-		expand_utils.c \
 		get_env.c \
 		get_env_utils.c \
 		var.c \

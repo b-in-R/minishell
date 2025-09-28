@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:43:15 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/27 20:45:43 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:19:54 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	exp_variable(t_expand *expand, const char *str, int *i)
 	int		start;
 
 	start = *i;
-	while (is_var_char(str[*i]))
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
 		(*i)++;
 	key = pool_substr(expand->pool, str, start, *i - start);
 	if (!key)
@@ -65,7 +65,7 @@ int	handle_dollar(t_expand *expand, const char *str, int *i)
 				expand->exp, i));
 	if (next == '$')
 		return (expand_pid(expand->pool, expand->result, i));
-	if (!is_var_char(next))
+	if (!(ft_isalnum(next) || next == '_'))
 	{
 		if (!append_char(expand->pool, expand->result, '$'))
 			return (0);

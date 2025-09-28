@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 22:54:25 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/26 12:57:53 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/28 19:31:42 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-#define PROMPT "\001\033[32m\002minishell> \001\033[0m\002"
 
 static void	init_shell(t_expander *exp, t_pool *global, char **envp)
 {

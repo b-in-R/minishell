@@ -6,12 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 17:17:30 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:08:11 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <errno.h>
 
 // Resolves the executable path then calls execve or exits on failure.
 void	execute_command(t_cmd *cmd, t_expander *exp)

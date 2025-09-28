@@ -6,12 +6,10 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 16:55:02 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/27 20:54:33 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:28:33 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stddef.h>
-#include "../../libft/libft.h"
 #include "../../includes/mem_manager.h"
 
 // Creates a substring using pool-managed memory.

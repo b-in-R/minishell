@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_cmd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:06:32 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/26 12:32:16 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/28 19:28:50 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,41 +87,6 @@ void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd)
 * count → nombre mots dans le tableau;
 * +1 → pour le nouveau qu'on rajoute ; +1 pour NULL;
 */
-/*int	add_arg(t_pool *pool, char ***args, const char *value)
-{
-	char	**new_args;
-	char	**old_args;
-	int		count;
-	int		i;
-
-	count = 0;
-	old_args = *args;
-	if (*args)
-	{
-		while (old_args[count])
-			count++;
-	}
-	new_args = pool_alloc(pool, sizeof(char *) * (count + 2));
-	if (!new_args)
-		return (0);
-	i = 0;
-	while (i < count)
-	{
-		new_args[i] = old_args[i];
-		i++;
-	}
-	new_args[i] = pool_strdup(pool, value);
-	if (!new_args[i])
-	{
-		pool_free_one(pool, new_args);
-		return (0);
-	}
-	new_args[i + 1] = NULL;
-	*args = new_args;
-	if (old_args)
-		pool_free_one(pool, old_args);
-	return (1);
-}*/
 int	add_arg(t_pool *pool, char ***args, const char *value)
 {
 	char	**new_args;

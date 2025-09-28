@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_2_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/26 12:47:51 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/28 19:05:58 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <errno.h>
-#include <limits.h>
-#include <string.h>
 
 void	capture_oldpwd(t_expander *exp, char *buf)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/25 16:42:40 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/28 19:29:51 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,37 +61,6 @@ static int	append_to_last_arg(t_pool *pool, t_cmd *cmd, const char *value)
 * 		- command 2: args = {"grep", "test"} → infile = "file.txt"
 *
 */
-/*int	process_token(t_expander *exp, t_token **tokens, t_cmd **current)
-{
-	if ((*tokens)->type == WORD)
-	{
-		if ((*tokens)->leading_space == 0 && (*current)->args
-			&& (*current)->args[0])
-		{
-			if (!append_to_last_arg(exp->pool, *current, (*tokens)->value))
-				return (0);
-		}
-		else if (!add_arg(exp->pool, &(*current)->args, (*tokens)->value))
-			return (0);
-		*tokens = (*tokens)->next;
-	}
-	else if ((*tokens)->type == REDIR_IN || (*tokens)->type == REDIR_OUT
-		|| (*tokens)->type == REDIR_APPEND || (*tokens)->type == HEREDOC)
-	{
-		if ((*tokens)->next == NULL || (*tokens)->next->type != WORD)
-			return (printf("Syntax error:no filename after redirection\n"), 0);
-		handle_redirections(exp, *current, *tokens);
-		*tokens = (*tokens)->next->next;
-	}
-	else if ((*tokens)->type == PIPE)
-	{
-		*current = NULL;
-		*tokens = (*tokens)->next;
-	}
-	else
-		*tokens = (*tokens)->next;
-	return (1);
-}*/
 int	process_token(t_expander *exp, t_token **tokens, t_cmd **current)
 {
 	if ((*tokens)->type == WORD)
@@ -174,43 +143,6 @@ char	*remove_outer_quotes(t_pool *pool, const char *str)
 /*
 *	Updates the current command's redirection fields based on the token type.
 */
-/*void	handle_redirections(t_expander *exp, t_cmd *current, t_token *tokens)
-{
-	char	*value;
-
-	value = tokens->next->value;
-	if (tokens->type == REDIR_IN)
-	{
-		if (current->infile)
-			pool_free_one(exp->pool, current->infile);
-		current->infile = pool_strdup(exp->pool, value);
-	}
-	else if (tokens->type == REDIR_OUT)
-	{
-		if (current->outfile)
-			pool_free_one(exp->pool, current->outfile);
-		current->outfile = pool_strdup(exp->pool, value);
-		current->append = 0;
-	}
-	else if (tokens->type == REDIR_APPEND)
-	{
-		if (current->outfile)
-			pool_free_one(exp->pool, current->outfile);
-		current->outfile = pool_strdup(exp->pool, value);
-		current->append = 1;
-	}
-	else if (tokens->type == HEREDOC)
-	{
-		if (current->delimiter)
-			pool_free_one(exp->pool, current->delimiter);
-		current->heredoc = 1;
-		current->delimiter = remove_outer_quotes(exp->pool, value);
-		if (tokens->next->quoted_type != NO_QUOTE)
-			current->expand_heredoc = 0;
-		else
-			current->expand_heredoc = 1;
-	}
-}*/
 void	handle_redirections(t_expander *exp, t_cmd *cmd, t_token *tok)
 {
 	char	*value;

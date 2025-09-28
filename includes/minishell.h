@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:01:20 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:34:07 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,6 @@
 # include "../libft/libft.h"
 # include "includes.h"
 # include "mem_manager.h"
-
-
-# ifndef PATH_MAX
-#  define PATH_MAX 4096
-# endif
 
 /*-------------Structures--------------*/
 /* Token types recognized in the input line
@@ -108,6 +103,13 @@ typedef struct s_cmd
 	char			*delimiter;
 	struct s_cmd	*next;
 }	t_cmd;
+
+typedef struct s_expand
+{
+	t_pool		*pool;
+	t_expander	*exp;
+	char		**result;
+}	t_expand;
 
 /*
 *	Struct for execute.c
@@ -253,13 +255,6 @@ int		track_heredoc_fds(t_expander *exp, int pipe_fd[2]);
 int		heredoc_fork_error(t_expander *exp, int pipe_fd[2]);
 int		init_heredoc_pipe(t_cmd *cmd, t_expander *exp, int pipe_fd[2]);
 
-typedef struct s_expand
-{
-	t_pool		*pool;
-	t_expander	*exp;
-	char		**result;
-}			t_expand;
-
 /*--------------Expander--------------*/
 int		expand_tokens(t_token *tokens, t_expander *exp);
 char	*expand_word(t_pool *pool, const char *word, t_expander *exp);
@@ -270,7 +265,6 @@ int		exp_variable(t_expand *expand, const char *str, int *i);
 int		handle_dollar(t_expand *expand, const char *word, int *i);
 int		append_char(t_pool *pool, char **str, char c);
 int		str_append_free(t_pool *pool, char **s1, const char *s2);
-int		is_var_char(char c);
 int		add_env_variable(t_pool *pool, char ***env, const char *line);
 int		is_simple_assignment(const char *line);
 int		expand_exit_status(t_pool *pool, char **result,
