@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/09/28 16:58:11 by rabiner          ###   ########.fr        #
+#    Updated: 2025/09/28 18:34:28 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ BUILT = builtin_1.c \
 		builtin_1_utils.c \
 		builtin_2.c \
 		builtin_2_utils.c \
+		builtin_export_utils.c \
 		check_builtin.c \
 
 EXPAND_DIR = expander

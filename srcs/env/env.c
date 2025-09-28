@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 18:51:32 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/12 01:53:05 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 18:04:01 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	free_env(t_pool *pool, char **my_env)
 }
 
 // Prints each environment entry on its own line.
-void	print_env(char **env)
+int	print_env(char **env)
 {
 	int	i;
 
@@ -117,4 +117,5 @@ void	print_env(char **env)
 		printf("%s\n", env[i]);
 		i++;
 	}
+	return (0);
 }

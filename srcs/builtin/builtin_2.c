@@ -3,14 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:50:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/26 12:45:22 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/09/28 18:32:11 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static int	export_print(char **env)
+{
+	int		index;
+	char	**sorted;
+
+	sorted = export_copy(env);
+	if (!sorted)
+		return (export_alloc_error());
+	export_sort(sorted);
+	index = 0;
+	while (sorted[index])
+	{
+		export_print_entry(sorted[index]);
+		index++;
+	}
+	free(sorted);
+	return (0);
+}
 
 // Promotes NAME from local env to export when no value is provided.
 static int	export_name_only(t_expander *exp, const char *name)
@@ -55,7 +74,7 @@ int	ft_export(t_expander *exp, char **args)
 	i = 1;
 	ret = 0;
 	if (!args[1])
-		return (print_env(exp->my_env), 0);
+		return (export_print(exp->my_env));
 	while (args[i])
 	{
 		if (export_handle_arg(exp, args[i]))
@@ -90,11 +109,4 @@ int	ft_unset(t_expander *exp, char **args)
 		i++;
 	}
 	return (ret);
-}
-
-// Displays every exported environment entry.
-int	ft_env(char **my_env)
-{
-	print_env(my_env);
-	return (0);
 }

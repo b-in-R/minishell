@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 16:57:33 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 18:33:52 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 # include <fcntl.h>
 # include <sys/wait.h>// a voir si obligatoire
 # include <errno.h>// a voir si obligatoire
+# include <limits.h> //
+
+# ifndef PATH_MAX
+#  define PATH_MAX 4096
+# endif
 
 /*-------------Structures--------------*/
 /* Token types recognized in the input line
@@ -146,8 +151,8 @@ void	error_exit(t_pool *pool, char **my_env, const char *str);
 void	cleanup_parent(t_pool *pool, t_cmd *cmd, int *in_fd, int *fd);
 
 // /utils/utils.c
-void	print_cmds(t_cmd *cmds);
-void	print_detailled_cmds(t_cmd *cmds);
+//void	print_cmds(t_cmd *cmds);
+//void	print_detailled_cmds(t_cmd *cmds);
 
 /*-------------Execution--------------*/
 // /execution/execute.c
@@ -182,12 +187,18 @@ int		cd_set_env(t_expander *exp, const char *key, const char *value);
 // /builtin/builtin_2.c
 int		ft_export(t_expander *exp, char **args);
 int		ft_unset(t_expander *exp, char **args);
-int		ft_env(char **my_env);
 void	capture_oldpwd(t_expander *exp, char *buf);
 int		export_alloc_error(void);
 int		export_promote_local(t_expander *exp, const char *name,
 			const char *val);
 int		export_without_value(t_expander *exp, const char *name);
+
+//  /builtin/builtin_export_utils.c
+int		export_count(char **env);
+char	**export_copy(char **env);
+void	export_sort(char **env);
+void	export_print_value(const char *value);
+void	export_print_entry(const char *entry);
 
 // /execution/path.c
 char	*find_command_path(t_expander *exp, const char *cmd);
@@ -198,7 +209,7 @@ void	release_tracked_entries(t_pool *pool, char **tab, int count);
 // /env/env.c
 char	**init_env(char **envp, t_pool *global);
 void	free_env(t_pool *pool, char **my_env);
-void	print_env(char **env);
+int		print_env(char **env);
 
 // env/env_utils.c
 int		set_env(t_pool *pool, char ***env, const char *arg);

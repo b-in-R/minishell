@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:09:00 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/02 17:47:36 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 18:03:15 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	execute_builtin(t_cmd *cmd, t_expander *exp)
 	if (!ft_strcmp(cmd->args[0], "unset"))
 		return (ft_unset(exp, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "env"))
-		return (ft_env(exp->my_env));
+		return (print_env(exp->my_env));
 	if (!ft_strcmp(cmd->args[0], "exit"))
 	{
 		pool_cleanup(exp->pool);
