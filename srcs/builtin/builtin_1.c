@@ -6,52 +6,11 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:05:43 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/30 18:27:59 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static int	resolve_target(t_expander *exp, char **args,
-		char **target, int *print_new)
-{
-	*print_new = 0;
-	if (!args[1])
-	{
-		*target = get_env(exp->my_env, "HOME");
-		if (!*target)
-			return (cd_error("HOME not set", NULL));
-		return (0);
-	}
-	if (!ft_strcmp(args[1], "-"))
-	{
-		*target = get_env(exp->my_env, "OLDPWD");
-		if (!*target)
-			return (cd_error("OLDPWD not set", NULL));
-		*print_new = 1;
-		return (0);
-	}
-	*target = args[1];
-	return (0);
-}
-
-static int	finalize_cd(t_expander *exp, char *oldpwd, int print_new)
-{
-	char	newpwd[PATH_MAX];
-
-	if (!getcwd(newpwd, PATH_MAX))
-		return (cd_error("error retrieving directory", strerror(errno)));
-	if (oldpwd[0] && cd_set_env(exp, "OLDPWD", oldpwd))
-		return (1);
-	if (cd_set_env(exp, "PWD", newpwd))
-		return (1);
-	if (print_new)
-	{
-		ft_putstr_fd(newpwd, STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
-	}
-	return (0);
-}
 
 int	ft_echo(char **args)
 {
