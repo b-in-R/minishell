@@ -6,12 +6,10 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 22:11:59 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/20 08:05:14 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:28:04 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include "../../libft/libft.h"
 #include "../../includes/mem_manager.h"
 
 // Allocates `n` bytes and registers the pointer in the pool list.
@@ -106,7 +104,7 @@ void	pool_clear(t_pool *p)
 }
 
 // Duplicates a C-string while recording it in the given pool.
-char	*pool_strdup_sys(t_pool *p, const char *s)
+char	*pool_strdup(t_pool *p, const char *s)
 {
 	size_t	len;
 	char	*dup;

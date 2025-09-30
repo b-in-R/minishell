@@ -6,13 +6,10 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 21:01:50 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/20 08:16:37 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:27:36 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
 #include "../../includes/mem_manager.h"
 
 // Registers an already opened file descriptor for later cleanup.
@@ -83,22 +80,13 @@ int	pool_open(t_pool *p, const char *path, int flags, int mode)
 	return (fd);
 }
 
-// Convenience wrapper that opens using the current global pool.
-int	pool_open_ctx(const char *path, int flags, int mode)
-{
-	return (pool_open(pool_get_context(), path, flags, mode));
-}
-
-// Opens a file, tracks it, and sets O_CLOEXEC when available.
+// Opens a file, tracks it, et ajoute O_CLOEXEC quand disponible.
 int	pool_open_coe(t_pool *p, const char *path, int flags, int mode)
 {
 	int	fd;
 	int	co_flags;
 
-	co_flags = flags;
-#ifdef O_CLOEXEC
-	co_flags |= O_CLOEXEC;
-#endif
+	co_flags = flags | O_CLOEXEC;
 	fd = pool_open(p, path, co_flags, mode);
 	if (fd < 0)
 		return (-1);

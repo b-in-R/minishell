@@ -6,32 +6,32 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 22:39:40 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/19 15:46:54 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:56:11 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MEM_MANAGER_H
 # define MEM_MANAGER_H
 
-# include <stddef.h>// c'est  pour quoi
-# include <sys/types.h>// c'est pour quoi
+# include "includes.h"
+# include "../libft/libft.h"
 
-// Struct suivi de malloc - free et fds
-typedef struct	s_memnode
+// Struct suivi d'allocations
+typedef struct s_memnode
 {
 	void				*ptr;
 	struct s_memnode	*next;
 }	t_memnode;
 
 // Struct suivi de fd
-typedef struct	s_fdnode
+typedef struct s_fdnode
 {
 	int				fd;
 	struct s_fdnode	*next;
 }	t_fdnode;
 
-// Struct head malloc - free et fd
-typedef struct	s_pool
+// Struct head allocs et fd
+typedef struct s_pool
 {
 	t_memnode	*mhead;
 	t_fdnode	*fhead;
@@ -44,33 +44,16 @@ int		pool_track(t_pool *p, void *ptr);
 void	pool_free_one(t_pool *p, void *ptr);
 void	pool_clear(t_pool *p);
 void	pool_cleanup(t_pool *p);
-char	*pool_strdup_sys(t_pool *p, const char *s);
-char	*pool_substr_sys(t_pool *p, const char *s, unsigned int start, size_t len);
-char	*pool_strjoin_sys(t_pool *p, const char *s1, const char *s2);
-void	pool_detach_fd_node(t_pool *p, t_fdnode *prev, t_fdnode *cur);
-void	pool_set_context(t_pool *pool);
-t_pool	*pool_get_context(void);
-void	pool_cleanup_ctx(void);
-
-# define pool_alloc_ctx(size) pool_alloc(pool_get_context(), (size))
-# define pool_track_ctx(ptr) pool_track(pool_get_context(), (ptr))
-# define pool_free_ctx(ptr) pool_free_one(pool_get_context(), (ptr))
-# define pool_open_coe_ctx(path, flags, mode) \
-	pool_open_coe(pool_get_context(), (path), (flags), (mode))
-# define pool_close_ctx(fd) pool_close_one(pool_get_context(), (fd))
-# define pool_close_all_ctx() pool_close_all(pool_get_context())
-# define pool_strdup_ctx(str) pool_strdup_sys(pool_get_context(), (str))
-# define pool_substr_ctx(str, start, len) \
-	pool_substr_sys(pool_get_context(), (str), (start), (len))
-# define pool_strjoin_ctx(s1, s2) \
-	pool_strjoin_sys(pool_get_context(), (s1), (s2))
+char	*pool_strdup(t_pool *p, const char *s);
+char	*pool_substr(t_pool *p, const char *s, unsigned int start, size_t len);
+char	*pool_strjoin(t_pool *p, const char *s1, const char *s2);
 
 // fd_manager.c
 int		pool_track_fd(t_pool *p, int fd);
 int		pool_close_one(t_pool *p, int fd);
 int		pool_open(t_pool *p, const char *path, int flags, int mode);
-int		pool_open_ctx(const char *path, int flags, int mode);
 int		pool_open_coe(t_pool *p, const char *path, int flags, int mode);
 void	pool_close_all(t_pool *p);
+void	pool_detach_fd_node(t_pool *p, t_fdnode *prev, t_fdnode *cur);
 
 #endif

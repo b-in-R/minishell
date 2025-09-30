@@ -3,33 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/08 11:05:27 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:05:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// Prints arguments separated by spaces, handling the optional -n flag.
+static int	resolve_target(t_expander *exp, char **args,
+		char **target, int *print_new)
+{
+	*print_new = 0;
+	if (!args[1])
+	{
+		*target = get_env(exp->my_env, "HOME");
+		if (!*target)
+			return (cd_error("HOME not set", NULL));
+		return (0);
+	}
+	if (!ft_strcmp(args[1], "-"))
+	{
+		*target = get_env(exp->my_env, "OLDPWD");
+		if (!*target)
+			return (cd_error("OLDPWD not set", NULL));
+		*print_new = 1;
+		return (0);
+	}
+	*target = args[1];
+	return (0);
+}
+
+static int	finalize_cd(t_expander *exp, char *oldpwd, int print_new)
+{
+	char	newpwd[PATH_MAX];
+
+	if (!getcwd(newpwd, PATH_MAX))
+		return (cd_error("error retrieving directory", strerror(errno)));
+	if (oldpwd[0] && cd_set_env(exp, "OLDPWD", oldpwd))
+		return (1);
+	if (cd_set_env(exp, "PWD", newpwd))
+		return (1);
+	if (print_new)
+	{
+		ft_putstr_fd(newpwd, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+	}
+	return (0);
+}
+
 int	ft_echo(char **args)
 {
 	int	i;
-	int	j;
 	int	newline;
 
-	i = 1;
-	newline = 1;
-	while (args[i] && args[i][0] == '-' && args[i][1] == 'n')
-	{
-		j = 1;
-		while (args[i][j++] == 'n')
-		if (args[i][j - 1] != '\0')
-			break ;
-		newline = 0;
-		i++;
-	}
+	i = skip_n_flags(args);
+	newline = (i == 1);
 	while (args[i])
 	{
 		write(1, args[i], ft_strlen(args[i]));
@@ -42,36 +72,29 @@ int	ft_echo(char **args)
 	return (0);
 }
 
-// Changes directory, falling back to $HOME when no path is given.
-int	ft_cd(char **my_env, char **args)
+// Changes directory, updates PWD/OLDPWD, and mirrors Bash error reporting.
+int	ft_cd(t_expander *exp, char **args)
 {
-	char	*path;
+	char	oldpwd[PATH_MAX];
+	char	*target;
+	int		print_new;
 
-	if (!args[1])
-	{
-		path = get_env(my_env, "HOME");
-		if (!path)
-		{
-			write(2, "minishell: cd: 'HOME' not set\n", 30);
-			return (1);
-		}
-	}
-	else
-		path = args[1];
-	if (!path || chdir(path) == -1)
-	{
-		write(2, "minishell: cd: n'est pas un dossier: ", 37);
-		write(2, path, ft_strlen(path));
-		write(2, "\n", 1);
+	print_new = 0;
+	if (args[1] && args[2])
+		return (cd_error("too many arguments", NULL));
+	capture_oldpwd(exp, oldpwd);
+	if (resolve_target(exp, args, &target, &print_new))
 		return (1);
-	}
-	return (0);
+	if (chdir(target) == -1)
+		return (cd_errno(target));
+	return (finalize_cd(exp, oldpwd, print_new));
 }
 
 // Outputs the absolute path of the current working directory.
 int	ft_pwd(char **my_env, char **args)
 {
 	char	cwd[1024];
+	char	*msg;
 
 	(void)args;
 	if (getcwd(cwd, sizeof(cwd)))
@@ -80,6 +103,10 @@ int	ft_pwd(char **my_env, char **args)
 		write(STDOUT_FILENO, "\n", 1);
 		return (0);
 	}
-	error_exit(my_env, "ft_pwd");
+	(void)my_env;
+	msg = strerror(errno);
+	write(STDERR_FILENO, "minishell: pwd: ", 16);
+	write(STDERR_FILENO, msg, ft_strlen(msg));
+	write(STDERR_FILENO, "\n", 1);
 	return (1);
 }

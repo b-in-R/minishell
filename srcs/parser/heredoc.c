@@ -6,93 +6,102 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 09:55:28 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/20 00:30:23 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:29:23 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*expand_variables(const char *line, t_expander *exp)
+static void	process_heredoc_line(int pipe_fd[2], t_cmd *cmd,
+				t_expander *exp, char *line)
 {
-	t_token	*tokens;
-	char	*result;
-
-	tokens = lexer((char *)line);
-	if (!tokens)
-		return (pool_strdup_ctx(""));
-	expand_tokens(tokens, exp);
-	result = join_tokens(tokens);
-	free_tokens(tokens);
-	return (result);
+	if (!pool_track(exp->pool, line))
+		handle_pool_track_failure(line, exp, pipe_fd[1]);
+	if (ft_strcmp(line, cmd->delimiter) == 0)
+	{
+		pool_free_one(exp->pool, line);
+		heredoc_child_exit(exp, pipe_fd[1], 0);
+	}
+	if (!push_line(pipe_fd[1], line, exp, cmd))
+	{
+		pool_free_one(exp->pool, line);
+		heredoc_child_exit(exp, pipe_fd[1], 1);
+	}
+	pool_free_one(exp->pool, line);
 }
 
+/*
+** Gère la boucle readline du heredoc: signaux, expansions et écriture sécurisée.
+*/
 static void	heredoc_child_process(int pipe_fd[2], t_cmd *cmd, t_expander *exp)
 {
 	char	*line;
-	char	*expanded_line;
 
-	signal(SIGINT, SIG_DFL);
-	pool_close_ctx(pipe_fd[0]);
+	signal(SIGINT, sigint_heredoc);
+	signal(SIGQUIT, SIG_IGN);
+	pool_close_one(exp->pool, pipe_fd[0]);
 	while (1)
 	{
+		g_signal = 0;
 		line = readline("> ");
 		if (!line)
 		{
-			pool_cleanup_ctx();
-			exit(0);
+			if (g_signal == SIGINT)
+			{
+				g_signal = 0;
+				heredoc_child_exit(exp, pipe_fd[1], 130);
+			}
+			heredoc_child_exit(exp, pipe_fd[1], 0);
 		}
-		pool_track_ctx(line);
-		if (ft_strcmp(line, cmd->delimiter) == 0)
-		{
-			pool_free_ctx(line);
-			pool_cleanup_ctx();
-			exit(0);
-		}
-		expanded_line = expand_variables(line, exp);
-		write(pipe_fd[1], expanded_line, ft_strlen(expanded_line));
-		write(pipe_fd[1], "\n", 1);
-		pool_free_ctx(line);
-		pool_free_ctx(expanded_line);
+		process_heredoc_line(pipe_fd, cmd, exp, line);
 	}
 }
 
-static int	heredoc_parent_process(int pipe_fd[2], pid_t pid, t_cmd *cmd)
+/*
+** Attend le fils heredoc, traduit son statut et restaure les handlers parents.
+*/
+static int	heredoc_parent_process(int pipe_fd[2], pid_t pid, t_cmd *cmd,
+				t_expander *exp)
 {
-	int	status;
+	int		status;
+	pid_t	wait_rc;
 
-	waitpid(pid, &status, 0);
-	pool_close_ctx(pipe_fd[1]);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-	{
-		pool_close_ctx(pipe_fd[0]);
-		cmd->in_fd = -1;
-		return (0);
-	}
+	wait_rc = waitpid(pid, &status, 0);
+	pool_close_one(exp->pool, pipe_fd[1]);
+	if (wait_rc == -1)
+		return (heredoc_wait_rc(cmd, exp, pipe_fd));
+	if (WIFSIGNALED(status))
+		return (heredoc_wifsignaled(cmd, exp, pipe_fd, status));
+	if (!WIFEXITED(status))
+		return (heredoc_wifexited(cmd, exp, pipe_fd));
+	if (WEXITSTATUS(status))
+		return (heredoc_exit(cmd, exp, pipe_fd, status));
 	cmd->in_fd = pipe_fd[0];
+	exp->last_status = 0;
+	setup_signals();
 	return (1);
 }
 
+/*
+** Prépare un heredoc: crée le pipe, fork, gère les erreurs et transmet l'in_fd.
+*/
 static int	process_single_heredoc(t_cmd *cmd, t_expander *exp)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
 
-	if (pipe(pipe_fd) == -1)
-		return (perror("pipe"), 0);
-	pool_track_fd(pool_get_context(), pipe_fd[0]);
-	pool_track_fd(pool_get_context(), pipe_fd[1]);
+	if (!init_heredoc_pipe(cmd, exp, pipe_fd))
+		return (0);
+	if (!track_heredoc_fds(exp, pipe_fd))
+		return (0);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == -1)
-	{
-		pool_close_ctx(pipe_fd[0]);
-		pool_close_ctx(pipe_fd[1]);
-		return (perror("fork"), 0);
-	}
+		return (heredoc_fork_error(exp, pipe_fd));
 	if (pid == 0)
 		heredoc_child_process(pipe_fd, cmd, exp);
-	else
-		return (heredoc_parent_process(pipe_fd, pid, cmd));
-	return (1);
+	return (heredoc_parent_process(pipe_fd, pid, cmd, exp));
 }
 
 /*

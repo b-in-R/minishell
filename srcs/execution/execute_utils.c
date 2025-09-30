@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 14:45:03 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/06 10:29:20 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/26 12:37:51 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <errno.h>
 
 // Counts how many command nodes compose the current pipeline.
 int	count_cmds(t_cmd *cmd)
@@ -32,9 +33,9 @@ void	initialise_data(t_fork *data, t_cmd *cmd, t_expander *exp)
 	data->fd[0] = -1;
 	data->fd[1] = -1;
 	data->in_fd = 0;
-	data->pid = pool_alloc_ctx(sizeof(pid_t) * count_cmds(cmd));
+	data->pid = pool_alloc(exp->pool, sizeof(pid_t) * count_cmds(cmd));
 	if (!data->pid)
-		error_exit(exp->my_env, "execute: malloc data->pid fail");
+		error_exit(exp->pool, exp->my_env, "execute: malloc data->pid fail");
 	data->status = 0;
 	data->last_status = 0;
 }
@@ -66,4 +67,37 @@ void	take_exit_code(int *i, int *j, t_fork *data)
 		}
 		(*j)++;
 	}
+}
+
+void	command_not_found_exit(t_expander *exp, char *cmd)
+{
+	ft_putstr_fd("minishell: command not found: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd("\n", 2);
+	pool_cleanup(exp->pool);
+	exit(127);
+}
+
+void	exec_failure_exit(t_expander *exp, char *cmd)
+{
+	if (errno == EACCES)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+	}
+	else if (errno == EISDIR)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": Is a directory\n", 2);
+	}
+	else
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": execve failed\n", 2);
+	}
+	pool_cleanup(exp->pool);
+	exit(126);
 }

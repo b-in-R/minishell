@@ -6,7 +6,7 @@
 #    By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:28:22 by rabiner           #+#    #+#              #
-#    Updated: 2025/09/20 08:06:49 by rabiner          ###   ########.fr        #
+#    Updated: 2025/09/28 19:12:52 by rabiner          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,11 +43,12 @@ EXEC =  execute.c \
 		execute_utils.c \
 		redirection.c \
 		path.c \
+		path_utils.c \
 
 MEM_DIR = mem_manager
 MEM =	fd_manager.c \
 		mem_manager.c \
-		pool_context.c \
+		mem_manager_utils.c \
 		pool_strings.c \
 
 ENV_DIR = env
@@ -57,12 +58,16 @@ ENV = env.c \
 
 BUILT_DIR = builtin
 BUILT = builtin_1.c \
+		builtin_1_utils.c \
 		builtin_2.c \
+		builtin_2_utils.c \
+		builtin_export_utils.c \
 		check_builtin.c \
 
 EXPAND_DIR = expander
 EXPAND = expand_tokens.c \
 		get_env.c \
+		get_env_utils.c \
 		var.c \
 
 LEXER_DIR = lexer
@@ -72,9 +77,13 @@ LEXER = create_token.c \
 
 PARSER_DIR = parser
 PARSER = create_cmd.c \
+		parser_utils.c \
 		parser.c \
 		syntax_checker.c \
 		heredoc.c \
+		heredoc_utils.c \
+		heredoc_utils2.c \
+		heredoc_p_process_ifs.c \
 
 SIGNAL_DIR = signals
 SIGNAL = signal.c \
@@ -82,6 +91,8 @@ SIGNAL = signal.c \
 UTILS_DIR = utils
 UTILS = utils.c \
 		free.c \
+		main_utils.c \
+		main_utils2.c \
 
 # Renvoi des dossiers et fichiers dans SRCS, mettre $(NOM_DIR)/, $(NOM)
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS)) \
@@ -101,41 +112,46 @@ OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
 
 INCLUDES = -I. -I$(LIBFT_DIR)
 
-all: $(OBJS_DIR) $(NAME)
+all: start_banner  $(OBJS_DIR) $(NAME)
+	@printf "$(GREEN)[    ok     ]\n$(RST)"
+
+start_banner:
+	@printf  "$(BLUE)[compilation]\n$(RST)"
 
 $(OBJS_DIR):
 	@mkdir -p $(OBJS_DIR)
 
+
+# ">/dev/null" mode silencieux
 $(LIBFT_A):
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) >/dev/null
 
 $(NAME): $(OBJS) $(LIBFT_A)
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME)
-	@{ \
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME); \
-	}	2> .build_err && \
-		(printf "$(GREEN)[compilation ok]$(RST)\n"; rm -f .build_err) || \
-		(cat .build_err; rm -f .build_err; false)
+	@$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT_A) $(LIBS) -o $(NAME) \
+		2> .build_err && rm -f .build_err \
+		|| (cat .build_err; rm -f .build_err; false)
 
+
+# suppr "2> .build_err" mode silencieux
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/*/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
 		|| (cat .build_err && rm -f .build_err && false)
 
 
+# suppr "2> .build_err" mode silencieux
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@ 2> .build_err \
 		|| (cat .build_err && rm -f .build_err && false)
 
 clean:
 	@$(RM) $(OBJS)
-	@$(MAKE) -C $(LIBFT_DIR) clean
-	@printf "$(BLUE)[srcs clean]$(RST)\n"
+	@$(MAKE) -C $(LIBFT_DIR) clean >/dev/null
 
 fclean: clean
 	@$(RM) $(NAME)
 	@$(RMDIR) $(OBJS_DIR)
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(LIBFT_DIR) fclean >/dev/null
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re start_banner

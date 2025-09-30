@@ -6,20 +6,19 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:09:00 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/02 17:47:36 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:06:52 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // renvoie sur la bonne fonction builtin
-// Dispatches the builtin implementation matching the command name.
 int	execute_builtin(t_cmd *cmd, t_expander *exp)
 {
 	if (!ft_strcmp(cmd->args[0], "echo"))
 		return (ft_echo(cmd->args));
 	if (!ft_strcmp(cmd->args[0], "cd"))
-		return (ft_cd(exp->my_env, cmd->args));
+		return (ft_cd(exp, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "pwd"))
 		return (ft_pwd(exp->my_env, cmd->args));
 	if (ft_strcmp(cmd->args[0], "export") == 0)
@@ -27,17 +26,16 @@ int	execute_builtin(t_cmd *cmd, t_expander *exp)
 	if (!ft_strcmp(cmd->args[0], "unset"))
 		return (ft_unset(exp, cmd->args));
 	if (!ft_strcmp(cmd->args[0], "env"))
-		return (ft_env(exp->my_env));
+		return (print_env(exp->my_env));
 	if (!ft_strcmp(cmd->args[0], "exit"))
 	{
-		pool_cleanup_ctx();
+		pool_cleanup(exp->pool);
 		exit(0);
 	}
 	return (1);
 }
 
 // Verifie si la commande entree est une builtin
-// Returns 1 when the command name matches a supported builtin.
 int	is_builtin(t_cmd *cmd)
 {
 	char	*name;

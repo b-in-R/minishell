@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 14:16:21 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/20 00:07:27 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/26 12:50:48 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	free_tokens(t_token *tokens)
+void	free_tokens(t_pool *pool, t_token *tokens)
 {
 	t_token	*tmp;
 
@@ -21,13 +21,12 @@ void	free_tokens(t_token *tokens)
 		tmp = tokens;
 		tokens = tokens->next;
 		if (tmp->value)
-			pool_free_ctx(tmp->value);
-		if (tmp)
-			pool_free_ctx(tmp);
+			pool_free_one(pool, tmp->value);
+		pool_free_one(pool, tmp);
 	}
 }
 
-void	free_cmds(t_cmd *cmds)
+void	free_cmds(t_pool *pool, t_cmd *cmds)
 {
 	t_cmd	*tmp;
 	int		i;
@@ -40,20 +39,20 @@ void	free_cmds(t_cmd *cmds)
 		{
 			i = 0;
 			while (tmp->args[i])
-				pool_free_ctx(tmp->args[i++]);
-			pool_free_ctx(tmp->args);
+				pool_free_one(pool, tmp->args[i++]);
+			pool_free_one(pool, tmp->args);
 		}
 		if (tmp->infile)
-			pool_free_ctx(tmp->infile);
+			pool_free_one(pool, tmp->infile);
 		if (tmp->outfile)
-			pool_free_ctx(tmp->outfile);
+			pool_free_one(pool, tmp->outfile);
 		if (tmp->delimiter)
-			pool_free_ctx(tmp->delimiter);
-		pool_free_ctx(tmp);
+			pool_free_one(pool, tmp->delimiter);
+		pool_free_one(pool, tmp);
 	}
 }
 
-void	free_allocs(char **tofree)
+void	free_allocs(t_pool *pool, char **tofree)
 {
 	int	i;
 
@@ -64,10 +63,36 @@ void	free_allocs(char **tofree)
 		{
 			while (tofree[i])
 			{
-				pool_free_ctx(tofree[i]);
+				pool_free_one(pool, tofree[i]);
 				i++;
 			}
 		}
-		pool_free_ctx(tofree);
+		pool_free_one(pool, tofree);
 	}
+}
+
+int	assignments_only(t_token *tokens)
+{
+	while (tokens)
+	{
+		if (tokens->type != WORD || !is_simple_assignment(tokens->value))
+			return (0);
+		tokens = tokens->next;
+	}
+	return (1);
+}
+
+t_token	*discard_assignment_prefix(t_token *tokens, t_pool *pool)
+{
+	t_token	*next;
+
+	while (tokens && tokens->type == WORD
+		&& is_simple_assignment(tokens->value))
+	{
+		next = tokens->next;
+		pool_free_one(pool, tokens->value);
+		pool_free_one(pool, tokens);
+		tokens = next;
+	}
+	return (tokens);
 }

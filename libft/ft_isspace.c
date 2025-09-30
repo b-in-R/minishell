@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 17:15:10 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/22 22:53:30 by rabiner          ###   ########.fr       */
+/*   Created: 2025/09/22 21:21:30 by rabiner           #+#    #+#             */
+/*   Updated: 2025/09/22 21:38:35 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strcmp(const char *s1, const char *s2)
+int	ft_isspace(int c)
 {
-	while (*s1 && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-	}
-	return ((unsigned char)*s1 - (unsigned char)*s2);
+	if ((c >= '\t' && c <= '\r') || c == ' ')
+		return (1);
+	else
+		return (0);
 }

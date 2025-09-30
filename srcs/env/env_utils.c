@@ -6,127 +6,111 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:42:45 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/12 00:45:47 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/28 19:07:42 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// Creates a fresh environment array when none exists yet.
-static char	**set_no_env(char *key, const char *arg)// allocs
+static void	copy_env_entries(char **dst, char **src, int size)
 {
-	char	**new_env;
-
-	new_env = pool_alloc_ctx(sizeof(char *) * 2);
-	if (!new_env)
-	{
-		pool_free_ctx(key);
-		return (NULL);
-	}
-	new_env[0] = pool_strdup_ctx(arg);
-	if (!new_env[0])
-	{
-		pool_free_ctx(new_env);
-		pool_free_ctx(key);
-		return (NULL);
-	}
-	new_env[1] = NULL;
-	pool_free_ctx(key);
-	return (new_env);
-}
-
-// Updates an existing variable if `key` already exists in env.
-static int	add_entry(char **env, char *key, int len, const char *arg)
-{
-	char	*new_entry;
-	int		i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp(env[i], key, len) && env[i][len] == '=')
-		{
-		new_entry = pool_strdup_ctx(arg);
-		if (!new_entry)
-		{
-			pool_free_ctx(key);
-			return (1);
-		}
-		pool_free_ctx(env[i]);
-		env[i] = new_entry;
-		pool_free_ctx(key);
-		return (1);
-	}
-		i++;
-	}
-	return (0);
-}
-
-// Copies pointers into the enlarged env array and appends the new entry.
-int	free_copy_env_2(char **env, char *key, const char *arg, char **new_env)
-{
-	int	j;
 	int	i;
 
 	i = 0;
-	j = 0;
-	while (env[i])
+	while (i < size)
+	{
+		dst[i] = src[i];
 		i++;
-	while (j < i)
-	{
-		new_env[j] = env[j];
-		j++;
 	}
-	new_env[i] = pool_strdup_ctx(arg);
-	if (!new_env[i])
+}
+
+static int	env_extend(t_pool *pool, char ***ref, char **env, const char *arg)
+{
+	char	**new_env;
+	char	*dup;
+	int		size;
+
+	size = 0;
+	while (env[size])
+		size++;
+	new_env = pool_alloc(pool, sizeof(char *) * (size + 2));
+	if (!new_env)
+		return (1);
+	copy_env_entries(new_env, env, size);
+	dup = pool_strdup(pool, arg);
+	if (!dup)
 	{
-		pool_free_ctx(new_env);
-		pool_free_ctx(key);
+		pool_free_one(pool, new_env);
 		return (1);
 	}
+	new_env[size] = dup;
+	new_env[size + 1] = NULL;
+	pool_free_one(pool, env);
+	*ref = new_env;
 	return (0);
 }
 
-// Grows the environment array and duplicates the new assignment.
-static char	**free_copy_env(char **env, char *key, const char *arg)
+static int	env_create(t_pool *pool, char ***ref, const char *arg, char *key)
 {
 	char	**new_env;
-	int		i;
 
-	i = 0;
-	while (env[i])
-		i++;
-	new_env = pool_alloc_ctx(sizeof(char *) * (i + 2));
+	new_env = pool_alloc(pool, sizeof(char *) * 2);
 	if (!new_env)
 	{
-		pool_free_ctx(key);
-		return (env);
+		pool_free_one(pool, key);
+		return (1);
 	}
-	if (free_copy_env_2(env, key, arg, new_env))
-		return (env);
-	new_env[i + 1] = NULL;
-	pool_free_ctx(env);
-	pool_free_ctx(key);
-	return (new_env);
+	new_env[0] = pool_strdup(pool, arg);
+	if (!new_env[0])
+	{
+		pool_free_one(pool, new_env);
+		pool_free_one(pool, key);
+		return (1);
+	}
+	new_env[1] = NULL;
+	*ref = new_env;
+	pool_free_one(pool, key);
+	return (0);
+}
+
+static int	set_env_bis(t_pool *pool, char ***env_ref,
+		const char *arg, char *key)
+{
+	char	**env;
+	int		status;
+
+	env = *env_ref;
+	if (!env)
+		return (env_create(pool, env_ref, arg, key));
+	status = env_replace(pool, env, key, arg);
+	if (status == 0)
+	{
+		pool_free_one(pool, key);
+		return (0);
+	}
+	if (status == 1)
+	{
+		pool_free_one(pool, key);
+		return (1);
+	}
+	status = env_extend(pool, env_ref, env, arg);
+	pool_free_one(pool, key);
+	return (status);
 }
 
 // Inserts or replaces an environment assignment in the given array.
-char	**set_env(char **env, const char *arg)
+int	set_env(t_pool *pool, char ***env_ref, const char *arg)
 {
-	int		len;
 	char	*key;
+	size_t	len;
 
-	if (!arg || !ft_strchr(arg, '='))
-		return (env);
+	if (!pool || !env_ref || !arg || !ft_strchr(arg, '='))
+		return (1);
 	len = 0;
 	while (arg[len] && arg[len] != '=')
 		len++;
-	key = pool_substr_ctx(arg, 0, len);
+	key = pool_substr(pool, arg, 0, len);
 	if (!key)
-		return (env);
-	if (!env)
-		return (set_no_env(key, arg));// return ((char **)new_env);
-	if (add_entry(env, key, len, arg))// -> malloc
-		return (env);
-	return (free_copy_env(env, key, arg));// return ((char **)new_env);
+		return (1);
+	return (set_env_bis(pool, env_ref, arg, key));
 }

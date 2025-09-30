@@ -3,50 +3,82 @@
 /*                                                        :::      ::::::::   */
 /*   handle_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/12 00:28:42 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/25 17:24:28 by albertooutu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/* Aprés avoir été appelé par le lexer:
-*  Cree un token de type PIPE avec valeur '|' et l'ajoute à la liste des tokens.
-*/
-void	handle_pipe(t_token **tokens, size_t *i)
+static const char	*resolve_redir(const char *line, size_t i,
+				t_token_type *type, size_t *step)
 {
-	add_token(tokens, create_token(PIPE, pool_strdup_ctx("|")));
-	(*i)++;// 2x malloc: create token, ft_strdup
+	*step = 1;
+	if (line[i] == '>' && line[i + 1] == '>')
+	{
+		*type = REDIR_APPEND;
+		*step = 2;
+		return (">>");
+	}
+	if (line[i] == '<' && line[i + 1] == '<')
+	{
+		*type = HEREDOC;
+		*step = 2;
+		return ("<<");
+	}
+	if (line[i] == '>')
+	{
+		*type = REDIR_OUT;
+		return (">");
+	}
+	if (line[i] == '<')
+	{
+		*type = REDIR_IN;
+		return ("<");
+	}
+	return (NULL);
 }
 
-/* Aprés avoir été appelé par le lexer:
-*  Cree un token de type (valeur): REDIR_IN (<), REDIR_OUT (>),
-*  REDIR_APPEND (>>) ou HEREDOC (<<), et l'ajoute à la liste des tokens.
+/*
+** Après appel du lexer: crée un token PIPE ("|") et l'ajoute à la liste.
 */
-void	handle_redirection(t_token **tokens, char *line, size_t *i)
+void	handle_pipe(t_lexer *lex)
 {
-	if (line[*i] == '>' && line [*i + 1] == '>')
-	{
-		add_token(tokens, create_token(REDIR_APPEND, pool_strdup_ctx(">>")));
-		*i += 2;// 2x malloc: create token, ft_strdup
-	}
-	else if (line[*i] == '<' && line[*i + 1] == '<')
-	{
-		add_token(tokens, create_token(HEREDOC, pool_strdup_ctx("<<")));
-		*i += 2;// 2x malloc: create token, ft_strdup
-	}
-	else if (line[*i] == '>')
-	{
-		add_token(tokens, create_token(REDIR_OUT, pool_strdup_ctx(">")));
-		(*i)++;// 2x malloc: create token, ft_strdup
-	}
-	else if (line[*i] == '<')
-	{
-		add_token(tokens, create_token(REDIR_IN, pool_strdup_ctx("<")));
-		(*i)++;// 2x malloc: create token, ft_strdup
-	}
+	t_token	*token;
+
+	token = create_token(lex->pool, PIPE, pool_strdup(lex->pool, "|"));
+	if (!token)
+		return ;
+	token->leading_space = *lex->last_space;
+	add_token(lex->tokens, token);
+	(*lex->index)++;
+	*lex->last_space = 0;
+}
+
+/*
+** Après appel du lexer: crée un token de redirection ( <, >, >>, << )
+** et l'ajoute à la liste des tokens.
+*/
+void	handle_redirection(t_lexer *lex)
+{
+	t_token_type	type;
+	t_token			*token;
+	const char		*symbol;
+	size_t			step;
+
+	type = WORD;
+	symbol = resolve_redir(lex->line, *lex->index, &type, &step);
+	if (!symbol)
+		return ;
+	token = create_token(lex->pool, type, pool_strdup(lex->pool, symbol));
+	if (!token)
+		return ;
+	token->leading_space = *lex->last_space;
+	add_token(lex->tokens, token);
+	*lex->index += step;
+	*lex->last_space = 0;
 }
 
 /* Aprés avoir été appelé par le lexer:
@@ -54,19 +86,29 @@ void	handle_redirection(t_token **tokens, char *line, size_t *i)
 *  Crée un token de type WORD avec sa valeur correspondante (word)
 * et l'ajoute a la liste des tokens
 */
-void	handle_word(t_token **tokens, char *line, size_t *i)
+void	handle_word(t_lexer *lex)
 {
 	size_t	start;
 	char	*word;
+	t_token	*token;
 
-	start = *i;
-	while (line[*i] && line[*i] != ' ' && line[*i] != '|' && line[*i] != '\''
-		&& line[*i] != '<' && line[*i] != '>' && line[*i] != '"')
+	start = *lex->index;
+	while (lex->line[*lex->index] && ft_isspace(lex->line[*lex->index]) == 0
+		&& lex->line[*lex->index] != '|' && lex->line[*lex->index] != '\''
+		&& lex->line[*lex->index] != '<' && lex->line[*lex->index] != '>'
+		&& lex->line[*lex->index] != '"')
 	{
-		(*i)++;
+		(*lex->index)++;
 	}
-	word = pool_substr_ctx(line, start, *i - start);
-	add_token(tokens, create_token(WORD, word));// -> malloc
+	word = pool_substr(lex->pool, lex->line, start, *lex->index - start);
+	if (!word)
+		return ;
+	token = create_token(lex->pool, WORD, word);
+	if (!token)
+		return ;
+	token->leading_space = *lex->last_space;
+	add_token(lex->tokens, token);
+	*lex->last_space = 0;
 }
 
 /*
@@ -75,26 +117,33 @@ void	handle_word(t_token **tokens, char *line, size_t *i)
 * et cree un token de type WORD avec valeur word
 */
 
-// rabiner: ' " ne fais pas le retour a la ligne avec > 
+// rabiner: ' " ne fais pas le retour a la ligne avec >
 
-void	handle_quotes(t_token **tokens, char *line, size_t *i)
+void	handle_quotes(t_lexer *lex)
 {
 	char	type_quote;
 	char	*word;
 	size_t	start;
 	t_token	*new_token;
 
-	type_quote = line[*i];
-	start = ++(*i);
-	while (line[*i] && line[*i] != type_quote)
-		(*i)++;
-	word = pool_substr_ctx(line, start, *i - start);
-	new_token = create_token(WORD, word);// -> malloc
+	type_quote = lex->line[*lex->index];
+	start = ++(*lex->index);
+	while (lex->line[*lex->index] && lex->line[*lex->index] != type_quote)
+		(*lex->index)++;
+	word = pool_substr(lex->pool, lex->line, start,
+			*lex->index - start);
+	if (!word)
+		return ;
+	new_token = create_token(lex->pool, WORD, word);
+	if (!new_token)
+		return ;
 	if (type_quote == '\'')
 		new_token->quoted_type = SINGLE_QUOTE;
 	else
 		new_token->quoted_type = DOUBLE_QUOTE;
-	add_token(tokens, new_token);
-	if (line[*i] == type_quote)
-		(*i)++;
+	new_token->leading_space = *lex->last_space;
+	add_token(lex->tokens, new_token);
+	if (lex->line[*lex->index] == type_quote)
+		(*lex->index)++;
+	*lex->last_space = 0;
 }
