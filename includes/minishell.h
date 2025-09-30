@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 22:43:15 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/09/30 18:30:05 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,13 @@ int		skip_n_flags(char **args);
 int		cd_error(const char *msg, const char *detail);
 int		cd_errno(const char *path);
 int		cd_set_env(t_expander *exp, const char *key, const char *value);
+
+// /builtin/cd_utils.c
+int		resolve_home_target(t_expander *exp, char **target,
+			const char *suffix);
+int		resolve_target(t_expander *exp, char **args, char **target,
+			int *print_new);
+int		finalize_cd(t_expander *exp, char *oldpwd, int print_new);
 
 // /builtin/builtin_2.c
 int		ft_export(t_expander *exp, char **args);
