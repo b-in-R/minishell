@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 21:01:50 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:27:36 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 12:51:30 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	pool_open(t_pool *p, const char *path, int flags, int mode)
 	return (fd);
 }
 
-// Opens a file, tracks it, et ajoute O_CLOEXEC quand disponible.
+// Opens a file, tracks it, with O_CLOEXEC.
 int	pool_open_coe(t_pool *p, const char *path, int flags, int mode)
 {
 	int	fd;

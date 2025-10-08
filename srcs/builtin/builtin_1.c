@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/10/08 12:35:51 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 15:12:11 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_echo(char **args)
 	return (0);
 }
 
-// Changes directory, updates PWD/OLDPWD + error handling
+// Changes directory, updates PWD/OLDPWD and error handling
 int	ft_cd(t_expander *exp, char **args)
 {
 	char	oldpwd[PATH_MAX];

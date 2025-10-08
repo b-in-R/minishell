@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:50:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 18:32:11 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 15:11:30 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ static int	export_handle_arg(t_expander *exp, const char *arg)
 	return (0);
 }
 
-// supprime dans local_env et ajoute ou update dans my_env
 // Adds or updates environment variables in the exported scope.
 int	ft_export(t_expander *exp, char **args)
 {

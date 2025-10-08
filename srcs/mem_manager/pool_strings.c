@@ -6,13 +6,13 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 16:55:02 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:28:33 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 12:58:36 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/mem_manager.h"
 
-// Creates a substring using pool-managed memory.
+// Creates a substring and add it to the pool.
 char	*pool_substr(t_pool *p, const char *s, unsigned int start,
 			size_t len)
 {
@@ -35,7 +35,7 @@ char	*pool_substr(t_pool *p, const char *s, unsigned int start,
 	return (sub);
 }
 
-// Concatenates two strings into a new pool-tracked buffer.
+// Make an strjoin and add it to the pool directly.
 char	*pool_strjoin(t_pool *p, const char *s1, const char *s2)
 {
 	size_t	len1;

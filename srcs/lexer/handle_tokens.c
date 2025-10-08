@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/25 17:24:28 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/10/08 13:11:37 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ static const char	*resolve_redir(const char *line, size_t i,
 	return (NULL);
 }
 
-/*
-** Après appel du lexer: crée un token PIPE ("|") et l'ajoute à la liste.
-*/
+// After lexer call, create a token PIPE ("|") and add it to the list.
 void	handle_pipe(t_lexer *lex)
 {
 	t_token	*token;
@@ -57,10 +55,7 @@ void	handle_pipe(t_lexer *lex)
 	*lex->last_space = 0;
 }
 
-/*
-** Après appel du lexer: crée un token de redirection ( <, >, >>, << )
-** et l'ajoute à la liste des tokens.
-*/
+// After lexer call: create a token redir (<, >, <<, >>) and add it to the list
 void	handle_redirection(t_lexer *lex)
 {
 	t_token_type	type;
@@ -81,10 +76,10 @@ void	handle_redirection(t_lexer *lex)
 	*lex->last_space = 0;
 }
 
-/* Aprés avoir été appelé par le lexer:
-* Lit un mot qui n'est pas entre quotes jusqu'à un espace ou un separateur
-*  Crée un token de type WORD avec sa valeur correspondante (word)
-* et l'ajoute a la liste des tokens
+/*
+*  After lexer call: read a word tats is not enclosed in quotes until it 
+*  encounters a space or separator, create a token WORD with its value,
+*  and adds it to the list.
 */
 void	handle_word(t_lexer *lex)
 {
@@ -112,13 +107,9 @@ void	handle_word(t_lexer *lex)
 }
 
 /*
-* Lit ce qui est entre quotes ' ou " sans les interpreter
-* Extrait la sous chaine a l'interieure
-* et cree un token de type WORD avec valeur word
+*	Reads what is between quotes ' or " without interpreting them
+*	Extracts the substring inside and create a token WORD with its value.
 */
-
-// rabiner: ' " ne fais pas le retour a la ligne avec >
-
 void	handle_quotes(t_lexer *lex)
 {
 	char	type_quote;

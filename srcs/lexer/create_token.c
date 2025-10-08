@@ -6,17 +6,15 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:56:16 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/12 00:26:02 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 13:21:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-* Cree un token on allouant la memorie necessaire
-pour stocker la structure de chaque token
-* et initialise les variables du token value,
-type et le pointeur vers le prochain token.
+* Create a token with the right memory space to hold the structs of all tokens
+* and initialise variables.
 */
 t_token	*create_token(t_pool *pool, t_token_type type, char *value)
 {
@@ -34,15 +32,9 @@ t_token	*create_token(t_pool *pool, t_token_type type, char *value)
 	return (token);
 }
 
+
 /*
-* Rajoute un token a la fin de la liste chainée
-* La 1er fois comme la liste sera vide en rentre dans le if
-* et on assigne le new_token a *list
-* La 2eme fois on saute la verification car la liste contiendra le 1er token
-* et tmp pointera vers le 1er token (T1),
-* ensuite comme tmp->next est NULL on rentre pas dans la boucle
-* et donc tmp->next pointera maintenant sur le 2eme token (T2),
-* donc on aura T1->T2->NULL, et comme ça jusqua la fin des tokens
+* Add a token to the end of the linked list
 */
 void	add_token(t_token **list, t_token *new_token)
 {

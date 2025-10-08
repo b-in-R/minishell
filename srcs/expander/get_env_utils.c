@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_env_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:43:15 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/26 12:34:26 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/10/08 13:43:05 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-* Gère l'expansion de $? (exit status)
+* Manage the $? expansion (exit status)
 */
 int	expand_exit_status(t_pool *pool, char **result,
 		t_expander *exp, int *i)

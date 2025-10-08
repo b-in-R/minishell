@@ -6,14 +6,14 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 16:43:15 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/28 19:19:54 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 13:41:43 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-* Extrait le nom de variable après $
+*  Extract the variable name after '$'
 */
 int	exp_variable(t_expand *expand, const char *str, int *i)
 {
@@ -44,13 +44,6 @@ int	exp_variable(t_expand *expand, const char *str, int *i)
 * 	- i: Pointer to the current index (to move forward in word).
 * 	- result: Pointer to the string being constructed(the word after expansion)
 * 	- last_status: The value of $? (return code of the last command).
-*
-* If a $ character is found followed by a ? character,
-* 	add the value of last_status to result.
-* If a $ character is found followed by a variable name,
-*	start = *i to mark the beginning of the variable name.
-* Increment i as alphanumeric or underscore, extract the variable name,
-*	retrieve its value with getenv(), and append it to result.
 */
 int	handle_dollar(t_expand *expand, const char *str, int *i)
 {

@@ -6,18 +6,14 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:47:55 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/28 19:26:08 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 13:26:17 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /*
-** Détecte si la ligne est une assignation simple: NAME=VALUE,
-	sans commande autour.
-** - NAME doit être un identifiant valide (même règle que export/unset)
-** - Il doit y avoir un '='
-** - On n'essaie pas ici de refuser des espaces autour (ton lexer s’en occupe).
+* Checks if the line is only type NAME=VALUE, without any other commands
 */
 int	is_simple_assignment(const char *line)
 {
@@ -34,9 +30,7 @@ int	is_simple_assignment(const char *line)
 }
 
 /*
-* Ajoute/maj dans local_env UNIQUEMENT (pas d'export).
-* (*env) peut être NULL -> set_env gère la création du tableau.
-* Retour: 0 ok, 1 erreur (alloc ou identifiant invalide).
+* Adds or update local_env ONLY (no export)
 */
 int	add_env_variable(t_pool *pool, char ***env, const char *line)
 {
@@ -50,12 +44,11 @@ int	add_env_variable(t_pool *pool, char ***env, const char *line)
 }
 
 /*
- * Used to handle all normal characters that aren't $
+ * Used to handle all normal characters that aren't '$'
  * Adds a character to the end of a string dynamically.
  * Puts the character in the buffer
  * Concatenates the buffer to the existing string and frees the old string
  */
-
 int	append_char(t_pool *pool, char **str, char c)
 {
 	char	buff[2];
@@ -71,7 +64,6 @@ int	append_char(t_pool *pool, char **str, char c)
  * Used in append_char() to add a character to the result string.
  * and also in handle_dollar() to add the value of a variable to result.
  */
-
 int	str_append_free(t_pool *pool, char **s1, const char *s2)
 {
 	char	*tmp;

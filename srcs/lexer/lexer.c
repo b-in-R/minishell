@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:10:25 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/28 22:42:50 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 13:18:20 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,13 @@ static void	lexer_loop(t_lexer *lex)
 }
 
 /* Lexer:
-*Converts the raw input line (char *line) into a linked list of t_token elemnts
-* Prends une ligne de commande brute (ex: echo "hello" > out.txt)
-* La scanne caractere par caractere et la découpe en tokens, ignore les spaces
-* Associe à chaque token son type (WORD, PIPE, REDIR_OUT, etc.)
-* Crée une liste chaînée de t_token
-* Retourner cette liste chaînée pour qu’elle soit utilisée ensuite par le parse
-*/
-/* Résumé du flux de traitement:
+* Converts the raw input line (char *line) into a linked list of t_token elemnts
+* Take a command line (ex: echo "hello" > out.txt)
+* Scan it char after char and split it in tokens, ignoring spaces
+* Associate every token to its type (WORD, PIPE, REDIR_OUT, etc)
+* Create a linked-list of t_token and returns it to parsing
+* 
+* Resume:
 *readline() --> line : "echo 'hello > test' | grep ok >> output"
 *lexer()
 * ├─ "echo"     → WORD

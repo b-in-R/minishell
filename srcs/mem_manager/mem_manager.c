@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 22:11:59 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:28:04 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 12:57:06 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	pool_clear(t_pool *p)
 	p->mhead = NULL;
 }
 
-// Duplicates a C-string while recording it in the given pool.
+// Make an strdup and add it to the pool directly.
 char	*pool_strdup(t_pool *p, const char *s)
 {
 	size_t	len;

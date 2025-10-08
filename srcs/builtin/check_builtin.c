@@ -6,13 +6,12 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:09:00 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:06:52 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 15:10:55 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// renvoie sur la bonne fonction builtin
 int	execute_builtin(t_cmd *cmd, t_expander *exp)
 {
 	if (!ft_strcmp(cmd->args[0], "echo"))
@@ -35,7 +34,6 @@ int	execute_builtin(t_cmd *cmd, t_expander *exp)
 	return (1);
 }
 
-// Verifie si la commande entree est une builtin
 int	is_builtin(t_cmd *cmd)
 {
 	char	*name;

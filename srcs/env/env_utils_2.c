@@ -6,13 +6,13 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:37:51 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:07:27 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 15:10:42 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// retrouver la valeur d'une variable d'environnement (aussi avant execve)
+// find the value of an environment variable
 char	*get_env(char **my_env, char *str)
 {
 	int		i;
@@ -31,7 +31,7 @@ char	*get_env(char **my_env, char *str)
 	return (NULL);
 }
 
-// supprime une variable d'environnement
+// delete an environment variable
 void	unset_env(t_pool *pool, char **my_env, char *arg)
 {
 	int		i;
@@ -90,9 +90,7 @@ int	remove_from_env(t_pool *pool, char **env, const char *key)
 	return (0);
 }
 
-/*
-*	Checks if a string is a valid identifier for an environment variable
-*/
+// Checks if a string is a valid identifier for an environment variable
 int	is_valid_identifier(const char *str)
 {
 	int	i;
@@ -115,6 +113,7 @@ int	is_valid_identifier(const char *str)
 	return (1);
 }
 
+// Replace the value of an environment variable
 int	env_replace(t_pool *pool, char **env, const char *key, const char *arg)
 {
 	char	*dup;
