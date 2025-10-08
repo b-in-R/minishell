@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 22:54:25 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:31:42 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 12:47:35 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@ static void	init_shell(t_expander *exp, t_pool *global, char **envp)
 	exp->my_env = init_env(envp, global);
 	exp->local_env = NULL;
 	exp->last_status = 0;
+}
+
+void	track_line_or_exit(char *line, t_expander *exp)
+{
+	if (pool_track(exp->pool, line))
+		return ;
+	free(line);
+	error_exit(exp->pool, exp->my_env, "shell_loop: track line");
 }
 
 static int	shell_loop(t_expander *exp)
@@ -37,7 +45,11 @@ static int	shell_loop(t_expander *exp)
 		}
 		track_line_or_exit(line, exp);
 		if (line[0])
-			process_non_empty(line, exp);
+		{
+			add_history(line);
+			process_multiline(line, exp);
+		}
+		//	process_non_empty(line, exp);
 		pool_free_one(exp->pool, line);
 	}
 	return (0);

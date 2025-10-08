@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/26 12:58:17 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/10/08 12:47:29 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,10 @@ int	handle_interrupted_read(t_expander *exp)
 	return (1);
 }
 
-void	track_line_or_exit(char *line, t_expander *exp)
-{
-	if (pool_track(exp->pool, line))
-		return ;
-	free(line);
-	error_exit(exp->pool, exp->my_env, "shell_loop: track line");
-}
-
+/*
 void	process_non_empty(char *line, t_expander *exp)
 {
 	add_history(line);
 	process_multiline(line, exp);
 }
+*/

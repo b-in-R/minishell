@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 17:30:26 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/30 18:27:59 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 12:35:51 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_echo(char **args)
 	return (0);
 }
 
-// Changes directory, updates PWD/OLDPWD, and mirrors Bash error reporting.
+// Changes directory, updates PWD/OLDPWD + error handling
 int	ft_cd(t_expander *exp, char **args)
 {
 	char	oldpwd[PATH_MAX];
@@ -49,7 +49,6 @@ int	ft_cd(t_expander *exp, char **args)
 	return (finalize_cd(exp, oldpwd, print_new));
 }
 
-// Outputs the absolute path of the current working directory.
 int	ft_pwd(char **my_env, char **args)
 {
 	char	cwd[1024];

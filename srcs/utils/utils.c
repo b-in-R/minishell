@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 17:05:00 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/08 12:39:42 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ char	*ft_strjoin_3(t_pool *pool, const char *s1, const char *s2,
 	return (res);
 }
 /*
-//TEMPORAIRE
+//TESTS
 void	print_detailled_cmds(t_cmd *cmds)
 {
 	int	i = 0;
