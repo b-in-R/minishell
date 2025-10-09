@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:06:32 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/28 19:28:50 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/09 17:28:14 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ t_cmd	*create_cmd(t_expander *exp)
 	cmd->expand_heredoc = 1;
 	cmd->in_fd = -1;
 	cmd->delimiter = NULL;
+	cmd->double_quote = exp->double_quotes;
 	cmd->next = NULL;
+	
+	printf("create_cmd.c -> create_cmd-> double_quote: %i\n\n", cmd->double_quote);
+
 	return (cmd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 14:31:08 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/28 19:08:11 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/09 17:16:12 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	execute_command(t_cmd *cmd, t_expander *exp)
 	if (!cmd->args || !cmd->args[0])
 		error_exit(exp->pool, exp->my_env,
 			"execute_command: missing command");
-	clean_args = create_clean_args(exp->pool, cmd->args);
+	clean_args = create_clean_args(exp->pool, cmd->args, cmd);// envoyer que cmd
 	if (!clean_args)
 		error_exit(exp->pool, exp->my_env,
 			"execute_command: create_clean_args");
@@ -125,14 +125,15 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	i = 0;
 	j = 0;
 	initialise_data(&data, cmd, exp);
+	//print_cmds(cmd);//
 	if (!cmd->next && is_builtin(cmd))
 	{
 		only_builtin(cmd, exp, &data);
 		pool_free_one(exp->pool, data.pid);
 		return ;
 	}
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);//
+	signal(SIGQUIT, SIG_IGN);//
 	while (cmd)
 	{
 		data.fd[0] = -1;
@@ -141,6 +142,6 @@ void	execute(t_cmd *cmd, t_expander *exp)
 	}
 	take_exit_code(&i, &j, &data);
 	exp->last_status = data.last_status;
-	setup_signals();
+	setup_signals();//
 	pool_free_one(exp->pool, data.pid);
 }

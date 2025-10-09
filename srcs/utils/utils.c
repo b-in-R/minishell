@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 15:09:09 by rabiner           #+#    #+#             */
-/*   Updated: 2025/10/08 12:39:42 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/09 16:44:57 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
  *
  * Returns: A newly allocated array with cleaned arguments.
 */
-char	**create_clean_args(t_pool *pool, char **args)
+char	**create_clean_args(t_pool *pool, char **args, t_cmd *cmd)
 {
 	char	**clean_args;
 	int		i;
@@ -46,7 +46,7 @@ char	**create_clean_args(t_pool *pool, char **args)
 	clean_args[i] = NULL;
 	while (i--)
 	{
-		clean_args[i] = remove_outer_quotes(pool, args[i]);
+		clean_args[i] = remove_outer_quotes(pool, args[i], cmd);
 		if (!clean_args[i])
 			return (NULL);
 	}
@@ -101,7 +101,7 @@ char	*ft_strjoin_3(t_pool *pool, const char *s1, const char *s2,
 	pool_free_one(pool, tmp);
 	return (res);
 }
-/*
+
 //TESTS
 void	print_detailled_cmds(t_cmd *cmds)
 {
@@ -110,14 +110,17 @@ void	print_detailled_cmds(t_cmd *cmds)
 	printf("\n\n### Detailled ###\n");
 	while (cmds->args[i])
 	{
-		printf("args[%i]:\t%s\n", i, cmds->args[i]);
+		printf("args[%i]:\t\t%s\n", i, cmds->args[i]);
 		i++;
 	}
-	printf("infile:\t\t%s\n", cmds->infile);
-	printf("outfile:\t%s\n", cmds->outfile);
-	printf("append:\t\t%i\n", cmds->append);
-	printf("heredoc:\t%i\n", cmds->heredoc);
-	printf("delimiter:\t%s\n", cmds->delimiter);
+	printf("infile:\t\t\t%s\n", cmds->infile);
+	printf("outfile:\t\t%s\n", cmds->outfile);
+	printf("append:\t\t\t%i\n", cmds->append);
+	printf("heredoc:\t\t%i\n", cmds->heredoc);
+	printf("expand_heredoc:\t\t%i\n", cmds->expand_heredoc);
+	printf("in_fd:\t\t\t%i\n", cmds->in_fd);
+	printf("delimiter:\t\t%s\n", cmds->delimiter);
+	printf("double_quote:\t\t%i\n", cmds->double_quote);
 }
 
 
@@ -127,26 +130,14 @@ void print_cmds(t_cmd *cmds)
 	int	i = 1;
 	while (cmds)
 	{
-		printf("-- CMD %d --\n", i++);
+		printf("----------- CMD  %d -----------\n", i++);
 		if (cmds->args)
 		{
 			printf("Args: ");
-			for (int j = 0; cmds->args[j]; j++)
-			{
-				//printf("\n[%s] ", cmds->args[j]);
-				print_detailled_cmds(cmds);
-			}
+			print_detailled_cmds(cmds);
 			printf("\n");
 		}
-		if (cmds->infile)
-			printf("Infile: %s\n", cmds->infile);
-		if (cmds->outfile)
-			printf("Outfile: %s (%s)\n", cmds->outfile,
-			cmds->append ? "append" : "truncate");
-		if (cmds->heredoc)
-			printf("Heredoc delimiter: %s\n", cmds->delimiter);
 		cmds = cmds->next;
 	}
-	printf("-----------------------\n\n");
+	printf("------------------------------\n\n");
 }
-	*/

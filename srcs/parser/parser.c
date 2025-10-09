@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/28 19:29:51 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/09 16:52:50 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,23 +120,28 @@ t_cmd	*parser(t_token *tokens, t_expander *exp)
 /*
 *	res = ft_substr(str, 1, len - 2); // supprime les quotes autour
 */
-char	*remove_outer_quotes(t_pool *pool, const char *str)
+char	*remove_outer_quotes(t_pool *pool, const char *str, t_cmd *cmd)
 {
 	size_t	len;
 	char	*res;
+	int		double_quote;
 
+	double_quote = 0;
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
 	if (len < 2)
 		return (pool_strdup(pool, str));
-	if ((str[0] == '\'' && str[len - 1] == '\'')
-		|| (str[0] == '"' && str[len - 1] == '"'))
+	if (str[0] == '\'' && str[len - 1] == '\'')
+		res = pool_substr(pool, str, 1, len - 2);
+	else if (str[0] == '"' && str[len - 1] == '"')
 	{
 		res = pool_substr(pool, str, 1, len - 2);
+		double_quote++;
 	}
 	else
 		res = pool_strdup(pool, str);
+	cmd->double_quote = double_quote;
 	return (res);
 }
 

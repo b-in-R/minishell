@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 16:08:26 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/10/08 13:11:37 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/09 16:58:13 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	handle_word(t_lexer *lex)
 		&& lex->line[*lex->index] != '<' && lex->line[*lex->index] != '>'
 		&& lex->line[*lex->index] != '"')
 	{
+		(lex->double_quote)++; //(voir reaction si pipes)
 		(*lex->index)++;
 	}
 	word = pool_substr(lex->pool, lex->line, start, *lex->index - start);

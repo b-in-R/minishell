@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albertooutumurobueno <albertooutumurobu    +#+  +:+       +#+        */
+/*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 13:11:41 by albertooutu       #+#    #+#             */
-/*   Updated: 2025/09/25 16:29:51 by albertooutu      ###   ########.fr       */
+/*   Updated: 2025/10/09 16:35:34 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ void	handle_heredoc(t_expander *exp, t_cmd *cmd, t_token *tok)
 	if (cmd->delimiter)
 		pool_free_one(exp->pool, cmd->delimiter);
 	cmd->heredoc = 1;
-	cmd->delimiter = remove_outer_quotes(exp->pool, tok->next->value);
+	cmd->delimiter = remove_outer_quotes(exp->pool, tok->next->value, cmd);
 	cmd->expand_heredoc = (tok->next->quoted_type == NO_QUOTE);
 }

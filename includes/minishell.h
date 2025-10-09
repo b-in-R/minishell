@@ -6,7 +6,7 @@
 /*   By: rabiner <rabiner@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 17:11:46 by rabiner           #+#    #+#             */
-/*   Updated: 2025/09/30 18:30:05 by rabiner          ###   ########.fr       */
+/*   Updated: 2025/10/09 17:03:35 by rabiner          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_expander
 	int		last_status;
 	char	**my_env;
 	char	**local_env;
+	int		double_quotes;// initialisation!
 	t_pool	*pool;
 }	t_expander;
 
@@ -79,6 +80,7 @@ typedef struct s_lexer
 	char		*line;
 	size_t		*index;
 	int			*last_space;
+	int			double_quote;// supprimer variable et initialisation
 	t_pool		*pool;
 }	t_lexer;
 
@@ -103,6 +105,7 @@ typedef struct s_cmd
 	int				expand_heredoc;
 	int				in_fd;
 	char			*delimiter;
+	int				double_quote;// initialiser + adapter code
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -144,8 +147,8 @@ extern volatile sig_atomic_t	g_signal;
 // /utils/utils.c
 void	error_exit(t_pool *pool, char **my_env, const char *str);
 void	cleanup_parent(t_pool *pool, t_cmd *cmd, int *in_fd, int *fd);
-//void	print_cmds(t_cmd *cmds);
-//void	print_detailled_cmds(t_cmd *cmds);
+void	print_cmds(t_cmd *cmds);
+void	print_detailled_cmds(t_cmd *cmds);
 
 /*-------------Execution--------------*/
 // /execution/execute.c
@@ -238,7 +241,7 @@ t_cmd	*create_cmd(t_expander *exp);
 void	add_cmd(t_cmd **cmd_list, t_cmd *new_cmd);
 int		add_arg(t_pool *pool, char ***args, const char *value);
 void	handle_redirections(t_expander *exp, t_cmd *current, t_token *tokens);
-char	*expand_variables(const char *line, t_expander *exp);
+//char	*expand_variables(const char *line, t_expander *exp);
 int		handle_heredocs(t_cmd *cmds, t_expander *exp);
 char	get_unclosed_quote_type(const char *line);
 void	handle_redir_in(t_expander *exp, t_cmd *cmd, char *value);
@@ -246,7 +249,7 @@ void	handle_redir_out(t_expander *exp, t_cmd *cmd, char *value, int type);
 void	handle_heredoc(t_expander *exp, t_cmd *cmd, t_token *tok);
 int		has_unclosed_quotes(const char *line);
 int		check_syntax_errors(t_token *tokens, char *line);
-char	*remove_outer_quotes(t_pool *pool, const char *str);
+char	*remove_outer_quotes(t_pool *pool, const char *str, t_cmd *cmd);
 int		push_line(int write_fd, char *line, t_expander *exp, t_cmd *cmd);
 void	handle_pool_track_failure(char *line, t_expander *exp, int write_fd);
 char	*expand_heredoc_line(const char *line, t_expander *exp);
@@ -282,7 +285,7 @@ int		expand_pid(t_pool *pool, char **result, int *i);
 void	free_env(t_pool *pool, char **env);
 char	*ft_strjoin_3(t_pool *pool, const char *s1, const char *s2,
 			const char *s3);
-char	**create_clean_args(t_pool *pool, char **args);
+char	**create_clean_args(t_pool *pool, char **args, t_cmd *cmd);
 int		assignments_only(t_token *tokens);
 t_token	*discard_assignment_prefix(t_token *tokens, t_pool *pool);
 int		store_only_assignments(t_token *tokens, t_expander *exp);
@@ -294,7 +297,7 @@ int		process_segment(char *line, size_t start, size_t len,
 int		process_multiline(char *line, t_expander *exp);
 int		handle_interrupted_read(t_expander *exp);
 void	track_line_or_exit(char *line, t_expander *exp);
-void	process_non_empty(char *line, t_expander *exp);
+//void	process_non_empty(char *line, t_expander *exp);
 
 /*---------------Free----------------*/
 void	free_allocs(t_pool *pool, char **tofree);
